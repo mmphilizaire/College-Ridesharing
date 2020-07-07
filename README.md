@@ -117,9 +117,7 @@ College Carpool is an application for university students only to carpool with o
 
 ## Wireframes
 
-<img src="YOUR_WIREFRAME_IMAGE_URL" width=600>
-
-![](https://i.imgur.com/AH5MxvH.png)
+<img src="wireframes.png" width=600>
 
 ## Schema
 
