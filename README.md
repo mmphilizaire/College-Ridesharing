@@ -121,10 +121,236 @@ College Carpool is an application for university students only to carpool with o
 
 ## Schema
 
-[This section will be completed in Unit 9]
 ### Models
-[Add table of models]
+
+### Models
+
+#### User
+
+   | Property      | Type     | Description |
+   | ------------- | -------- | ------------|
+   | objectId      | String   | unique id for the user (default field) |
+   | name          | String   | name of the user |
+   | university    | String   | name of the user's university |
+   | username      | String   | unique username for the user to login |
+   | password      | String   | password for user to login |
+   | profilePicture| File     | user's profile image |
+   | createdAt     | DateTime | date when user profile is created (default field) |
+   | updatedAt     | DateTime | date when user profile is last updated (default field) |
+   
+#### Ride Request
+
+   | Property      | Type     | Description |
+   | ------------- | -------- | ------------|
+   | objectId      | String   | unique id for the ride request (default field) |
+   | user          | Pointer to User| user who requested the ride |
+   | earliestDeparture  | DateTime     | earliest departure date & time |
+   | latestDeparture    | DateTime   | latest departure date & time |
+   | startLocation | Pointer to Location   | location of the requested start of the ride |
+   | endLocation    | Pointer to Location   | location of the requested end of the ride |
+   | createdAt     | DateTime | date when ride request is created (default field) |
+   | updatedAt     | DateTime | date when ride request is last updated (default field) |
+   
+#### Ride Offer
+
+   | Property      | Type     | Description |
+   | ------------- | -------- | ------------|
+   | objectId      | String   | unique id for the ride request (default field) |
+   | driver          | Pointer to User| user who is offering the ride |
+   | departure  | DateTime     | ride departure date & time |
+   | startLocation | Pointer to Location   | location of the start of the ride |
+   | endLocation    | Pointer to Location   | location of the end of the ride |
+   | pricePerSeat    | Number   | price per seat in the ride |
+   | seats    | Number   | number of seats in the ride |
+   | passengers    | Array of Pointers to User   | booked passengers for the ride |
+   | createdAt     | DateTime | date when ride request is created (default field) |
+   | updatedAt     | DateTime | date when ride request is last updated (default field) |
+   
+#### Location
+
+   | Property      | Type     | Description |
+   | ------------- | -------- | ------------|
+   | objectId      | String   | unique id for the location (default field) |
+   | Longitude     | Number | longitude of the location |
+   | Latitude      | Number     | latitude of the location |
+   | City          | String  | city of the location |
+   | State         | String   | state of the location |
+   | createdAt     | DateTime | date when location is created (default field) |
+   | updatedAt     | DateTime | date when location is last updated (default field) |
+
 ### Networking
-- [Add list of network requests by screen ]
-- [Create basic snippets for each Parse network request]
+#### List of network requests by screen
+- Login Screen
+    - (Read/GET) Use login method to login using the inputted username and password
+        ```java
+        ParseUser.logInInBackground(username, password, new LogInCallback() {
+            @Override
+            public void done(ParseUser user, ParseException e) {
+                if(e != null){
+                    Toast.makeText(LoginActivity.this, "Issue with login!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Toast.makeText(LoginActivity.this, "Success!", Toast.LENGTH_SHORT);
+                //TODO: go to ride offer stream screen
+            }
+        });
+        ```
+
+- Registration Screen
+    - (Create/POST) Create a new user with inputted information
+
+        ```java
+        ParseUser user = new ParseUser();
+        user.setUsername(username);
+        user.setPassword(password);
+        user.signUpInBackground(new SignUpCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e != null){
+                    Toast.makeText(LoginActivity.this, "Issue with login!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Toast.makeText(LoginActivity.this, "Success!", Toast.LENGTH_SHORT);
+                //TODO: go to ride offer stream screen
+            }
+        });
+        ```
+
+- Ride Request Screen
+    - (Create/POST) Create a new ride request with inputted information
+
+        ```java
+        RideRequest request = new RideRequest();
+        request.put("user", currentUser);
+        request.put("earliestDeparture", earliest);
+        request.put("latestDeparture", latest);
+        request.put("startLocation", startLocation);
+        request.put("endLocation", endLocation);
+        request.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e != null){
+                    Toast.makeText(getContext(), "Error while saving!", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(getContext(), "Ride request was successful!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        ```
+
+- Ride Offer Screen
+    - (Create/POST) Create a new ride offer with inputted information
+
+        ```java
+        RideOffer offer = new RideOffer();
+        offer.put("user", currentUser);
+        offer.put("departure", departure);
+        offer.put("startLocation", startLocation);
+        offer.put("endLocation", endLocation);
+        offer.put("pricePerSeat", price);
+        offer.put("seats", seats);
+        offer.put("passengers", new ArrayList<User>());
+        offer.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e != null){
+                    Toast.makeText(getContext(), "Error while saving!", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(getContext(), "Ride offer was successful!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        ```
+
+- User Profile Screen
+    - (Read/GET) Query logged in user object
+
+    ```java
+    ParseUser currentUser = ParseUser.getCurrentUser();
+    String name = currentUser.getString("name");
+    String university = currentUser.getString("university");
+    ParseFile profiePicture = currentUser.getParseFile("profilePicture");
+    //TODO: input information on the screen
+    
+    ```
+
+    - (Update/PUT) Update user profile picture
+    ```java
+    //TODO: get new profile picture and set as variable
+    ParseUser currentUser = ParseUser.getCurrentUser();
+    currentuser.put("profilePicture", newProfilePicture)
+    ```
+
+- Ride Offers Stream Screen
+    - (Read/GET) Query all future ride offers that satisfy criteria inputted by the user
+    ```java
+    ParseQuery<Post> query = ParseQuery.getQuery(RideOffers.class);
+    query.include(Post."user");
+    //TODO: ensure that ride offers satisfy criteria inputted by user using query.whereEqualTo() method
+    query.setLimit(20);
+    query.addDescendingOrder(Post."createdAt");
+    query.findInBackground(new FindCallback<Post>() {
+        @Override
+         public void done(List<Post> posts, ParseException e) {
+            if(e != null){
+                 //TODO: alert user of error
+                return;
+            }
+            //TODO: show the list of posts
+            }
+        });
+    ```
+
+- Ride Requests Stream Screen
+    - (Read/GET) Query all future ride requests that satisfy criteria inputted by the user
+        ```java
+        ParseQuery<Post> query = ParseQuery.getQuery(RideRequest.class);
+        query.include(Post."user");
+        //TODO: ensure that ride offers satisfy criteria inputted by user using query.whereEqualTo() method
+        query.setLimit(20);
+        query.addDescendingOrder(Post."createdAt");
+        query.findInBackground(new FindCallback<Post>() {
+            @Override
+            public void done(List<Post> posts, ParseException e) {
+                if(e != null){
+                    //TODO: alert user of error
+                    return;
+                }
+                //TODO: show the list of posts
+                }
+            });
+        ```
+
+- Ride Offer Detail Screen
+    - (Read/GET) Query specific ride offer information
+        ```java
+        Location startLocation = rideOffer.getParseObject("startLocation");
+        Location endLocation = rideOffer.getParseObject("endLocation");
+        User user = rideOffer.getParseObject("driver");
+        DateTime departure = rideOffer.getDateTime("departure");
+        
+        ```
+
+- Ride Request Detail Screen
+    - (Read/GET) Query specific ride request information
+    - (Read/GET) Query ride request user information
+
+      
+         ```swift
+         let query = PFQuery(className:"Post")
+         query.whereKey("author", equalTo: currentUser)
+         query.order(byDescending: "createdAt")
+         query.findObjectsInBackground { (posts: [PFObject]?, error: Error?) in
+            if let error = error { 
+               print(error.localizedDescription)
+            } else if let posts = posts {
+               print("Successfully retrieved \(posts.count) posts.")
+           // TODO: Do something with posts...
+            }
+         }
+         ```
+
+
 - [OPTIONAL: List endpoints if using existing API such as Yelp]
