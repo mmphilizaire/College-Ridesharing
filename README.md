@@ -337,20 +337,4 @@ College Carpool is an application for university students only to carpool with o
     - (Read/GET) Query specific ride request information
     - (Read/GET) Query ride request user information
 
-      
-         ```swift
-         let query = PFQuery(className:"Post")
-         query.whereKey("author", equalTo: currentUser)
-         query.order(byDescending: "createdAt")
-         query.findObjectsInBackground { (posts: [PFObject]?, error: Error?) in
-            if let error = error { 
-               print(error.localizedDescription)
-            } else if let posts = posts {
-               print("Successfully retrieved \(posts.count) posts.")
-           // TODO: Do something with posts...
-            }
-         }
-         ```
-
-
-- [OPTIONAL: List endpoints if using existing API such as Yelp]
+    
