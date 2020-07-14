@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_ride_stream"
+        android:icon="@drawable/ic_ride_stream"
+        android:title="Ride Stream"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_ride_offer"
+        android:icon="@drawable/ic_ride_offer"
+        android:title="Ride Offer"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_ride_request"
+        android:icon="@drawable/ic_ride_request"
+        android:title="Ride Request"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_profile"
+        android:icon="@drawable/ic_profile"
+        android:title="Profile"
+        app:showAsAction="always" />
+</menu>
