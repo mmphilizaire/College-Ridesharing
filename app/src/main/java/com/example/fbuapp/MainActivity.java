@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
                         fragment = new RideStreamFragment();
                         break;
                     case R.id.action_ride_offer:
-                        fragment = new RideOfferFragment();
+                        fragment = new RideOfferFragment(mFragmentManager);
                         break;
                     case R.id.action_ride_request:
                         //fragment = new RideStreamFragment();

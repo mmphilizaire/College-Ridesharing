@@ -6,7 +6,9 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -14,9 +16,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.example.fbuapp.MapDialogFragment;
 import com.example.fbuapp.R;
 
 import org.w3c.dom.Text;
@@ -25,11 +29,20 @@ import java.util.Calendar;
 
 public class RideOfferFragment extends Fragment implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
+    private FragmentManager mFragmentManager;
+
+    private EditText mStartLocationEditText;
+    private EditText mEndLocationEditText;
+
     private TextView mDepartureDateTextView;
     private TextView mDepartureTimeTextView;
 
     public RideOfferFragment() {
         // Required empty public constructor
+    }
+
+    public RideOfferFragment(FragmentManager fragmentManager) {
+        mFragmentManager = fragmentManager;
     }
 
     @Override
@@ -46,6 +59,9 @@ public class RideOfferFragment extends Fragment implements DatePickerDialog.OnDa
         mDepartureDateTextView = view.findViewById(R.id.tvDepartureDate);
         mDepartureTimeTextView = view.findViewById(R.id.tvDepartureTime);
 
+        mStartLocationEditText = view.findViewById(R.id.etStartLocation);
+        mEndLocationEditText = view.findViewById(R.id.etEndLocation);
+
         mDepartureDateTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -57,6 +73,21 @@ public class RideOfferFragment extends Fragment implements DatePickerDialog.OnDa
             @Override
             public void onClick(View view) {
                 showTimePickerDialog();
+            }
+        });
+
+        mStartLocationEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment map = MapDialogFragment.newInstance();
+                map.show(mFragmentManager, "tag");
+            }
+        });
+
+        mEndLocationEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
             }
         });
 
