@@ -7,7 +7,7 @@ import com.parse.ParseUser;
 import org.json.JSONArray;
 import org.parceler.Parcel;
 
-import java.text.DateFormat;
+import android.text.format.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -82,9 +82,24 @@ public class RideOffer extends ParseObject {
         put(KEY_PASSENGERS, passengers);
     }
 
-//    public String getDay(){
-//        Date date = getDepartureTime();
-//        return DateFormat.format("MM dd yyyy", date);
-//    }
+    public String getDay(){
+        Date date = getDepartureTime();
+        return (String) DateFormat.format("EEEE", date);
+    }
+
+    public String getDateWithYear(){
+        Date date = getDepartureTime();
+        return (String) DateFormat.format("MMMM d, yyyy", date);
+    }
+
+    public String getDateNoYear(){
+        Date date = getDepartureTime();
+        return (String) DateFormat.format("MMMM d", date);
+    }
+
+    public String getTime(){
+        Date date = getDepartureTime();
+        return (String) DateFormat.format("h:mm", date);
+    }
 
 }

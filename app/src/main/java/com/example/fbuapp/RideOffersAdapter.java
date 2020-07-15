@@ -79,8 +79,8 @@ public class RideOffersAdapter extends RecyclerView.Adapter<RideOffersAdapter.Vi
             ParseFile profilePicture = rideOffer.getUser().getParseFile("profilePicture");
             Glide.with(mContext).load(profilePicture.getUrl()).transform(new CircleCrop()).into(mProfilePictureImageView);
             mNameTextView.setText(rideOffer.getUser().getString("firstName"));
-            mDateTextView.setText(rideOffer.getDepartureTime().toString());
-            mTimeTextView.setText(rideOffer.getDepartureTime().toString());
+            mDateTextView.setText(rideOffer.getDay() + ", " + rideOffer.getDateNoYear());
+            mTimeTextView.setText(rideOffer.getTime());
             mStartLocationTextView.setText(rideOffer.getStartLocation());
             mEndLocationTextView.setText(rideOffer.getEndLocation());
             mPricePerSeatTextView.setText(rideOffer.getSeatPrice().toString());
