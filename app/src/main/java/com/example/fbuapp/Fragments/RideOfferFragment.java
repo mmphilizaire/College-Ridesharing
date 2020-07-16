@@ -2,11 +2,11 @@ package com.example.fbuapp.Fragments;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -20,14 +20,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.example.fbuapp.MapDialogFragment;
+import com.example.fbuapp.MapActivity;
 import com.example.fbuapp.R;
-
-import org.w3c.dom.Text;
 
 import java.util.Calendar;
 
+import static android.app.Activity.RESULT_OK;
+
 public class RideOfferFragment extends Fragment implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+
+    public static final int START_REQUEST_CODE = 1234;
+    public static final int END_REQUEST_CODE = 4321;
 
     private FragmentManager mFragmentManager;
 
@@ -79,18 +82,37 @@ public class RideOfferFragment extends Fragment implements DatePickerDialog.OnDa
         mStartLocationEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogFragment map = MapDialogFragment.newInstance();
-                map.show(mFragmentManager, "tag");
+                Intent map = new Intent(getActivity(), MapActivity.class);
+                startActivityForResult(map, START_REQUEST_CODE);
             }
         });
 
         mEndLocationEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent map = new Intent(getActivity(), MapActivity.class);
+                startActivityForResult(map, END_REQUEST_CODE);
             }
         });
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (resultCode == RESULT_OK && requestCode == START_REQUEST_CODE) {
+            double latitude = data.getExtras().getDouble("latitude");
+            double longitude = data.getExtras().getDouble("longitude");
+            String city = data.getExtras().getString("city");
+            String state = data.getExtras().getString("state");
+            mStartLocationEditText.setText(city + ", " + state);
+        }
+        else if(resultCode == RESULT_OK && requestCode == END_REQUEST_CODE){
+            double latitude = data.getExtras().getDouble("latitude");
+            double longitude = data.getExtras().getDouble("longitude");
+            String city = data.getExtras().getString("city");
+            String state = data.getExtras().getString("state");
+            mEndLocationEditText.setText(city + ", " + state);
+        }
     }
 
     private void showTimePickerDialog() {

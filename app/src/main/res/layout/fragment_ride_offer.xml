@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:ems="10"
+            android:ems="15"
             android:focusable="false"
             android:inputType="textPersonName" />
 
@@ -54,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:ems="10"
+            android:ems="15"
             android:focusable="false"
             android:inputType="textPersonName" />
 
@@ -130,5 +130,11 @@
             android:inputType="number" />
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btnOffer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Offer" />
 
 </LinearLayout>
