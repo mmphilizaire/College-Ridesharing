@@ -6,64 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/search_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/ivSearch"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="0dp"
-            app:srcCompat="?android:attr/actionModeWebSearchDrawable" />
-
-        <EditText
-            android:id="@+id/etLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="45dp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="0dp"
-            android:layout_toEndOf="@+id/ivSearch"
-            android:hint="Enter City"
-            android:textSize="20sp" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/rlCurrentLocation"
-        android:layout_below="@+id/search_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/ivCurrentLocation"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="0dp"
-            app:srcCompat="@drawable/ic_my_location" />
-
-        <TextView
-            android:id="@+id/tvCurrentLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="45dp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="0dp"
-            android:layout_toEndOf="@+id/ivCurrentLocation"
-            android:gravity="center_vertical"
-            android:text="Current Location"
-            android:textSize="20sp" />
-
-    </RelativeLayout>
-
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -71,5 +13,69 @@
         android:id="@+id/map"
         tools:context=".MapsActivity"
         android:name="com.google.android.gms.maps.SupportMapFragment" />
+
+    <RelativeLayout
+        android:id="@+id/search_layout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:elevation="10dp"
+        android:background="#ffffff">
+
+        <ImageView
+            android:id="@+id/ivSearch"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            app:srcCompat="?android:attr/actionModeWebSearchDrawable" />
+
+        <EditText
+            android:id="@+id/etSearch"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/ivSearch"
+            android:layout_marginLeft="8dp"
+            android:layout_centerVertical="true"
+            android:hint="Enter City"
+            android:textColor="#000000"
+            android:background="@null"
+            android:textSize="18sp"
+            android:imeOptions="actionSearch"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlCurrentLocation"
+        android:layout_below="@+id/search_layout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:elevation="10dp"
+        android:background="#ffffff">
+
+        <ImageView
+            android:id="@+id/ivCurrentLocation"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            app:srcCompat="@drawable/ic_my_location" />
+
+        <TextView
+            android:id="@+id/tvCurrentLocation"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@+id/ivCurrentLocation"
+            android:gravity="center_vertical"
+            android:text="Current Location"
+            android:textSize="18sp" />
+
+    </RelativeLayout>
 
 </RelativeLayout>
