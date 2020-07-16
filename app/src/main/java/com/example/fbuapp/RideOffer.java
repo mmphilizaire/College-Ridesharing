@@ -42,19 +42,19 @@ public class RideOffer extends ParseObject {
         put(KEY_DEPARTURE_TIME, departureTime);
     }
 
-    public String getStartLocation(){
-        return getString(KEY_START_LOCATION);
+    public Location getStartLocation(){
+        return (Location) get(KEY_START_LOCATION);
     }
 
-    public void setStartLocation(String startLocation){
+    public void setStartLocation(Location startLocation){
         put(KEY_START_LOCATION, startLocation);
     }
 
-    public String getEndLocation(){
-        return getString(KEY_END_LOCATION);
+    public Location getEndLocation(){
+        return (Location) get(KEY_END_LOCATION);
     }
 
-    public void setEndLocation(String endLocation){
+    public void setEndLocation(Location endLocation){
         put(KEY_END_LOCATION, endLocation);
     }
 

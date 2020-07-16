@@ -15,15 +15,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.example.fbuapp.Location;
+import com.example.fbuapp.MainActivity;
 import com.example.fbuapp.MapActivity;
 import com.example.fbuapp.R;
+import com.example.fbuapp.RideOffer;
+import com.parse.ParseUser;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -36,9 +42,16 @@ public class RideOfferFragment extends Fragment implements DatePickerDialog.OnDa
 
     private EditText mStartLocationEditText;
     private EditText mEndLocationEditText;
-
     private TextView mDepartureDateTextView;
     private TextView mDepartureTimeTextView;
+    private EditText mSeatPriceEditText;
+    private EditText mSeatCountEditText;
+
+    public Button mCreateButton;
+
+    public Location mStartLocation;
+    public Location mEndLocation;
+    private Calendar mDepartureCalendar;
 
     public RideOfferFragment() {
         // Required empty public constructor
@@ -59,11 +72,18 @@ public class RideOfferFragment extends Fragment implements DatePickerDialog.OnDa
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mStartLocation = new Location();
+        mEndLocation = new Location();
+        mDepartureCalendar = Calendar.getInstance();
+
         mDepartureDateTextView = view.findViewById(R.id.tvDepartureDate);
         mDepartureTimeTextView = view.findViewById(R.id.tvDepartureTime);
-
         mStartLocationEditText = view.findViewById(R.id.etStartLocation);
         mEndLocationEditText = view.findViewById(R.id.etEndLocation);
+        mSeatCountEditText = view.findViewById(R.id.etSeatCount);
+        mSeatPriceEditText = view.findViewById(R.id.etSeatPrice);
+
+        mCreateButton = view.findViewById(R.id.btnOffer);
 
         mDepartureDateTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,23 +115,37 @@ public class RideOfferFragment extends Fragment implements DatePickerDialog.OnDa
             }
         });
 
+        mCreateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                RideOffer rideOffer = new RideOffer();
+                rideOffer.setUser(ParseUser.getCurrentUser());
+                rideOffer.setDepartureTime(mDepartureCalendar.getTime());
+                rideOffer.setSeatPrice((Number) Integer.parseInt(mSeatPriceEditText.getText().toString()));
+                rideOffer.setSeatCount((Number) Integer.parseInt(mSeatCountEditText.getText().toString()));
+                rideOffer.setStartLocation(mStartLocation);
+                rideOffer.setEndLocation(mEndLocation);
+                rideOffer.saveInBackground();
+            }
+        });
+
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode == RESULT_OK && requestCode == START_REQUEST_CODE) {
-            double latitude = data.getExtras().getDouble("latitude");
-            double longitude = data.getExtras().getDouble("longitude");
-            String city = data.getExtras().getString("city");
-            String state = data.getExtras().getString("state");
-            mStartLocationEditText.setText(city + ", " + state);
+            mStartLocation.setLatitude((Number) data.getExtras().getDouble("latitude"));
+            mStartLocation.setLongitude((Number) data.getExtras().getDouble("longitude"));
+            mStartLocation.setCity(data.getExtras().getString("city"));
+            mStartLocation.setState(data.getExtras().getString("state"));
+            mStartLocationEditText.setText(mStartLocation.getCity() + ", " + mStartLocation.getState());
         }
         else if(resultCode == RESULT_OK && requestCode == END_REQUEST_CODE){
-            double latitude = data.getExtras().getDouble("latitude");
-            double longitude = data.getExtras().getDouble("longitude");
-            String city = data.getExtras().getString("city");
-            String state = data.getExtras().getString("state");
-            mEndLocationEditText.setText(city + ", " + state);
+            mEndLocation.setLatitude((Number) data.getExtras().getDouble("latitude"));
+            mEndLocation.setLongitude((Number) data.getExtras().getDouble("longitude"));
+            mEndLocation.setCity(data.getExtras().getString("city"));
+            mEndLocation.setState(data.getExtras().getString("state"));
+            mEndLocationEditText.setText(mEndLocation.getCity() + ", " + mEndLocation.getState());
         }
     }
 
@@ -134,6 +168,7 @@ public class RideOfferFragment extends Fragment implements DatePickerDialog.OnDa
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
         String date = month+1 + "/" + dayOfMonth + "/" + year;
+        mDepartureCalendar.set(year, month-1, dayOfMonth);
         mDepartureDateTextView.setText(date);
 
     }
@@ -141,6 +176,7 @@ public class RideOfferFragment extends Fragment implements DatePickerDialog.OnDa
     @Override
     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
         String time;
+        mDepartureCalendar.set(mDepartureCalendar.get(Calendar.YEAR), mDepartureCalendar.get(Calendar.MONTH), mDepartureCalendar.get(Calendar.DAY_OF_MONTH), hour, minute);
         if(DateFormat.is24HourFormat(getContext())){
             if(minute < 10){
                 time = hour + ":0" + minute;
@@ -172,4 +208,5 @@ public class RideOfferFragment extends Fragment implements DatePickerDialog.OnDa
         }
         mDepartureTimeTextView.setText(time);
     }
+
 }

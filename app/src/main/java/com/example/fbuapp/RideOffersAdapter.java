@@ -81,8 +81,8 @@ public class RideOffersAdapter extends RecyclerView.Adapter<RideOffersAdapter.Vi
             mNameTextView.setText(rideOffer.getUser().getString("firstName"));
             mDateTextView.setText(rideOffer.getDay() + ", " + rideOffer.getDateNoYear());
             mTimeTextView.setText(rideOffer.getTime());
-            mStartLocationTextView.setText(rideOffer.getStartLocation());
-            mEndLocationTextView.setText(rideOffer.getEndLocation());
+            //mStartLocationTextView.setText(rideOffer.getStartLocation());
+            //mEndLocationTextView.setText(rideOffer.getEndLocation());
             mPricePerSeatTextView.setText(rideOffer.getSeatPrice().toString());
             mSeatsAvailableTextView.setText(rideOffer.getSeatCount().toString());
         }
