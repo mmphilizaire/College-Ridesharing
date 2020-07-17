@@ -1,6 +1,7 @@
 package com.example.fbuapp;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -13,15 +14,15 @@ public class RideStreamFragmentPagerAdapter extends FragmentPagerAdapter {
 
     final int PAGE_COUNT = 2;
     private String tabTitles[] = new String[] { "Offers", "Requests"};
-    private Context context;
 
-    public RideStreamFragmentPagerAdapter(FragmentManager fragmentManager, Context context){
+    public RideStreamFragmentPagerAdapter(FragmentManager fragmentManager){
         super(fragmentManager);
-        this.context = context;
+        //super(fragmentManager);
     }
 
     @Override
     public Fragment getItem(int position) {
+        Log.e("mishka", "okayyyy"+position);
         return RideStreamPageFragment.newInstance(position+1);
     }
 

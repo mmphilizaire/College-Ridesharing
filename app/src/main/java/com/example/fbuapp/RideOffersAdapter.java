@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.example.fbuapp.Models.RideOffer;
 import com.parse.ParseFile;
 
 import java.util.List;
@@ -41,7 +42,6 @@ public class RideOffersAdapter extends RecyclerView.Adapter<RideOffersAdapter.Vi
 
     @Override
     public int getItemCount() {
-        Log.e("Mishka", ""+mRideOffers.size());
         return mRideOffers.size();
     }
 
@@ -81,10 +81,10 @@ public class RideOffersAdapter extends RecyclerView.Adapter<RideOffersAdapter.Vi
             mNameTextView.setText(rideOffer.getUser().getString("firstName"));
             mDateTextView.setText(rideOffer.getDay() + ", " + rideOffer.getDateNoYear());
             mTimeTextView.setText(rideOffer.getTime());
-            //mStartLocationTextView.setText(rideOffer.getStartLocation());
-            //mEndLocationTextView.setText(rideOffer.getEndLocation());
-            mPricePerSeatTextView.setText(rideOffer.getSeatPrice().toString());
-            mSeatsAvailableTextView.setText(rideOffer.getSeatCount().toString());
+            mStartLocationTextView.setText(rideOffer.getStartLocation().getCity()+", "+rideOffer.getStartLocation().getState());
+            mEndLocationTextView.setText(rideOffer.getEndLocation().getCity()+", "+rideOffer.getEndLocation().getState());
+            mPricePerSeatTextView.setText("$" + rideOffer.getSeatPrice().toString() + "\nper seat");
+            mSeatsAvailableTextView.setText(rideOffer.getSeatCount().toString() + " seats left");
         }
     }
 

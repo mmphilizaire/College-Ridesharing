@@ -1,5 +1,9 @@
-package com.example.fbuapp;
+package com.example.fbuapp.Models;
 
+import android.text.format.DateFormat;
+
+import com.example.fbuapp.Models.Location;
+import com.example.fbuapp.Models.RideOffer;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
@@ -60,6 +64,22 @@ public class RideRequest extends ParseObject {
 
     public void setEndLocation(Location endLocation){
         put(KEY_END_LOCATION, endLocation);
+    }
+
+    public String getDay(Date date){
+        return (String) DateFormat.format("EEEE", date);
+    }
+
+    public String getDateWithYear(Date date){
+        return (String) DateFormat.format("MMMM d, yyyy", date);
+    }
+
+    public String getDateNoYear(Date date){
+        return (String) DateFormat.format("MMMM d", date);
+    }
+
+    public String getTime(Date date){
+        return (String) DateFormat.format("h:mm", date);
     }
 
 }

@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,11 +35,13 @@ public class RideStreamFragment extends Fragment {
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = view.findViewById(R.id.viewpager);
-        viewPager.setAdapter(new RideStreamFragmentPagerAdapter(getActivity().getSupportFragmentManager(), getContext()));
+        viewPager.setAdapter(new RideStreamFragmentPagerAdapter(getActivity().getSupportFragmentManager()));
 
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = view.findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        //viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
     }
 }

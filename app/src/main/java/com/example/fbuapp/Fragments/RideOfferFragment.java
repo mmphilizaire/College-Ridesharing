@@ -20,10 +20,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.example.fbuapp.Location;
+import com.example.fbuapp.Models.Location;
 import com.example.fbuapp.MapActivity;
 import com.example.fbuapp.R;
-import com.example.fbuapp.RideOffer;
+import com.example.fbuapp.Models.RideOffer;
 import com.parse.ParseUser;
 
 import java.util.Calendar;

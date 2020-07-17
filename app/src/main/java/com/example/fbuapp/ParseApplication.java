@@ -2,6 +2,9 @@ package com.example.fbuapp;
 
 import android.app.Application;
 
+import com.example.fbuapp.Models.Location;
+import com.example.fbuapp.Models.RideOffer;
+import com.example.fbuapp.Models.RideRequest;
 import com.parse.Parse;
 import com.parse.ParseObject;
 

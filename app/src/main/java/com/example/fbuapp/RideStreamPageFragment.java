@@ -10,8 +10,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
+import com.example.fbuapp.Models.RideOffer;
+import com.example.fbuapp.Models.RideRequest;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -25,8 +26,10 @@ public class RideStreamPageFragment extends Fragment {
 
     private int mPage;
 
-    private RideOffersAdapter adapter;
+    private RideOffersAdapter mOffersAdapter;
+    private RideRequestsAdapter mRequestsAdpater;
     private ArrayList<RideOffer> rideOffers;
+    private ArrayList<RideRequest> rideRequests;
     private RecyclerView rideOffersRecyclerView;
 
     public RideStreamPageFragment() {
@@ -55,13 +58,18 @@ public class RideStreamPageFragment extends Fragment {
         if(mPage == 1){
             rideOffersRecyclerView = view.findViewById(R.id.rvRideOffers);
             rideOffers = new ArrayList<>();
-            adapter = new RideOffersAdapter(rideOffers, getContext());
-            rideOffersRecyclerView.setAdapter(adapter);
+            mOffersAdapter = new RideOffersAdapter(rideOffers, getContext());
+            rideOffersRecyclerView.setAdapter(mOffersAdapter);
             rideOffersRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             rideOffersList();
         }
         else{
-
+            rideOffersRecyclerView = view.findViewById(R.id.rvRideOffers);
+            rideRequests = new ArrayList<>();
+            mRequestsAdpater = new RideRequestsAdapter(rideRequests, getContext());
+            rideOffersRecyclerView.setAdapter(mRequestsAdpater);
+            rideOffersRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            rideRequestsList();
         }
         return view;
     }
@@ -69,6 +77,8 @@ public class RideStreamPageFragment extends Fragment {
     private void rideOffersList() {
         ParseQuery<RideOffer> query = ParseQuery.getQuery(RideOffer.class);
         query.include(RideOffer.KEY_USER);
+        query.include(RideOffer.KEY_START_LOCATION);
+        query.include(RideOffer.KEY_END_LOCATION);
         query.setLimit(20);
         query.findInBackground(new FindCallback<RideOffer>() {
             @Override
@@ -77,7 +87,25 @@ public class RideStreamPageFragment extends Fragment {
                     //error handling
                     return;
                 }
-                adapter.addAll(objects);
+                mOffersAdapter.addAll(objects);
+            }
+        });
+    }
+
+    private void rideRequestsList() {
+        ParseQuery<RideRequest> query = ParseQuery.getQuery(RideRequest.class);
+        query.include(RideRequest.KEY_USER);
+        query.include(RideRequest.KEY_START_LOCATION);
+        query.include(RideRequest.KEY_END_LOCATION);
+        query.setLimit(20);
+        query.findInBackground(new FindCallback<RideRequest>() {
+            @Override
+            public void done(List<RideRequest> objects, ParseException e) {
+                if(e != null){
+                    //error handling
+                    return;
+                }
+                mRequestsAdpater.addAll(objects);
             }
         });
     }

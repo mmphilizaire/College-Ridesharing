@@ -1,4 +1,4 @@
-package com.example.fbuapp;
+package com.example.fbuapp.Models;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
@@ -8,7 +8,7 @@ import org.json.JSONArray;
 import org.parceler.Parcel;
 
 import android.text.format.DateFormat;
-import java.text.SimpleDateFormat;
+
 import java.util.Date;
 
 @Parcel(analyze = RideOffer.class)
