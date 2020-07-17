@@ -42,6 +42,5 @@ public class RideStreamFragment extends Fragment {
         tabLayout.setupWithViewPager(viewPager);
 
         //viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-
     }
 }
