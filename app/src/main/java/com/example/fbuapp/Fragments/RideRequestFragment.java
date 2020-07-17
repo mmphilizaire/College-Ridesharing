@@ -24,13 +24,14 @@ import com.example.fbuapp.Location;
 import com.example.fbuapp.MapActivity;
 import com.example.fbuapp.R;
 import com.example.fbuapp.RideOffer;
+import com.example.fbuapp.RideRequest;
 import com.parse.ParseUser;
 
 import java.util.Calendar;
 
 import static android.app.Activity.RESULT_OK;
 
-public class RideOfferFragment extends Fragment implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class RideRequestFragment extends Fragment implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     public static final int START_REQUEST_CODE = 1234;
     public static final int END_REQUEST_CODE = 4321;
@@ -39,22 +40,24 @@ public class RideOfferFragment extends Fragment implements DatePickerDialog.OnDa
 
     private EditText mStartLocationEditText;
     private EditText mEndLocationEditText;
-    private TextView mDepartureDateTextView;
-    private TextView mDepartureTimeTextView;
-    private EditText mSeatPriceEditText;
-    private EditText mSeatCountEditText;
+    private TextView mEarliestDateTextView;
+    private TextView mEarliestTimeTextView;
+    private TextView mLatestDateTextView;
+    private TextView mLatestTimeTextView;
 
     public Button mCreateButton;
 
     public Location mStartLocation;
     public Location mEndLocation;
-    private Calendar mDepartureCalendar;
+    private Calendar mEarliestDepartureCalendar;
+    private Calendar mLatestDepartureCalendar;
+    private boolean mEarliestDeparture;
 
-    public RideOfferFragment() {
+    public RideRequestFragment() {
         // Required empty public constructor
     }
 
-    public RideOfferFragment(FragmentManager fragmentManager) {
+    public RideRequestFragment(FragmentManager fragmentManager) {
         mFragmentManager = fragmentManager;
     }
 
@@ -62,7 +65,7 @@ public class RideOfferFragment extends Fragment implements DatePickerDialog.OnDa
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_ride_offer, container, false);
+        return inflater.inflate(R.layout.fragment_ride_request, container, false);
     }
 
     @Override
@@ -71,27 +74,47 @@ public class RideOfferFragment extends Fragment implements DatePickerDialog.OnDa
 
         mStartLocation = new Location();
         mEndLocation = new Location();
-        mDepartureCalendar = Calendar.getInstance();
+        mEarliestDepartureCalendar = Calendar.getInstance();
+        mLatestDepartureCalendar = Calendar.getInstance();
+        mEarliestDeparture = false;
 
-        mDepartureDateTextView = view.findViewById(R.id.tvDepartureDate);
-        mDepartureTimeTextView = view.findViewById(R.id.tvDepartureTime);
+        mEarliestDateTextView = view.findViewById(R.id.tvEarliestDate);
+        mEarliestTimeTextView = view.findViewById(R.id.tvEarliestTime);
+        mLatestDateTextView = view.findViewById(R.id.tvLatestDate);
+        mLatestTimeTextView = view.findViewById(R.id.tvLatestTime);
         mStartLocationEditText = view.findViewById(R.id.etStartLocation);
         mEndLocationEditText = view.findViewById(R.id.etEndLocation);
-        mSeatCountEditText = view.findViewById(R.id.etSeatCount);
-        mSeatPriceEditText = view.findViewById(R.id.etSeatPrice);
 
-        mCreateButton = view.findViewById(R.id.btnOffer);
+        mCreateButton = view.findViewById(R.id.btnRequest);
 
-        mDepartureDateTextView.setOnClickListener(new View.OnClickListener() {
+        mEarliestDateTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mEarliestDeparture = true;
                 showDatePickerDialog();
             }
         });
 
-        mDepartureTimeTextView.setOnClickListener(new View.OnClickListener() {
+        mLatestDateTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mEarliestDeparture = false;
+                showDatePickerDialog();
+            }
+        });
+
+        mEarliestTimeTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mEarliestDeparture = true;
+                showTimePickerDialog();
+            }
+        });
+
+        mLatestTimeTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mEarliestDeparture = false;
                 showTimePickerDialog();
             }
         });
@@ -115,14 +138,13 @@ public class RideOfferFragment extends Fragment implements DatePickerDialog.OnDa
         mCreateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RideOffer rideOffer = new RideOffer();
-                rideOffer.setUser(ParseUser.getCurrentUser());
-                rideOffer.setDepartureTime(mDepartureCalendar.getTime());
-                rideOffer.setSeatPrice((Number) Integer.parseInt(mSeatPriceEditText.getText().toString()));
-                rideOffer.setSeatCount((Number) Integer.parseInt(mSeatCountEditText.getText().toString()));
-                rideOffer.setStartLocation(mStartLocation);
-                rideOffer.setEndLocation(mEndLocation);
-                rideOffer.saveInBackground();
+                RideRequest rideRequest = new RideRequest();
+                rideRequest.setUser(ParseUser.getCurrentUser());
+                rideRequest.setEarliestDeparture(mEarliestDepartureCalendar.getTime());
+                rideRequest.setLatestDeparture(mLatestDepartureCalendar.getTime());
+                rideRequest.setStartLocation(mStartLocation);
+                rideRequest.setEndLocation(mEndLocation);
+                rideRequest.saveInBackground();
             }
         });
 
@@ -165,15 +187,19 @@ public class RideOfferFragment extends Fragment implements DatePickerDialog.OnDa
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
         String date = month+1 + "/" + dayOfMonth + "/" + year;
-        mDepartureCalendar.set(year, month-1, dayOfMonth);
-        mDepartureDateTextView.setText(date);
-
+        if(mEarliestDeparture){
+            mEarliestDepartureCalendar.set(year, month-1, dayOfMonth);
+            mEarliestDateTextView.setText(date);
+        }
+        else {
+            mLatestDepartureCalendar.set(year, month-1, dayOfMonth);
+            mLatestDateTextView.setText(date);
+        }
     }
 
     @Override
     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
         String time;
-        mDepartureCalendar.set(mDepartureCalendar.get(Calendar.YEAR), mDepartureCalendar.get(Calendar.MONTH), mDepartureCalendar.get(Calendar.DAY_OF_MONTH), hour, minute);
         if(DateFormat.is24HourFormat(getContext())){
             if(minute < 10){
                 time = hour + ":0" + minute;
@@ -206,7 +232,14 @@ public class RideOfferFragment extends Fragment implements DatePickerDialog.OnDa
                 }
             }
         }
-        mDepartureTimeTextView.setText(time);
+        if(mEarliestDeparture){
+            mEarliestDepartureCalendar.set(mEarliestDepartureCalendar.get(Calendar.YEAR), mEarliestDepartureCalendar.get(Calendar.MONTH), mEarliestDepartureCalendar.get(Calendar.DAY_OF_MONTH), hour, minute);
+            mEarliestTimeTextView.setText(time);
+        }
+        else{
+            mLatestDepartureCalendar.set(mLatestDepartureCalendar.get(Calendar.YEAR), mLatestDepartureCalendar.get(Calendar.MONTH), mLatestDepartureCalendar.get(Calendar.DAY_OF_MONTH), hour, minute);
+            mLatestTimeTextView.setText(time);
+        }
     }
 
 }

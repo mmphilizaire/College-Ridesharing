@@ -14,6 +14,7 @@ public class ParseApplication extends Application {
         super.onCreate();
 
         ParseObject.registerSubclass(RideOffer.class);
+        ParseObject.registerSubclass(RideRequest.class);
         ParseObject.registerSubclass(Location.class);
 
         // Use for troubleshooting -- remove this line for production

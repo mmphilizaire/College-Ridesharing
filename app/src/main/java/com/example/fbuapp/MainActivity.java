@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.fbuapp.Fragments.RideOfferFragment;
+import com.example.fbuapp.Fragments.RideRequestFragment;
 import com.example.fbuapp.Fragments.RideStreamFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -36,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
                         fragment = new RideOfferFragment(mFragmentManager);
                         break;
                     case R.id.action_ride_request:
-                        //fragment = new RideStreamFragment();
-                        //break;
+                        fragment = new RideRequestFragment();
+                        break;
                     case R.id.action_profile:
                     default:
                         fragment = new RideStreamFragment();
