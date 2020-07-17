@@ -34,7 +34,7 @@ public class RideStreamFragment extends Fragment {
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = view.findViewById(R.id.viewpager);
-        viewPager.setAdapter(new RideStreamFragmentPagerAdapter(getActivity().getSupportFragmentManager(), getContext()));
+        viewPager.setAdapter(new RideStreamFragmentPagerAdapter(getChildFragmentManager(), getContext()));
 
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = view.findViewById(R.id.sliding_tabs);
