@@ -15,13 +15,16 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.fbuapp.Fragments.FilterDialogFragment;
+import com.example.fbuapp.Models.Location;
 import com.example.fbuapp.Models.RideOffer;
 import com.example.fbuapp.Models.RideRequest;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class RideStreamPageFragment extends Fragment implements FilterDialogFragment.FilterDialogListener {
@@ -145,8 +148,42 @@ public class RideStreamPageFragment extends Fragment implements FilterDialogFrag
     }
 
     @Override
-    public void onFinishFilterDialog(String input) {
-        Log.e("Mishka", input);
+    public void onFinishFilterDialog(final Location start, final int radiusStart, final Location end, final int radiusEnd, final Date earliest, final Date latest, final boolean hideFullRides){
+        ParseQuery<RideOffer> query = ParseQuery.getQuery(RideOffer.class);
+        query.include(RideOffer.KEY_USER);
+        query.include(RideOffer.KEY_START_LOCATION);
+        query.include(RideOffer.KEY_END_LOCATION);
+        query.setLimit(20);
+        query.findInBackground(new FindCallback<RideOffer>() {
+            @Override
+            public void done(List<RideOffer> objects, ParseException e) {
+                if(e != null){
+                    //error handling
+                    return;
+                }
+                List<RideOffer> filtered = new ArrayList<>();
+                for(RideOffer object : objects){
+                    if(object.getStartLocation().getGeoPoint().distanceInMilesTo(start.getGeoPoint()) > radiusStart){
+                        continue;
+                    }
+                    if(object.getEndLocation().getGeoPoint().distanceInMilesTo(end.getGeoPoint()) > radiusEnd){
+                        continue;
+                    }
+                    if(!object.getDepartureTime().after(earliest)){
+                        continue;
+                    }
+                    if(!object.getDepartureTime().before(latest)){
+                        continue;
+                    }
+                    if(hideFullRides && object.getPassengers().length() == object.getSeatCount().intValue()){
+                        continue;
+                    }
+                    filtered.add(object);
+                }
+                mOffersAdapter.clear();
+                mOffersAdapter.addAll(filtered);
+            }
+        });
     }
 
 }

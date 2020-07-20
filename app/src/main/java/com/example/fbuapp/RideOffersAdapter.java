@@ -45,6 +45,11 @@ public class RideOffersAdapter extends RecyclerView.Adapter<RideOffersAdapter.Vi
         return mRideOffers.size();
     }
 
+    public void clear(){
+        mRideOffers.clear();
+        notifyDataSetChanged();
+    }
+
     public void addAll(List<RideOffer> rideOffers){
         mRideOffers.addAll(rideOffers);
         notifyDataSetChanged();
