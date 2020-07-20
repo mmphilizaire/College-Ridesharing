@@ -2,6 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:padding="10dp"
     android:orientation="vertical">
 
     <TextView
@@ -50,10 +51,10 @@
             android:id="@+id/etStartMileRadius"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="10"
             android:ems="2"
-            android:focusable="false"
-            android:inputType="number" />
+            android:focusable="auto"
+            android:inputType="number"
+            android:text="10" />
 
     </LinearLayout>
 
@@ -93,10 +94,10 @@
             android:id="@+id/etEndMileRadius"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="10"
             android:ems="2"
-            android:focusable="false"
-            android:inputType="number" />
+            android:focusable="auto"
+            android:inputType="number"
+            android:text="10" />
 
     </LinearLayout>
 
@@ -142,16 +143,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Hide Full Rides" />
-        
+
         <CheckBox
+            android:id="@+id/cbHideFullRides"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         
     </LinearLayout>
 
     <Button
+        android:id="@+id/btnApply"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Apply"/>
+        android:text="Apply" />
 
 </LinearLayout>

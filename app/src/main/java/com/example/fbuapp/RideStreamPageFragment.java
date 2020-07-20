@@ -7,10 +7,12 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.fbuapp.Fragments.FilterDialogFragment;
 import com.example.fbuapp.Models.RideOffer;
@@ -22,7 +24,7 @@ import com.parse.ParseQuery;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RideStreamPageFragment extends Fragment {
+public class RideStreamPageFragment extends Fragment implements FilterDialogFragment.FilterDialogListener {
 
     public static final String ARG_PAGE = "ARG_PAGE";
 
@@ -96,8 +98,9 @@ public class RideStreamPageFragment extends Fragment {
     }
 
     private void filterResults(){
-        FragmentManager fragmentManager = getChildFragmentManager();
+        FragmentManager fragmentManager = getFragmentManager();
         FilterDialogFragment filterDialogFragment = FilterDialogFragment.newInstance();
+        filterDialogFragment.setTargetFragment(RideStreamPageFragment.this, 200);
         filterDialogFragment.show(fragmentManager, "filter_fragment");
     }
 
@@ -140,4 +143,10 @@ public class RideStreamPageFragment extends Fragment {
             }
         });
     }
+
+    @Override
+    public void onFinishFilterDialog(String input) {
+        Log.e("Mishka", input);
+    }
+
 }
