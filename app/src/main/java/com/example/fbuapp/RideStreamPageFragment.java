@@ -6,10 +6,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.fbuapp.Models.RideOffer;
 import com.example.fbuapp.Models.RideRequest;
@@ -28,9 +28,11 @@ public class RideStreamPageFragment extends Fragment {
 
     private RideOffersAdapter mOffersAdapter;
     private RideRequestsAdapter mRequestsAdpater;
-    private ArrayList<RideOffer> rideOffers;
-    private ArrayList<RideRequest> rideRequests;
-    private RecyclerView rideOffersRecyclerView;
+    private ArrayList<RideOffer> mRideOffers;
+    private ArrayList<RideRequest> mRideRequests;
+    private RecyclerView mRideOffersRecyclerView;
+    private Button mFilterButton;
+    private Button mSortButton;
 
     public RideStreamPageFragment() {
         // Required empty public constructor
@@ -55,23 +57,48 @@ public class RideStreamPageFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_ride_page_stream, container, false);
+
+        mFilterButton = view.findViewById(R.id.btnFilter);
+        mSortButton = view.findViewById(R.id.btnSort);
+
+        mFilterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filterResults();
+            }
+        });
+        mSortButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sortResults();
+            }
+        });
+
         if(mPage == 1){
-            rideOffersRecyclerView = view.findViewById(R.id.rvRideOffers);
-            rideOffers = new ArrayList<>();
-            mOffersAdapter = new RideOffersAdapter(rideOffers, getContext());
-            rideOffersRecyclerView.setAdapter(mOffersAdapter);
-            rideOffersRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            mRideOffersRecyclerView = view.findViewById(R.id.rvRideOffers);
+            mRideOffers = new ArrayList<>();
+            mOffersAdapter = new RideOffersAdapter(mRideOffers, getContext());
+            mRideOffersRecyclerView.setAdapter(mOffersAdapter);
+            mRideOffersRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             rideOffersList();
         }
         else{
-            rideOffersRecyclerView = view.findViewById(R.id.rvRideOffers);
-            rideRequests = new ArrayList<>();
-            mRequestsAdpater = new RideRequestsAdapter(rideRequests, getContext());
-            rideOffersRecyclerView.setAdapter(mRequestsAdpater);
-            rideOffersRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            mRideOffersRecyclerView = view.findViewById(R.id.rvRideOffers);
+            mRideRequests = new ArrayList<>();
+            mRequestsAdpater = new RideRequestsAdapter(mRideRequests, getContext());
+            mRideOffersRecyclerView.setAdapter(mRequestsAdpater);
+            mRideOffersRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             rideRequestsList();
         }
         return view;
+    }
+
+    private void filterResults(){
+        
+    }
+
+    private void sortResults(){
+
     }
 
     private void rideOffersList() {
