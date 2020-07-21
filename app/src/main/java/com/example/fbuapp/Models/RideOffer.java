@@ -99,7 +99,11 @@ public class RideOffer extends ParseObject {
 
     public String getTime(){
         Date date = getDepartureTime();
-        return (String) DateFormat.format("h:mm", date);
+        return (String) DateFormat.format("h:mm a", date);
+    }
+
+    public int getSeatsAvailable(){
+        return getSeatCount().intValue() - getPassengers().length();
     }
 
 }
