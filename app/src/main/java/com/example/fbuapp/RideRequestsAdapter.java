@@ -46,6 +46,11 @@ public class RideRequestsAdapter extends RecyclerView.Adapter<RideRequestsAdapte
         return mRideRequests.size();
     }
 
+    public void clear(){
+        mRideRequests.clear();
+        notifyDataSetChanged();
+    }
+
     public void addAll(List<RideRequest> rideRequests){
         mRideRequests.addAll(rideRequests);
         notifyDataSetChanged();

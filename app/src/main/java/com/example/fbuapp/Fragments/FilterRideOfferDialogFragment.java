@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
@@ -23,11 +22,10 @@ import com.example.fbuapp.R;
 import com.parse.ParseGeoPoint;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import static android.app.Activity.RESULT_OK;
 
-public class FilterDialogFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+public class FilterRideOfferDialogFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
     public static final int START_REQUEST_CODE = 1234;
     public static final int END_REQUEST_CODE = 4321;
@@ -47,22 +45,22 @@ public class FilterDialogFragment extends DialogFragment implements DatePickerDi
     private CheckBox mHideFullRidesCheckBox;
     private Button mApplyFilterButton;
 
-    public interface FilterDialogListener{
-        void onFinishFilterDialog(Location start, int radiusStart, Location end, int radiusEnd, Calendar earliest, Calendar latest, boolean hideFullRides);
+    public interface FilterRideOfferDialogListener{
+        void onFinishRideOfferFilterDialog(Location start, int radiusStart, Location end, int radiusEnd, Calendar earliest, Calendar latest, boolean hideFullRides);
     }
 
-    public FilterDialogFragment(){
+    public FilterRideOfferDialogFragment(){
 
     }
 
-    public static FilterDialogFragment newInstance(){
-        FilterDialogFragment filter = new FilterDialogFragment();
+    public static FilterRideOfferDialogFragment newInstance(){
+        FilterRideOfferDialogFragment filter = new FilterRideOfferDialogFragment();
         return filter;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        return inflater.inflate(R.layout.fragment_dialog_filter, container);
+        return inflater.inflate(R.layout.fragment_dialog_filter_ride_offer, container);
     }
 
     @Override
@@ -113,8 +111,8 @@ public class FilterDialogFragment extends DialogFragment implements DatePickerDi
         mApplyFilterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FilterDialogListener listener = (FilterDialogListener) getTargetFragment();
-                listener.onFinishFilterDialog(mStartLocation, Integer.parseInt(mStartMileRadiusEditText.getText().toString()), mEndLocation, Integer.parseInt(mEndMileRadiusEditText.getText().toString()), mEarliestDateCalendar, mLatestDateCalendar, mHideFullRidesCheckBox.isChecked());
+                FilterRideOfferDialogListener listener = (FilterRideOfferDialogListener) getTargetFragment();
+                listener.onFinishRideOfferFilterDialog(mStartLocation, Integer.parseInt(mStartMileRadiusEditText.getText().toString()), mEndLocation, Integer.parseInt(mEndMileRadiusEditText.getText().toString()), mEarliestDateCalendar, mLatestDateCalendar, mHideFullRidesCheckBox.isChecked());
                 dismiss();
             }
         });
