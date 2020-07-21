@@ -24,6 +24,7 @@ import com.example.fbuapp.Models.Location;
 import com.example.fbuapp.MapActivity;
 import com.example.fbuapp.R;
 import com.example.fbuapp.Models.RideOffer;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 
 import java.util.Calendar;
@@ -131,17 +132,23 @@ public class RideOfferFragment extends Fragment implements DatePickerDialog.OnDa
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode == RESULT_OK && requestCode == START_REQUEST_CODE) {
-            mStartLocation.setLatitude((Number) data.getExtras().getDouble("latitude"));
-            mStartLocation.setLongitude((Number) data.getExtras().getDouble("longitude"));
+            double latitude = data.getExtras().getDouble("latitude");
+            double longitude = data.getExtras().getDouble("longitude");
+            mStartLocation.setLatitude((Number) latitude );
+            mStartLocation.setLongitude((Number) longitude);
             mStartLocation.setCity(data.getExtras().getString("city"));
             mStartLocation.setState(data.getExtras().getString("state"));
+            mStartLocation.setGeoPoint(new ParseGeoPoint(latitude, longitude));
             mStartLocationEditText.setText(mStartLocation.getCity() + ", " + mStartLocation.getState());
         }
         else if(resultCode == RESULT_OK && requestCode == END_REQUEST_CODE){
-            mEndLocation.setLatitude((Number) data.getExtras().getDouble("latitude"));
-            mEndLocation.setLongitude((Number) data.getExtras().getDouble("longitude"));
+            double latitude = data.getExtras().getDouble("latitude");
+            double longitude = data.getExtras().getDouble("longitude");
+            mEndLocation.setLatitude((Number) latitude);
+            mEndLocation.setLongitude((Number) longitude);
             mEndLocation.setCity(data.getExtras().getString("city"));
             mEndLocation.setState(data.getExtras().getString("state"));
+            mEndLocation.setGeoPoint(new ParseGeoPoint(latitude, longitude));
             mEndLocationEditText.setText(mEndLocation.getCity() + ", " + mEndLocation.getState());
         }
     }

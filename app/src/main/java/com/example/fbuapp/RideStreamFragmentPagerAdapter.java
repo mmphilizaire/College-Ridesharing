@@ -22,7 +22,6 @@ public class RideStreamFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        Log.e("mishka", "okayyyy"+position);
         return RideStreamPageFragment.newInstance(position+1);
     }
 

@@ -1,6 +1,7 @@
 package com.example.fbuapp.Models;
 
 import com.parse.ParseClassName;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 
 @ParseClassName("Location")
@@ -10,6 +11,7 @@ public class Location extends ParseObject {
     public static final String KEY_LONGITUDE = "longitude";
     public static final String KEY_CITY = "city";
     public static final String KEY_STATE = "state";
+    public static final String KEY_GEO_POINT = "geoPoint";
 
     public Location(){
     }
@@ -44,5 +46,13 @@ public class Location extends ParseObject {
 
     public void setState(String state){
         put(KEY_STATE, state);
+    }
+
+    public ParseGeoPoint getGeoPoint(){
+        return getParseGeoPoint(KEY_GEO_POINT);
+    }
+
+    public void setGeoPoint(ParseGeoPoint geoPoint){
+        put(KEY_GEO_POINT, geoPoint);
     }
 }
