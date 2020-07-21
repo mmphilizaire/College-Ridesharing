@@ -102,4 +102,8 @@ public class RideOffer extends ParseObject {
         return (String) DateFormat.format("h:mm", date);
     }
 
+    public int getSeatsAvailable(){
+        return getSeatCount().intValue() - getPassengers().length();
+    }
+
 }

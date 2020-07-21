@@ -9,10 +9,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.example.fbuapp.Fragments.FilterRideOfferDialogFragment;
+import com.example.fbuapp.Fragments.RideOfferDetailFragment;
 import com.example.fbuapp.Models.RideOffer;
 import com.parse.ParseFile;
 
@@ -22,10 +26,12 @@ public class RideOffersAdapter extends RecyclerView.Adapter<RideOffersAdapter.Vi
 
     private List<RideOffer> mRideOffers;
     private Context mContext;
+    private Fragment mFragment;
 
-    public RideOffersAdapter(List<RideOffer> rideOffers, Context context){
+    public RideOffersAdapter(List<RideOffer> rideOffers, Context context, Fragment fragment){
         mRideOffers = rideOffers;
         mContext = context;
+        mFragment = fragment;
     }
 
     @Override
@@ -55,7 +61,9 @@ public class RideOffersAdapter extends RecyclerView.Adapter<RideOffersAdapter.Vi
         notifyDataSetChanged();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+       // private RideOffer mRideOffer;
 
         public ImageView mProfilePictureImageView;
         public TextView mNameTextView;
@@ -68,6 +76,7 @@ public class RideOffersAdapter extends RecyclerView.Adapter<RideOffersAdapter.Vi
 
         public ViewHolder(@NonNull View itemView){
             super(itemView);
+            itemView.setOnClickListener(this);
 
             mProfilePictureImageView = itemView.findViewById(R.id.ivProfilePicture);
             mNameTextView = itemView.findViewById(R.id.tvName);
@@ -75,7 +84,7 @@ public class RideOffersAdapter extends RecyclerView.Adapter<RideOffersAdapter.Vi
             mTimeTextView = itemView.findViewById(R.id.tvTime);
             mStartLocationTextView = itemView.findViewById(R.id.tvStart);
             mEndLocationTextView = itemView.findViewById(R.id.tvEnd);
-            mPricePerSeatTextView = itemView.findViewById(R.id.tvPrice);
+            mPricePerSeatTextView = itemView.findViewById(R.id.tvSeatPrice);
             mSeatsAvailableTextView = itemView.findViewById(R.id.tvSeats);
 
         }
@@ -89,7 +98,16 @@ public class RideOffersAdapter extends RecyclerView.Adapter<RideOffersAdapter.Vi
             mStartLocationTextView.setText(rideOffer.getStartLocation().getCity()+", "+rideOffer.getStartLocation().getState());
             mEndLocationTextView.setText(rideOffer.getEndLocation().getCity()+", "+rideOffer.getEndLocation().getState());
             mPricePerSeatTextView.setText("$" + rideOffer.getSeatPrice().toString() + "\nper seat");
-            mSeatsAvailableTextView.setText(rideOffer.getSeatCount().toString() + " seats left");
+            mSeatsAvailableTextView.setText(rideOffer.getSeatsAvailable() + " seats left");
+        }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition();
+            FragmentManager fragmentManager = mFragment.getFragmentManager();
+            RideOfferDetailFragment detailFragment = RideOfferDetailFragment.newInstance(mRideOffers.get(position));
+            detailFragment.setTargetFragment(mFragment, 200);
+            detailFragment.show(fragmentManager, "detail_fragment");
         }
     }
 

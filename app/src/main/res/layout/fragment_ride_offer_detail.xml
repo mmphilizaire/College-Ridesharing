@@ -2,7 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="300dp" android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
 
     <TextView
         android:id="@+id/tvDetails"
@@ -51,8 +53,8 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="0dp"
         android:gravity="center"
-        tools:text="Alexandria,\nVirginia"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        tools:text="Alexandria,\nVirginia" />
 
     <TextView
         android:id="@+id/tvEnd"
@@ -68,7 +70,7 @@
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/tvPrice"
+        android:layout_above="@+id/tvSeatPrice"
         android:layout_below="@+id/mvMap"
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
@@ -79,7 +81,7 @@
         app:srcCompat="@drawable/ic_arrow" />
 
     <TextView
-        android:id="@+id/tvPrice"
+        android:id="@+id/tvSeatPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvStart"
@@ -92,7 +94,7 @@
         android:id="@+id/tvSeatsAvailable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tvPrice"
+        android:layout_below="@id/tvSeatPrice"
         android:layout_alignParentEnd="true"
         android:textSize="16sp"
         tools:text="3 seats\navailable" />
