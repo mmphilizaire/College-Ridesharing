@@ -79,7 +79,7 @@ public class RideRequest extends ParseObject {
     }
 
     public String getTime(Date date){
-        return (String) DateFormat.format("h:mm", date);
+        return (String) DateFormat.format("h:mm a", date);
     }
 
 }

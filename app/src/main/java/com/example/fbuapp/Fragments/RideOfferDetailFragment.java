@@ -20,6 +20,7 @@ public class RideOfferDetailFragment extends DialogFragment {
 
     private RideOffer mRideOffer;
 
+    private ImageView mCloseImageView;
     private TextView mDateTextView;
     private TextView mTimeTextView;
     private  TextView mStartLocationTextView;
@@ -53,6 +54,7 @@ public class RideOfferDetailFragment extends DialogFragment {
 
         mRideOffer = getArguments().getParcelable("rideOffer");
 
+        mCloseImageView = view.findViewById(R.id.ivClose);
         mDateTextView = view.findViewById(R.id.tvDate);
         mTimeTextView = view.findViewById(R.id.tvTime);
         mStartLocationTextView = view.findViewById(R.id.tvStart);
@@ -65,6 +67,13 @@ public class RideOfferDetailFragment extends DialogFragment {
         mDriverUniversityTextView = view.findViewById(R.id.tvUniversity);
 
         bind();
+
+        mCloseImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+            }
+        });
 
     }
 
