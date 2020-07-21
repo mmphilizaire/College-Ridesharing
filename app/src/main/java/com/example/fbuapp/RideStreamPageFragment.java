@@ -99,7 +99,7 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
         else{
             mRideOffersRecyclerView = view.findViewById(R.id.rvRideOffers);
             mRideRequests = new ArrayList<>();
-            mRequestsAdpater = new RideRequestsAdapter(mRideRequests, getContext());
+            mRequestsAdpater = new RideRequestsAdapter(mRideRequests, getContext(), this);
             mRideOffersRecyclerView.setAdapter(mRequestsAdpater);
             mRideOffersRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             rideRequestsList();

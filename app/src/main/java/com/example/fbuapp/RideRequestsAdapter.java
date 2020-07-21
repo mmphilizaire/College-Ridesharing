@@ -1,7 +1,6 @@
 package com.example.fbuapp;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,11 +8,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
-import com.example.fbuapp.Models.RideOffer;
+import com.example.fbuapp.Fragments.RideOfferDetailFragment;
+import com.example.fbuapp.Fragments.RideRequestDetailFragment;
+import com.example.fbuapp.Fragments.RideRequestFragment;
 import com.example.fbuapp.Models.RideRequest;
 import com.parse.ParseFile;
 
@@ -23,10 +26,12 @@ public class RideRequestsAdapter extends RecyclerView.Adapter<RideRequestsAdapte
 
     private List<RideRequest> mRideRequests;
     private Context mContext;
+    private Fragment mFragment;
 
-    public RideRequestsAdapter(List<RideRequest> rideRequests, Context context){
+    public RideRequestsAdapter(List<RideRequest> rideRequests, Context context, Fragment fragment){
         mRideRequests = rideRequests;
         mContext = context;
+        mFragment = fragment;
     }
 
     @Override
@@ -56,7 +61,7 @@ public class RideRequestsAdapter extends RecyclerView.Adapter<RideRequestsAdapte
         notifyDataSetChanged();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public ImageView mProfilePictureImageView;
         public TextView mNameTextView;
@@ -69,6 +74,7 @@ public class RideRequestsAdapter extends RecyclerView.Adapter<RideRequestsAdapte
 
         public ViewHolder(@NonNull View itemView){
             super(itemView);
+            itemView.setOnClickListener(this);
 
             mProfilePictureImageView = itemView.findViewById(R.id.ivProfilePicture);
             mNameTextView = itemView.findViewById(R.id.tvName);
@@ -92,6 +98,16 @@ public class RideRequestsAdapter extends RecyclerView.Adapter<RideRequestsAdapte
             mStartLocationTextView.setText(rideRequest.getStartLocation().getCity()+", "+rideRequest.getStartLocation().getState());
             mEndLocationTextView.setText(rideRequest.getEndLocation().getCity()+", "+rideRequest.getEndLocation().getState());
         }
+
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition();
+            FragmentManager fragmentManager = mFragment.getFragmentManager();
+            RideRequestDetailFragment detailFragment = RideRequestDetailFragment.newInstance(mRideRequests.get(position));
+            detailFragment.setTargetFragment(mFragment, 200);
+            detailFragment.show(fragmentManager, "detail_fragment");
+        }
+
     }
 
 }
