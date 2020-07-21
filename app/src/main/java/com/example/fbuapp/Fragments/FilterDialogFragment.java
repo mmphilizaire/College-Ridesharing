@@ -48,7 +48,7 @@ public class FilterDialogFragment extends DialogFragment implements DatePickerDi
     private Button mApplyFilterButton;
 
     public interface FilterDialogListener{
-        void onFinishFilterDialog(Location start, int radiusStart, Location end, int radiusEnd, Date earliest, Date latest, boolean hideFullRides);
+        void onFinishFilterDialog(Location start, int radiusStart, Location end, int radiusEnd, Calendar earliest, Calendar latest, boolean hideFullRides);
     }
 
     public FilterDialogFragment(){
@@ -68,11 +68,6 @@ public class FilterDialogFragment extends DialogFragment implements DatePickerDi
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        mStartLocation = new Location();
-        mEndLocation = new Location();
-        mEarliestDateCalendar = Calendar.getInstance();
-        mLatestDateCalendar = Calendar.getInstance();
 
         mStartLocationEditText = view.findViewById(R.id.etStartLocation);
         mStartMileRadiusEditText = view.findViewById(R.id.etStartMileRadius);
@@ -119,7 +114,7 @@ public class FilterDialogFragment extends DialogFragment implements DatePickerDi
             @Override
             public void onClick(View view) {
                 FilterDialogListener listener = (FilterDialogListener) getTargetFragment();
-                listener.onFinishFilterDialog(mStartLocation, Integer.parseInt(mStartMileRadiusEditText.getText().toString()), mEndLocation, Integer.parseInt(mEndMileRadiusEditText.getText().toString()), mEarliestDateCalendar.getTime(), mLatestDateCalendar.getTime(), mHideFullRidesCheckBox.isChecked());
+                listener.onFinishFilterDialog(mStartLocation, Integer.parseInt(mStartMileRadiusEditText.getText().toString()), mEndLocation, Integer.parseInt(mEndMileRadiusEditText.getText().toString()), mEarliestDateCalendar, mLatestDateCalendar, mHideFullRidesCheckBox.isChecked());
                 dismiss();
             }
         });
@@ -129,6 +124,9 @@ public class FilterDialogFragment extends DialogFragment implements DatePickerDi
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode == RESULT_OK && requestCode == START_REQUEST_CODE) {
+            if(mStartLocation == null){
+                mStartLocation = new Location();
+            }
             double latitude = data.getExtras().getDouble("latitude");
             double longitude = data.getExtras().getDouble("longitude");
             mStartLocation.setLatitude((Number) latitude );
@@ -139,6 +137,9 @@ public class FilterDialogFragment extends DialogFragment implements DatePickerDi
             mStartLocationEditText.setText(mStartLocation.getCity() + ", " + mStartLocation.getState());
         }
         else if(resultCode == RESULT_OK && requestCode == END_REQUEST_CODE){
+            if(mEndLocation == null){
+                mEndLocation = new Location();
+            }
             double latitude = data.getExtras().getDouble("latitude");
             double longitude = data.getExtras().getDouble("longitude");
             mEndLocation.setLatitude((Number) latitude);
@@ -162,10 +163,16 @@ public class FilterDialogFragment extends DialogFragment implements DatePickerDi
     public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
         String date = month+1 + "/" + dayOfMonth + "/" + year;
         if(mEarliestDate){
+            if(mEarliestDateCalendar == null){
+                mEarliestDateCalendar = Calendar.getInstance();
+            }
             mEarliestDateCalendar.set(year, month-1, dayOfMonth);
             mEarliestDateTextView.setText(date);
         }
         else {
+            if(mLatestDateCalendar == null){
+                mLatestDateCalendar = Calendar.getInstance();
+            }
             mLatestDateCalendar.set(year, month-1, dayOfMonth);
             mLatestDateTextView.setText(date);
         }

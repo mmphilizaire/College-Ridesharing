@@ -24,6 +24,7 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -148,7 +149,7 @@ public class RideStreamPageFragment extends Fragment implements FilterDialogFrag
     }
 
     @Override
-    public void onFinishFilterDialog(final Location start, final int radiusStart, final Location end, final int radiusEnd, final Date earliest, final Date latest, final boolean hideFullRides){
+    public void onFinishFilterDialog(final Location start, final int radiusStart, final Location end, final int radiusEnd, final Calendar earliest, final Calendar latest, final boolean hideFullRides){
         ParseQuery<RideOffer> query = ParseQuery.getQuery(RideOffer.class);
         query.include(RideOffer.KEY_USER);
         query.include(RideOffer.KEY_START_LOCATION);
@@ -163,16 +164,16 @@ public class RideStreamPageFragment extends Fragment implements FilterDialogFrag
                 }
                 List<RideOffer> filtered = new ArrayList<>();
                 for(RideOffer object : objects){
-                    if(object.getStartLocation().getGeoPoint().distanceInMilesTo(start.getGeoPoint()) > radiusStart){
+                    if(start != null && object.getStartLocation().getGeoPoint().distanceInMilesTo(start.getGeoPoint()) > radiusStart){
                         continue;
                     }
-                    if(object.getEndLocation().getGeoPoint().distanceInMilesTo(end.getGeoPoint()) > radiusEnd){
+                    if(end != null && object.getEndLocation().getGeoPoint().distanceInMilesTo(end.getGeoPoint()) > radiusEnd){
                         continue;
                     }
-                    if(!object.getDepartureTime().after(earliest)){
+                    if(earliest != null && !object.getDepartureTime().after(earliest.getTime())){
                         continue;
                     }
-                    if(!object.getDepartureTime().before(latest)){
+                    if(latest != null && !object.getDepartureTime().before(latest.getTime())){
                         continue;
                     }
                     if(hideFullRides && object.getPassengers().length() == object.getSeatCount().intValue()){
