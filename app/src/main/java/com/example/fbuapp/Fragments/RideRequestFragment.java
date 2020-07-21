@@ -77,8 +77,8 @@ public class RideRequestFragment extends Fragment implements DatePickerDialog.On
         mLatestDepartureCalendar = Calendar.getInstance();
         mEarliestDeparture = false;
 
-        mEarliestDateTextView = view.findViewById(R.id.tvEarliestDate);
-        mEarliestTimeTextView = view.findViewById(R.id.tvEarliestTime);
+        mEarliestDateTextView = view.findViewById(R.id.tvDate);
+        mEarliestTimeTextView = view.findViewById(R.id.tvTime);
         mLatestDateTextView = view.findViewById(R.id.tvLatestDate);
         mLatestTimeTextView = view.findViewById(R.id.tvLatestTime);
         mStartLocationEditText = view.findViewById(R.id.etStartLocation);

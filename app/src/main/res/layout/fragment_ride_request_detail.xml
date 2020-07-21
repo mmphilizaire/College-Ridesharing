@@ -14,27 +14,43 @@
         android:layout_marginEnd="0dp"
         android:layout_toStartOf="@+id/ivClose"
         android:gravity="center"
-        android:text="Ride Details"
+        android:text="Request Details"
         android:textColor="#000000"
         android:textSize="30sp"
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/tvDate"
+        android:id="@+id/tvEarliestDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvDetails"
         android:layout_alignParentStart="true"
+        android:textSize="20sp"
+        tools:text="July 19, 2020" />
+
+    <TextView
+        android:id="@+id/tvLatestDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvDetails"
         android:layout_alignParentEnd="true"
         android:textSize="20sp"
         tools:text="July 19, 2020" />
 
     <TextView
-        android:id="@+id/tvTime"
+        android:id="@+id/tvEarliestTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvDate"
+        android:layout_below="@+id/tvEarliestDate"
         android:layout_alignParentStart="true"
+        android:textSize="16sp"
+        tools:text="6:00 PM" />
+
+    <TextView
+        android:id="@+id/tvLatestTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvEarliestDate"
         android:layout_alignParentEnd="true"
         android:textSize="16sp"
         tools:text="6:00 PM" />
@@ -43,7 +59,7 @@
         android:id="@+id/mvMap"
         android:layout_width="500dp"
         android:layout_height="300dp"
-        android:layout_below="@+id/tvTime" />
+        android:layout_below="@+id/tvEarliestTime" />
 
     <TextView
         android:id="@+id/tvStart"
@@ -80,39 +96,20 @@
         android:layout_toEndOf="@+id/tvStart"
         app:srcCompat="@drawable/ic_arrow" />
 
-    <TextView
-        android:id="@+id/tvSeatPrice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvStart"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:textSize="18sp"
-        tools:text="$23 PER SEAT" />
-
-    <TextView
-        android:id="@+id/tvSeatsAvailable"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvSeatPrice"
-        android:layout_alignParentEnd="true"
-        android:textSize="16sp"
-        tools:text="3 seats\navailable" />
-
     <Button
         android:id="@+id/btnOfferRide"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvSeatsAvailable"
+        android:layout_below="@+id/ivProfilePicture"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:text="Book a Seat" />
+        android:text="Offer a Ride" />
 
     <TextView
         android:id="@+id/tvDriverTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btnOfferRide"
+        android:layout_below="@+id/tvStart"
         android:text="Driver"
         android:textColor="#000000"
         android:textSize="24sp"
@@ -122,7 +119,7 @@
         android:id="@+id/ivClose"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/tvDate"
+        android:layout_above="@+id/tvEarliestDate"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         app:srcCompat="@drawable/ic_close" />
