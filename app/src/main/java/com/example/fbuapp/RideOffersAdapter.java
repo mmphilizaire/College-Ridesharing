@@ -1,6 +1,7 @@
 package com.example.fbuapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -102,10 +103,13 @@ public class RideOffersAdapter extends RecyclerView.Adapter<RideOffersAdapter.Vi
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            FragmentManager fragmentManager = mFragment.getFragmentManager();
-            RideOfferDetailFragment detailFragment = RideOfferDetailFragment.newInstance(mRideOffers.get(position));
-            detailFragment.setTargetFragment(mFragment, 200);
-            detailFragment.show(fragmentManager, "detail_fragment");
+            Intent rideOfferDetails = new Intent(mContext, DetailActivity.class);
+            rideOfferDetails.putExtra("rideOffer", mRideOffers.get(position));
+            mContext.startActivity(rideOfferDetails);
+//            FragmentManager fragmentManager = mFragment.getFragmentManager();
+//            RideOfferDetailFragment detailFragment = RideOfferDetailFragment.newInstance(mRideOffers.get(position));
+//            detailFragment.setTargetFragment(mFragment, 200);
+//            detailFragment.show(fragmentManager, "detail_fragment");
         }
     }
 

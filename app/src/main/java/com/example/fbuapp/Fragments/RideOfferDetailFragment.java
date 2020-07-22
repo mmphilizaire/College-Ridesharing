@@ -48,7 +48,7 @@ public class RideOfferDetailFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        return inflater.inflate(R.layout.fragment_ride_offer_detail, container);
+        return inflater.inflate(R.layout.fragment_ride_offer_detail, container, false);
     }
 
     @Override
@@ -76,14 +76,15 @@ public class RideOfferDetailFragment extends DialogFragment {
         mCloseImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dismiss();
+                //TODO
             }
         });
 
         mDriverInfoRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                //getFragmentManager().beginTransaction().replace(R.id.flContainer, ProfileFragment.newInstance(mRideOffer.getUser())).commit();
+                //launchProfileFragment(mRideOffer.getUser());
             }
         });
 

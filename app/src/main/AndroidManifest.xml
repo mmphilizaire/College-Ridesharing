@@ -26,6 +26,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity android:name=".RegisterActivity"></activity>
+        <activity android:name=".DetailActivity"></activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
