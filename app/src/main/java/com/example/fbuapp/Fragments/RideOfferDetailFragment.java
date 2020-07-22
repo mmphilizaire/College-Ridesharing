@@ -59,7 +59,6 @@ public class RideOfferDetailFragment extends DialogFragment {
 
         mDriverInfoRelativeLayout = view.findViewById(R.id.rlDriverInfo);
 
-        mCloseImageView = view.findViewById(R.id.ivClose);
         mDateTextView = view.findViewById(R.id.tvDate);
         mTimeTextView = view.findViewById(R.id.tvTime);
         mStartLocationTextView = view.findViewById(R.id.tvStart);
@@ -73,17 +72,10 @@ public class RideOfferDetailFragment extends DialogFragment {
 
         bind();
 
-        mCloseImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //TODO
-            }
-        });
-
         mDriverInfoRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //getFragmentManager().beginTransaction().replace(R.id.flContainer, ProfileFragment.newInstance(mRideOffer.getUser())).commit();
+                getFragmentManager().beginTransaction().replace(R.id.flContainer, ProfileFragment.newInstance(mRideOffer.getUser())).commit();
                 //launchProfileFragment(mRideOffer.getUser());
             }
         });

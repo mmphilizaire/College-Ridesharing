@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.example.fbuapp.Fragments.ProfileFragment;
 import com.example.fbuapp.Fragments.RideOfferDetailFragment;
@@ -23,11 +25,20 @@ import com.parse.ParseUser;
 public class DetailActivity extends AppCompatActivity {
 
     FragmentManager mFragmentManager = getSupportFragmentManager();
+    private ImageView mCloseImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        mCloseImageView = findViewById(R.id.ivClose);
+        mCloseImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         RideOffer rideOffer = (RideOffer) getIntent().getParcelableExtra("rideOffer");
 
