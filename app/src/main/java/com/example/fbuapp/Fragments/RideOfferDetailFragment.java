@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,6 +28,8 @@ public class RideOfferDetailFragment extends DialogFragment {
     private TextView mEndLocationTextView;
     private TextView mPricePerSeatTextView;
     private TextView mSeatsAvailableTextView;
+
+    private RelativeLayout mDriverInfoRelativeLayout;
 
     private ImageView mDriverProfilePictureImageView;
     private TextView mDriverNameTextView;
@@ -54,6 +57,8 @@ public class RideOfferDetailFragment extends DialogFragment {
 
         mRideOffer = getArguments().getParcelable("rideOffer");
 
+        mDriverInfoRelativeLayout = view.findViewById(R.id.rlDriverInfo);
+
         mCloseImageView = view.findViewById(R.id.ivClose);
         mDateTextView = view.findViewById(R.id.tvDate);
         mTimeTextView = view.findViewById(R.id.tvTime);
@@ -72,6 +77,13 @@ public class RideOfferDetailFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 dismiss();
+            }
+        });
+
+        mDriverInfoRelativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
             }
         });
 

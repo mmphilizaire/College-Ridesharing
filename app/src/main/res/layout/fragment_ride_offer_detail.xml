@@ -19,6 +19,15 @@
         android:textSize="30sp"
         android:textStyle="bold" />
 
+    <ImageView
+        android:id="@+id/ivClose"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tvDate"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        app:srcCompat="@drawable/ic_close" />
+
     <TextView
         android:id="@+id/tvDate"
         android:layout_width="wrap_content"
@@ -108,47 +117,48 @@
         android:layout_alignParentEnd="true"
         android:text="Book a Seat" />
 
-    <TextView
-        android:id="@+id/tvDriverTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <RelativeLayout
+        android:id="@+id/rlDriverInfo"
         android:layout_below="@+id/btnOfferRide"
-        android:text="Driver"
-        android:textColor="#000000"
-        android:textSize="24sp"
-        android:textStyle="bold" />
-
-    <ImageView
-        android:id="@+id/ivClose"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/tvDate"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        app:srcCompat="@drawable/ic_close" />
-
-    <ImageView
-        android:id="@+id/ivProfilePicture"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_below="@+id/tvDriverTitle"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <TextView
-        android:id="@+id/tvDriverName"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvDriverTitle"
-        android:layout_toEndOf="@+id/ivProfilePicture"
-        android:textSize="18sp"
-        tools:text="Mishka" />
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/tvUniversity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvDriverName"
-        android:layout_toEndOf="@+id/ivProfilePicture"
-        android:textSize="18sp"
-        tools:text="UNC Chapel Hill" />
+        <TextView
+            android:id="@+id/tvDriverTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="Driver"
+            android:textColor="#000000"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+
+        <ImageView
+            android:id="@+id/ivProfilePicture"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_below="@+id/tvDriverTitle"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tvDriverName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvDriverTitle"
+            android:layout_toEndOf="@+id/ivProfilePicture"
+            android:textSize="18sp"
+            tools:text="Mishka" />
+
+        <TextView
+            android:id="@+id/tvUniversity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvDriverName"
+            android:layout_toEndOf="@+id/ivProfilePicture"
+            android:textSize="18sp"
+            tools:text="UNC Chapel Hill" />
+
+    </RelativeLayout>
+
 </RelativeLayout>
