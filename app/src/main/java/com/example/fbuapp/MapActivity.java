@@ -8,6 +8,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -53,6 +54,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private EditText mSearchEditText;
     private RelativeLayout mCloseRelativeLayout;
     private RelativeLayout mSelectRelativeLayout;
+    private RelativeLayout mCurrentLocationRelativeLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mSearchEditText = findViewById(R.id.etSearch);
         mCloseRelativeLayout = findViewById(R.id.rlClose);
         mSelectRelativeLayout = findViewById(R.id.rlUseAddress);
+        mCurrentLocationRelativeLayout = findViewById(R.id.rlCurrentLocation);
 
         mCloseRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,6 +87,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     setResult(RESULT_OK, close);
                     finish();
                 }
+            }
+        });
+
+        mCurrentLocationRelativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myLocation();
             }
         });
 
@@ -156,6 +166,37 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             mAddress = list.get(0);
             Toast.makeText(this, "Found Location", Toast.LENGTH_SHORT).show();
             moveCamera(new LatLng(mAddress.getLatitude(), mAddress.getLongitude()), 15f, mAddress.getAddressLine(0));
+        }
+    }
+
+    private void myLocation(){
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        try{
+            if(mLocationPermissionsGranted){
+                final Task location = mFusedLocationProviderClient.getLastLocation();
+                location.addOnCompleteListener(new OnCompleteListener() {
+                    @Override
+                    public void onComplete(@NonNull Task task) {
+                        if(task.isSuccessful()){
+                            Location currentLocation = (Location) task.getResult();
+                            moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 15f, "Current location");
+                            Geocoder geocoder = new Geocoder(MapActivity.this);
+                            List<Address> addresses = new ArrayList<>();
+                            try {
+                                addresses = geocoder.getFromLocation(currentLocation.getLatitude(), currentLocation.getLongitude(), 1);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            mAddress = addresses.get(0);
+                            mSearchEditText.setText("Current Location");
+                        } else{
+                            Toast.makeText(MapActivity.this, "Unable to get location", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        } catch(SecurityException e){
+
         }
     }
 
