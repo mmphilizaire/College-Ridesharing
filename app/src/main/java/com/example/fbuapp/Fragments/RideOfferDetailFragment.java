@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -28,6 +29,8 @@ public class RideOfferDetailFragment extends DialogFragment {
     private TextView mPricePerSeatTextView;
     private TextView mSeatsAvailableTextView;
 
+    private RelativeLayout mDriverInfoRelativeLayout;
+
     private ImageView mDriverProfilePictureImageView;
     private TextView mDriverNameTextView;
     private TextView mDriverUniversityTextView;
@@ -45,7 +48,7 @@ public class RideOfferDetailFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        return inflater.inflate(R.layout.fragment_ride_offer_detail, container);
+        return inflater.inflate(R.layout.fragment_ride_offer_detail, container, false);
     }
 
     @Override
@@ -54,7 +57,8 @@ public class RideOfferDetailFragment extends DialogFragment {
 
         mRideOffer = getArguments().getParcelable("rideOffer");
 
-        mCloseImageView = view.findViewById(R.id.ivClose);
+        mDriverInfoRelativeLayout = view.findViewById(R.id.rlDriverInfo);
+
         mDateTextView = view.findViewById(R.id.tvDate);
         mTimeTextView = view.findViewById(R.id.tvTime);
         mStartLocationTextView = view.findViewById(R.id.tvStart);
@@ -68,10 +72,11 @@ public class RideOfferDetailFragment extends DialogFragment {
 
         bind();
 
-        mCloseImageView.setOnClickListener(new View.OnClickListener() {
+        mDriverInfoRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dismiss();
+                getFragmentManager().beginTransaction().replace(R.id.flContainer, ProfileFragment.newInstance(mRideOffer.getUser())).commit();
+                //launchProfileFragment(mRideOffer.getUser());
             }
         });
 

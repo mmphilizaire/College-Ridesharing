@@ -14,6 +14,8 @@ import com.example.fbuapp.Fragments.RideOfferFragment;
 import com.example.fbuapp.Fragments.RideRequestFragment;
 import com.example.fbuapp.Fragments.RideStreamFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.Parse;
+import com.parse.ParseUser;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.action_profile:
                     default:
-                        fragment = new ProfileFragment();
+                        fragment = ProfileFragment.newInstance(ParseUser.getCurrentUser());
                         break;
                 }
                 mFragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
@@ -52,4 +54,9 @@ public class MainActivity extends AppCompatActivity {
         });
         mBottomNavigationView.setSelectedItemId(R.id.action_ride_stream);
     }
+
+//    public void launchProfileFragment(ParseUser user){
+//        mFragmentManager.beginTransaction().replace(R.id.flContainer, ProfileFragment.newInstance(user)).commit();
+//    }
+
 }

@@ -17,18 +17,12 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.fbuapp.LoginActivity;
-import com.example.fbuapp.Models.RideOffer;
 import com.example.fbuapp.R;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
-
-import java.util.List;
 
 public class ProfileFragment extends Fragment {
 
-    private ParseUser user;
+    private ParseUser mUser;
 
     private ImageView mProfilePictureImageView;
     private TextView mNameTextView;
@@ -38,6 +32,14 @@ public class ProfileFragment extends Fragment {
     private TextView mRidesRiddenTextView;
 
     private Button mLogoutButton;
+
+    public static ProfileFragment newInstance(ParseUser user){
+        ProfileFragment profile = new ProfileFragment();
+        Bundle args = new Bundle();
+        args.putParcelable("user", user);
+        profile.setArguments(args);
+        return profile;
+    }
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -52,7 +54,7 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        user = ParseUser.getCurrentUser();
+        mUser = getArguments().getParcelable("user");
 
         mProfilePictureImageView = view.findViewById(R.id.ivProfilePicture);
         mNameTextView = view.findViewById(R.id.tvName);
@@ -62,19 +64,25 @@ public class ProfileFragment extends Fragment {
         mRidesRiddenTextView = view.findViewById(R.id.tvRidesRidden);
         mLogoutButton = view.findViewById(R.id.btnLogout);
 
-        Glide.with(getContext()).load(user.getParseFile("profilePicture").getUrl()).transform(new CircleCrop()).into(mProfilePictureImageView);
-        mNameTextView.setText(user.getString("firstName")+" "+user.getString("lastName").substring(0,1)+".");
-        mUniversityTextView.setText(user.getString("university"));
-        mMemberSinceTextView.setText("Member since "+DateFormat.format("MMMM yyyy", user.getCreatedAt()));
-        mRidesDrivenTextView.setText("Driven " + ridesDrivenCount(user) + " Rides");
-        mRidesRiddenTextView.setText("Ridden " + ridesRiddenCount(user) + " Rides");
+        Glide.with(getContext()).load(mUser.getParseFile("profilePicture").getUrl()).transform(new CircleCrop()).into(mProfilePictureImageView);
+        mNameTextView.setText(mUser.getString("firstName")+" "+ mUser.getString("lastName").substring(0,1)+".");
+        mUniversityTextView.setText(mUser.getString("university"));
+        mMemberSinceTextView.setText("Member since "+DateFormat.format("MMMM yyyy", mUser.getCreatedAt()));
+        mRidesDrivenTextView.setText("Driven " + ridesDrivenCount(mUser) + " Rides");
+        mRidesRiddenTextView.setText("Ridden " + ridesRiddenCount(mUser) + " Rides");
 
-        mLogoutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                logOutUser();
-            }
-        });
+        if(mUser == ParseUser.getCurrentUser()){
+            mLogoutButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    logOutUser();
+                }
+            });
+        }
+        else{
+            mLogoutButton.setVisibility(View.GONE);
+        }
+
 
     }
 
