@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.LogInCallback;
 import com.parse.ParseException;
@@ -72,6 +73,27 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void signUpUser(String firstName, String lastName, String university, String email, String password) {
+        if(firstName.equals("")){
+            Toast.makeText(this, "Must enter full name!", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if(lastName.equals("")){
+            Toast.makeText(this, "Must enter full name!", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if(university.equals("")){
+            Toast.makeText(this, "Must enter university!", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if(email.equals("")){
+            Toast.makeText(this, "Must enter email!", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if(password.equals("")){
+            Toast.makeText(this, "Must enter password!", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         ParseUser user = new ParseUser();
         user.setUsername(email);
         user.setPassword(password);
@@ -83,8 +105,17 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void done(ParseException e) {
                 if(e != null){
-                    //handle possible errors, same username, same email, etc
-                    Log.e("Mishka", "lol", e);
+                    switch(e.getCode()){
+                        case ParseException.USERNAME_TAKEN:
+                            Toast.makeText(RegisterActivity.this, "Email has already been taken. Login!", Toast.LENGTH_LONG).show();
+                            break;
+                        case ParseException.INVALID_EMAIL_ADDRESS:
+                            Toast.makeText(RegisterActivity.this, "Invalid email address!", Toast.LENGTH_LONG).show();
+                            break;
+                        default:
+                            Toast.makeText(RegisterActivity.this, "Server error!", Toast.LENGTH_LONG).show();
+                            e.printStackTrace();
+                    }
                     return;
                 }
                 goMainActivity();
