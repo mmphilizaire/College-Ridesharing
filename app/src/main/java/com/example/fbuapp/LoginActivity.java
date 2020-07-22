@@ -4,10 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.LogInCallback;
 import com.parse.ParseException;
@@ -69,8 +72,20 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void done(ParseUser user, ParseException e) {
                 if(e != null){
-                    //handle specific errors by displaying toast
-                    //incorrect password, no username, etc
+                    switch(e.getCode()){
+                        case ParseException.OBJECT_NOT_FOUND:
+                            Toast.makeText(LoginActivity.this, "Email or password invalid!", Toast.LENGTH_LONG).show();
+                            break;
+                        case ParseException.USERNAME_MISSING:
+                            Toast.makeText(LoginActivity.this, "Must enter email!", Toast.LENGTH_LONG).show();
+                            break;
+                        case ParseException.PASSWORD_MISSING:
+                            Toast.makeText(LoginActivity.this, "Must enter password!", Toast.LENGTH_LONG).show();
+                            break;
+                        default:
+                            Toast.makeText(LoginActivity.this, "Server error!", Toast.LENGTH_LONG).show();
+                            e.printStackTrace();
+                    }
                     return;
                 }
                 goMainActivity();
