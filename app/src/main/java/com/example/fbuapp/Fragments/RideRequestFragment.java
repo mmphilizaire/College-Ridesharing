@@ -19,9 +19,11 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.fbuapp.Models.Location;
 import com.example.fbuapp.MapActivity;
+import com.example.fbuapp.Models.RideOffer;
 import com.example.fbuapp.R;
 import com.example.fbuapp.Models.RideRequest;
 import com.parse.ParseUser;
@@ -137,16 +139,40 @@ public class RideRequestFragment extends Fragment implements DatePickerDialog.On
         mCreateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RideRequest rideRequest = new RideRequest();
-                rideRequest.setUser(ParseUser.getCurrentUser());
-                rideRequest.setEarliestDeparture(mEarliestDepartureCalendar.getTime());
-                rideRequest.setLatestDeparture(mLatestDepartureCalendar.getTime());
-                rideRequest.setStartLocation(mStartLocation);
-                rideRequest.setEndLocation(mEndLocation);
-                rideRequest.saveInBackground();
+                if(!missingInfo()){
+                    RideRequest rideRequest = new RideRequest();
+                    rideRequest.setUser(ParseUser.getCurrentUser());
+                    rideRequest.setEarliestDeparture(mEarliestDepartureCalendar.getTime());
+                    rideRequest.setLatestDeparture(mLatestDepartureCalendar.getTime());
+                    rideRequest.setStartLocation(mStartLocation);
+                    rideRequest.setEndLocation(mEndLocation);
+                    rideRequest.saveInBackground();
+                }
+                else{
+                    Toast.makeText(getActivity(), "Missing information!", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
+    }
+
+    private boolean missingInfo() {
+        if(mStartLocation == null || mEndLocation == null){
+            return true;
+        }
+        if(mEarliestDateTextView.getText().toString().equals("Select a Date")){
+            return true;
+        }
+        if(mLatestDateTextView.getText().toString().equals("Select a Date")){
+            return true;
+        }
+        if(mEarliestTimeTextView.getText().toString().equals("Select a Time")){
+            return true;
+        }
+        if(mLatestTimeTextView.getText().toString().equals("Select a Time")){
+            return true;
+        }
+        return false;
     }
 
     @Override

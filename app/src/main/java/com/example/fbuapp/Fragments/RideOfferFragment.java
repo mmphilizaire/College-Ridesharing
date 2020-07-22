@@ -19,6 +19,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.fbuapp.Models.Location;
 import com.example.fbuapp.MapActivity;
@@ -116,17 +117,41 @@ public class RideOfferFragment extends Fragment implements DatePickerDialog.OnDa
         mCreateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RideOffer rideOffer = new RideOffer();
-                rideOffer.setUser(ParseUser.getCurrentUser());
-                rideOffer.setDepartureTime(mDepartureCalendar.getTime());
-                rideOffer.setSeatPrice((Number) Integer.parseInt(mSeatPriceEditText.getText().toString()));
-                rideOffer.setSeatCount((Number) Integer.parseInt(mSeatCountEditText.getText().toString()));
-                rideOffer.setStartLocation(mStartLocation);
-                rideOffer.setEndLocation(mEndLocation);
-                rideOffer.saveInBackground();
+                if(!missingInfo()){
+                    RideOffer rideOffer = new RideOffer();
+                    rideOffer.setUser(ParseUser.getCurrentUser());
+                    rideOffer.setDepartureTime(mDepartureCalendar.getTime());
+                    rideOffer.setSeatPrice((Number) Integer.parseInt(mSeatPriceEditText.getText().toString()));
+                    rideOffer.setSeatCount((Number) Integer.parseInt(mSeatCountEditText.getText().toString()));
+                    rideOffer.setStartLocation(mStartLocation);
+                    rideOffer.setEndLocation(mEndLocation);
+                    rideOffer.saveInBackground();
+                }
+                else{
+                    Toast.makeText(getActivity(), "Missing information!", Toast.LENGTH_LONG).show();
+                }
             }
         });
 
+    }
+
+    private boolean missingInfo() {
+        if(mStartLocation == null || mEndLocation == null){
+            return true;
+        }
+        if(mDepartureDateTextView.getText().toString().equals("Select a Date")){
+            return true;
+        }
+        if(mDepartureTimeTextView.getText().toString().equals("Select a Time")){
+            return true;
+        }
+        if(mSeatCountEditText.getText().toString().equals("")){
+            return true;
+        }
+        if(mSeatPriceEditText.getText().toString().equals("")){
+            return true;
+        }
+        return false;
     }
 
     @Override
