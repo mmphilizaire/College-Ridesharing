@@ -7,19 +7,6 @@
     android:padding="10dp">
 
     <TextView
-        android:id="@+id/tvDetails"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_marginEnd="0dp"
-        android:layout_toStartOf="@+id/ivClose"
-        android:gravity="center"
-        android:text="Request Details"
-        android:textColor="#000000"
-        android:textSize="30sp"
-        android:textStyle="bold" />
-
-    <TextView
         android:id="@+id/tvEarliestDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -55,17 +42,19 @@
         android:textSize="16sp"
         tools:text="6:00 PM" />
 
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/mvMap"
+    <fragment
+        android:id="@+id/map"
         android:layout_width="500dp"
         android:layout_height="300dp"
-        android:layout_below="@+id/tvEarliestTime" />
+        android:layout_below="@+id/tvEarliestTime"
+        tools:context=".RideOfferDetailFragment"
+        android:name="com.google.android.gms.maps.SupportMapFragment" />
 
     <TextView
         android:id="@+id/tvStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/mvMap"
+        android:layout_below="@+id/map"
         android:layout_alignParentStart="true"
         android:layout_marginStart="0dp"
         android:gravity="center"
@@ -76,7 +65,7 @@
         android:id="@+id/tvEnd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/mvMap"
+        android:layout_below="@+id/map"
         android:layout_alignParentEnd="true"
         android:gravity="center"
         android:textSize="18sp"
@@ -87,7 +76,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/tvSeatPrice"
-        android:layout_below="@+id/mvMap"
+        android:layout_below="@+id/map"
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
         android:layout_marginEnd="0dp"
@@ -100,52 +89,52 @@
         android:id="@+id/btnOfferRide"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ivProfilePicture"
+        android:layout_below="@+id/rlUserInfo"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:text="Offer a Ride" />
 
-    <TextView
-        android:id="@+id/tvDriverTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <RelativeLayout
+        android:id="@+id/rlUserInfo"
         android:layout_below="@+id/tvStart"
-        android:text="Driver"
-        android:textColor="#000000"
-        android:textSize="24sp"
-        android:textStyle="bold" />
-
-    <ImageView
-        android:id="@+id/ivClose"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/tvEarliestDate"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        app:srcCompat="@drawable/ic_close" />
-
-    <ImageView
-        android:id="@+id/ivProfilePicture"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_below="@+id/tvDriverTitle"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <TextView
-        android:id="@+id/tvDriverName"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvDriverTitle"
-        android:layout_toEndOf="@+id/ivProfilePicture"
-        android:textSize="18sp"
-        tools:text="Mishka" />
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/tvUniversity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvDriverName"
-        android:layout_toEndOf="@+id/ivProfilePicture"
-        android:textSize="18sp"
-        tools:text="UNC Chapel Hill" />
+        <TextView
+            android:id="@+id/tvUserTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="User"
+            android:textColor="#000000"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+
+        <ImageView
+            android:id="@+id/ivProfilePicture"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_below="@+id/tvUserTitle"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tvUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvUserTitle"
+            android:layout_toEndOf="@+id/ivProfilePicture"
+            android:textSize="18sp"
+            tools:text="Mishka" />
+
+        <TextView
+            android:id="@+id/tvUniversity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvUserName"
+            android:layout_toEndOf="@+id/ivProfilePicture"
+            android:textSize="18sp"
+            tools:text="UNC Chapel Hill" />
+
+    </RelativeLayout>
+
 </RelativeLayout>
