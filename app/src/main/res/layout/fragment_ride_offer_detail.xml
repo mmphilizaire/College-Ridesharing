@@ -26,17 +26,19 @@
         android:textSize="16sp"
         tools:text="6:00 PM" />
 
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/mvMap"
+    <fragment
+        android:id="@+id/map"
         android:layout_width="500dp"
         android:layout_height="300dp"
-        android:layout_below="@+id/tvTime" />
+        android:layout_below="@+id/tvTime"
+        tools:context=".RideOfferDetailFragment"
+        android:name="com.google.android.gms.maps.SupportMapFragment" />
 
     <TextView
         android:id="@+id/tvStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/mvMap"
+        android:layout_below="@+id/map"
         android:layout_alignParentStart="true"
         android:layout_marginStart="0dp"
         android:gravity="center"
@@ -47,7 +49,7 @@
         android:id="@+id/tvEnd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/mvMap"
+        android:layout_below="@+id/map"
         android:layout_alignParentEnd="true"
         android:gravity="center"
         android:textSize="18sp"
@@ -58,7 +60,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/tvSeatPrice"
-        android:layout_below="@+id/mvMap"
+        android:layout_below="@+id/map"
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
         android:layout_marginEnd="0dp"
