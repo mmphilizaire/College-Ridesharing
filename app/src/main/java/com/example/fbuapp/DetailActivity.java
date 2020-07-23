@@ -15,9 +15,11 @@ import android.widget.ImageView;
 import com.example.fbuapp.Fragments.ProfileFragment;
 import com.example.fbuapp.Fragments.RideOfferDetailFragment;
 import com.example.fbuapp.Fragments.RideOfferFragment;
+import com.example.fbuapp.Fragments.RideRequestDetailFragment;
 import com.example.fbuapp.Fragments.RideRequestFragment;
 import com.example.fbuapp.Fragments.RideStreamFragment;
 import com.example.fbuapp.Models.RideOffer;
+import com.example.fbuapp.Models.RideRequest;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.Parse;
 import com.parse.ParseUser;
@@ -41,8 +43,14 @@ public class DetailActivity extends AppCompatActivity {
         });
 
         RideOffer rideOffer = (RideOffer) getIntent().getParcelableExtra("rideOffer");
+        if(rideOffer != null){
+            mFragmentManager.beginTransaction().replace(R.id.flContainer, RideOfferDetailFragment.newInstance(rideOffer)).commit();
+        }
+        else{
+            RideRequest rideRequest = (RideRequest) getIntent().getParcelableExtra("rideRequest");
+            mFragmentManager.beginTransaction().replace(R.id.flContainer, RideRequestDetailFragment.newInstance(rideRequest)).commit();
+        }
 
-        mFragmentManager.beginTransaction().replace(R.id.flContainer, RideOfferDetailFragment.newInstance(rideOffer)).commit();
 
     }
 

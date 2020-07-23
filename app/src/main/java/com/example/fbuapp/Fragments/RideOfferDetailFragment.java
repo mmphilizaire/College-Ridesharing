@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
@@ -41,12 +42,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-public class RideOfferDetailFragment extends DialogFragment implements OnMapReadyCallback, TaskLoadedCallback {
+public class RideOfferDetailFragment extends Fragment implements OnMapReadyCallback, TaskLoadedCallback {
 
     private static final int ERROR_DIALOG_REQUEST = 9001;
 
     private GoogleMap mMap;
-    private FusedLocationProviderClient mFusedLocationProviderClient;
     private Polyline mPolyline;
 
     private RideOffer mRideOffer;

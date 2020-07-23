@@ -1,6 +1,7 @@
 package com.example.fbuapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -102,10 +103,14 @@ public class RideRequestsAdapter extends RecyclerView.Adapter<RideRequestsAdapte
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            FragmentManager fragmentManager = mFragment.getFragmentManager();
-            RideRequestDetailFragment detailFragment = RideRequestDetailFragment.newInstance(mRideRequests.get(position));
-            detailFragment.setTargetFragment(mFragment, 200);
-            detailFragment.show(fragmentManager, "detail_fragment");
+            Intent rideRequestDetails = new Intent(mContext, DetailActivity.class);
+            rideRequestDetails.putExtra("rideRequest", mRideRequests.get(position));
+            mContext.startActivity(rideRequestDetails);
+//            int position = getAdapterPosition();
+//            FragmentManager fragmentManager = mFragment.getFragmentManager();
+//            RideRequestDetailFragment detailFragment = RideRequestDetailFragment.newInstance(mRideRequests.get(position));
+//            detailFragment.setTargetFragment(mFragment, 200);
+//            detailFragment.show(fragmentManager, "detail_fragment");
         }
 
     }
