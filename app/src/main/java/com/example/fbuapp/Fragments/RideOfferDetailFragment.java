@@ -4,11 +4,9 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -22,29 +20,32 @@ import androidx.fragment.app.DialogFragment;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
-import com.example.fbuapp.MapActivity;
+import com.example.fbuapp.FetchURL;
 import com.example.fbuapp.Models.Location;
 import com.example.fbuapp.Models.RideOffer;
 import com.example.fbuapp.R;
+import com.example.fbuapp.TaskLoadedCallback;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
-public class RideOfferDetailFragment extends DialogFragment implements OnMapReadyCallback {
+public class RideOfferDetailFragment extends DialogFragment implements OnMapReadyCallback, TaskLoadedCallback {
 
     private static final int ERROR_DIALOG_REQUEST = 9001;
-    private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
-    private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 5313;
 
-    private Boolean mLocationPermissionsGranted = false;
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
+    private Polyline mPolyline;
 
     private RideOffer mRideOffer;
 
@@ -108,7 +109,7 @@ public class RideOfferDetailFragment extends DialogFragment implements OnMapRead
         });
 
         if (isServicesOK()) {
-            getLocationPermission();
+            initializeMap();
         }
 
     }
@@ -117,13 +118,7 @@ public class RideOfferDetailFragment extends DialogFragment implements OnMapRead
     public void onMapReady(GoogleMap googleMap) {
         Toast.makeText(getContext(), "Map is Ready", Toast.LENGTH_SHORT).show();
         mMap = googleMap;
-        if (mLocationPermissionsGranted) {
-            getRoute();
-
-            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
-        }
+        getRoute();
     }
 
     private void getRoute() {
@@ -136,7 +131,38 @@ public class RideOfferDetailFragment extends DialogFragment implements OnMapRead
         addMarker(start, "Start Location");
         addMarker(end, "End Location");
 
+        moveCamera(start, end);
 
+        String url = getUrl(start, end, "driving");
+        new FetchURL(getContext(), this).execute(url, "driving");
+
+    }
+
+    private void moveCamera(LatLng start, LatLng end) {
+
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
+        builder.include(start);
+        builder.include(end);
+
+        LatLngBounds bounds = builder.build();
+
+        int width = getResources().getDisplayMetrics().widthPixels;
+        int height = getResources().getDisplayMetrics().heightPixels;
+        int padding = (int) (width * 0.35);
+
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, padding);
+        mMap.animateCamera(cu);
+
+    }
+
+    private String getUrl(LatLng start, LatLng end, String directionMode) {
+        String origin = "origin=" + start.latitude + "," + start.longitude;
+        String destination = "destination=" + end.latitude + "," + end.longitude;
+        String mode = "mode=" + directionMode;
+        String parameters = origin + "&" + destination + "&" + mode;
+        String url = "https://maps.googleapis.com/maps/api/directions/json?" + parameters + "&key=" + getString(R.string.google_apps_API_key);
+        return url;
     }
 
     private void addMarker(LatLng location, String title) {
@@ -165,47 +191,6 @@ public class RideOfferDetailFragment extends DialogFragment implements OnMapRead
         mapFragment.getMapAsync(this);
     }
 
-    private void getLocationPermission(){
-        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION};
-
-        if(ContextCompat.checkSelfPermission(getContext(),
-                FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            if(ContextCompat.checkSelfPermission(getContext(),
-                    COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-                mLocationPermissionsGranted = true;
-                initializeMap();
-            }else{
-                ActivityCompat.requestPermissions(getActivity(),
-                        permissions,
-                        LOCATION_PERMISSION_REQUEST_CODE);
-            }
-        }else{
-            ActivityCompat.requestPermissions(getActivity(),
-                    permissions,
-                    LOCATION_PERMISSION_REQUEST_CODE);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        mLocationPermissionsGranted = false;
-
-        switch(requestCode){
-            case LOCATION_PERMISSION_REQUEST_CODE:{
-                if(grantResults.length > 0){
-                    for(int i = 0; i < grantResults.length; i++){
-                        if(grantResults[i] != PackageManager.PERMISSION_GRANTED){
-                            return;
-                        }
-                    }
-                    mLocationPermissionsGranted = true;
-                    initializeMap();
-                }
-            }
-        }
-    }
-
     private void bind(){
         mDateTextView.setText(mRideOffer.getDateWithYear());
         mTimeTextView.setText(mRideOffer.getTime());
@@ -219,4 +204,11 @@ public class RideOfferDetailFragment extends DialogFragment implements OnMapRead
         mDriverUniversityTextView.setText(mRideOffer.getUser().getString("university"));
     }
 
+    @Override
+    public void onTaskDone(Object... values) {
+        if(mPolyline != null){
+            mPolyline.remove();
+        }
+        mPolyline = mMap.addPolyline((PolylineOptions) values[0]);
+    }
 }
