@@ -2,7 +2,9 @@ package com.example.fbuapp.Fragments;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -118,6 +120,21 @@ public class RideOfferDetailFragment extends DialogFragment implements OnMapRead
     public void onMapReady(GoogleMap googleMap) {
         Toast.makeText(getContext(), "Map is Ready", Toast.LENGTH_SHORT).show();
         mMap = googleMap;
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                Location startLocation = mRideOffer.getStartLocation();
+                Location endLocation = mRideOffer.getEndLocation();
+                LatLng start = new LatLng(startLocation.getLatitude().doubleValue(), startLocation.getLongitude().doubleValue());
+                LatLng end = new LatLng(endLocation.getLatitude().doubleValue(), endLocation.getLongitude().doubleValue());
+                Uri uri = Uri.parse(getMapLink(start, end, "driving"));
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, uri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                if (mapIntent.resolveActivity(getContext().getPackageManager()) != null) {
+                    startActivity(mapIntent);
+                }
+            }
+        });
         getRoute();
     }
 
@@ -154,6 +171,15 @@ public class RideOfferDetailFragment extends DialogFragment implements OnMapRead
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, padding);
         mMap.animateCamera(cu);
 
+    }
+
+    private String getMapLink(LatLng start, LatLng end, String directionMode) {
+        String origin = "origin=" + start.latitude + "," + start.longitude;
+        String destination = "destination=" + end.latitude + "," + end.longitude;
+        String mode = "travelmode=" + directionMode;
+        String parameters = origin + "&" + destination + "&" + mode;
+        String url = "https://www.google.com/maps/dir/?api=1&" + parameters;
+        return url;
     }
 
     private String getUrl(LatLng start, LatLng end, String directionMode) {
