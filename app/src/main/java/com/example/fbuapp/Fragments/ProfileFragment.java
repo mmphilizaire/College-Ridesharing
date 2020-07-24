@@ -1,6 +1,8 @@
 package com.example.fbuapp.Fragments;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -117,5 +119,9 @@ public class ProfileFragment extends Fragment {
         return 0;
     }
 
+    public void setProfilePicture(Uri profilePicture){
+        //mProfilePictureImageView.setImageBitmap(profilePicture);
+        Glide.with(getContext()).load(profilePicture).transform(new CircleCrop()).into(mProfilePictureImageView);
+    }
 
 }

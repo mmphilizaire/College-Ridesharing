@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -21,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView mBottomNavigationView;
     final FragmentManager mFragmentManager = getSupportFragmentManager();
+
+    public boolean ACCESS_GRANTED;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +56,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         mBottomNavigationView.setSelectedItemId(R.id.action_ride_stream);
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults)
+    {
+        switch (requestCode) {
+            case 1000:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //startGallery();
+                    ACCESS_GRANTED = true;
+                } else {
+                    //didn't grant access
+                    ACCESS_GRANTED = false;
+                }
+                break;
+        }
     }
 
 //    public void launchProfileFragment(ParseUser user){
