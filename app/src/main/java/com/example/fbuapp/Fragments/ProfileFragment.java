@@ -13,11 +13,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.fbuapp.LoginActivity;
 import com.example.fbuapp.R;
+import com.example.fbuapp.RideStreamPageFragment;
 import com.parse.ParseUser;
 
 public class ProfileFragment extends Fragment {
@@ -71,6 +73,13 @@ public class ProfileFragment extends Fragment {
         mRidesDrivenTextView.setText("Driven " + ridesDrivenCount(mUser) + " Rides");
         mRidesRiddenTextView.setText("Ridden " + ridesRiddenCount(mUser) + " Rides");
 
+        mProfilePictureImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changeProfilePicture();
+            }
+        });
+
         if(mUser == ParseUser.getCurrentUser()){
             mLogoutButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -84,6 +93,13 @@ public class ProfileFragment extends Fragment {
         }
 
 
+    }
+
+    private void changeProfilePicture() {
+        FragmentManager fragmentManager = getFragmentManager();
+        ProfilePictureDialogFragment profilePictureDialogFragment = ProfilePictureDialogFragment.newInstance();
+        profilePictureDialogFragment.setTargetFragment(ProfileFragment.this, 200);
+        profilePictureDialogFragment.show(fragmentManager, "profile_picture_fragment");
     }
 
     private void logOutUser() {
