@@ -213,7 +213,7 @@ public class RideRequestFragment extends Fragment implements DatePickerDialog.On
     public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
         String date = month+1 + "/" + dayOfMonth + "/" + year;
         if(mEarliestDeparture){
-            mEarliestDepartureCalendar.set(year, month-1, dayOfMonth);
+            mEarliestDepartureCalendar.set(year, month, dayOfMonth);
             mEarliestDateTextView.setText(date);
         }
         else {

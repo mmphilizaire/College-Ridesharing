@@ -164,14 +164,14 @@ public class FilterRideOfferDialogFragment extends DialogFragment implements Dat
             if(mEarliestDateCalendar == null){
                 mEarliestDateCalendar = Calendar.getInstance();
             }
-            mEarliestDateCalendar.set(year, month-1, dayOfMonth);
+            mEarliestDateCalendar.set(year, month, dayOfMonth);
             mEarliestDateTextView.setText(date);
         }
         else {
             if(mLatestDateCalendar == null){
                 mLatestDateCalendar = Calendar.getInstance();
             }
-            mLatestDateCalendar.set(year, month-1, dayOfMonth);
+            mLatestDateCalendar.set(year, month, dayOfMonth);
             mLatestDateTextView.setText(date);
         }
     }
