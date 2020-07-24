@@ -23,6 +23,7 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.example.fbuapp.DetailActivity;
 import com.example.fbuapp.FetchURL;
 import com.example.fbuapp.Models.Location;
 import com.example.fbuapp.Models.RideOffer;
@@ -105,8 +106,7 @@ public class RideOfferDetailFragment extends Fragment implements OnMapReadyCallb
         mDriverInfoRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getFragmentManager().beginTransaction().replace(R.id.flContainer, ProfileFragment.newInstance(mRideOffer.getUser())).commit();
-                //launchProfileFragment(mRideOffer.getUser());
+                ((DetailActivity)getActivity()).getProfile(mRideOffer);
             }
         });
 

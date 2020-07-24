@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.example.fbuapp.DetailActivity;
 import com.example.fbuapp.FetchURL;
 import com.example.fbuapp.Models.Location;
 import com.example.fbuapp.Models.RideRequest;
@@ -46,7 +47,6 @@ public class RideRequestDetailFragment extends Fragment implements OnMapReadyCal
     private RideRequest mRideRequest;
 
     private RelativeLayout mUserInfoRelativeLayout;
-    private ImageView mCloseImageView;
     private TextView mEarliestDateTextView;
     private TextView mEarliestTimeTextView;
     private TextView mLatestDateTextView;
@@ -82,7 +82,6 @@ public class RideRequestDetailFragment extends Fragment implements OnMapReadyCal
 
         mUserInfoRelativeLayout = view.findViewById(R.id.rlUserInfo);
 
-        mCloseImageView = view.findViewById(R.id.ivClose);
         mEarliestDateTextView = view.findViewById(R.id.tvEarliestDate);
         mEarliestTimeTextView = view.findViewById(R.id.tvEarliestTime);
         mLatestDateTextView = view.findViewById(R.id.tvLatestDate);
@@ -99,8 +98,7 @@ public class RideRequestDetailFragment extends Fragment implements OnMapReadyCal
         mUserInfoRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getFragmentManager().beginTransaction().replace(R.id.flContainer, ProfileFragment.newInstance(mRideRequest.getUser())).commit();
-                //launchProfileFragment(mRideOffer.getUser());
+                ((DetailActivity)getActivity()).getProfile(mRideRequest);
             }
         });
 
