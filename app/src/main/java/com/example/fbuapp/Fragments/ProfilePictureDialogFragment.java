@@ -24,7 +24,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.fbuapp.MainActivity;
 import com.example.fbuapp.R;
+import com.parse.ParseFile;
+import com.parse.ParseUser;
 
+import java.io.File;
 import java.io.IOException;
 
 public class ProfilePictureDialogFragment extends DialogFragment {
@@ -101,6 +104,8 @@ public class ProfilePictureDialogFragment extends DialogFragment {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         if (galleryIntent.resolveActivity(getActivity().getPackageManager()) != null) {
             startActivityForResult(galleryIntent, 1000);
+            ProfileFragment profileFragment = (ProfileFragment)getTargetFragment();
+            //profileFragment.getUser().put("profilePicture", new ParseFile("profilePicture", ))
         }
     }
 
@@ -111,6 +116,11 @@ public class ProfilePictureDialogFragment extends DialogFragment {
             dismiss();
             ProfileFragment fragment = (ProfileFragment)getTargetFragment();
             fragment.setProfilePicture(returnUri);
+//            File profilePictureFile = new File(returnUri.getPath());
+//            ParseFile profilePictureParseFile = new ParseFile(profilePictureFile);
+//            ParseUser user = ParseUser.getCurrentUser();
+//            user.put("profilePicture", profilePictureParseFile);
+//            user.saveInBackground();
         }
     }
 }

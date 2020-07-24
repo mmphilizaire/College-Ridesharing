@@ -78,7 +78,9 @@ public class ProfileFragment extends Fragment {
         mProfilePictureImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                changeProfilePicture();
+                if(mUser == ParseUser.getCurrentUser()){
+                    changeProfilePicture();
+                }
             }
         });
 
@@ -122,6 +124,10 @@ public class ProfileFragment extends Fragment {
     public void setProfilePicture(Uri profilePicture){
         //mProfilePictureImageView.setImageBitmap(profilePicture);
         Glide.with(getContext()).load(profilePicture).transform(new CircleCrop()).into(mProfilePictureImageView);
+    }
+
+    public ParseUser getUser(){
+        return mUser;
     }
 
 }
