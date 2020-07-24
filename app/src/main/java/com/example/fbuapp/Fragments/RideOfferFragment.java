@@ -198,6 +198,7 @@ public class RideOfferFragment extends Fragment implements DatePickerDialog.OnDa
     public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
         String date = month+1 + "/" + dayOfMonth + "/" + year;
         mDepartureCalendar.set(year, month, dayOfMonth);
+        mDepartureCalendar.set(year, month, dayOfMonth);
         mDepartureDateTextView.setText(date);
 
     }
