@@ -129,34 +129,10 @@ public class ProfileFragment extends Fragment {
 
     public void setProfilePicture(Uri profilePicture){
         Glide.with(getContext()).load(profilePicture).transform(new CircleCrop()).into(mProfilePictureImageView);
-//
-//        File profilePictureFile = new File(profilePicture.getPath());
-//        ParseFile profilePictureParseFile = new ParseFile(profilePictureFile);
-//        ParseUser user = ParseUser.getCurrentUser();
-//        profilePictureParseFile.saveInBackground(new SaveCallback() {
-//            @Override
-//            public void done(ParseException e) {
-//                if(e != null){
-//                    Log.e("Mishka", e.toString());
-//                }
-//                else{
-//                    Log.e("Mishka", "success");
-//                }
-//            }
-//        });
-//        user.put("profilePicture", profilePictureParseFile);
-//        user.put("firstName", "Mishka");
-//        user.saveInBackground(new SaveCallback() {
-//            @Override
-//            public void done(ParseException e) {
-//                if(e != null){
-//                    Log.e("Mishka", e.toString());
-//                }
-//                else{
-//                    Log.e("Mishka", "success");
-//                }
-//            }
-//        });
+    }
+
+    public void setProfilePicture(Bitmap profilePicture) {
+        Glide.with(getContext()).load(profilePicture).transform(new CircleCrop()).into(mProfilePictureImageView);
     }
 
     public ParseUser getUser(){
