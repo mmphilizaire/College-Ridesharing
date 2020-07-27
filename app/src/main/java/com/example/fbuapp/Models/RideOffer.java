@@ -5,6 +5,8 @@ import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.parceler.Parcel;
 
 import android.text.format.DateFormat;
@@ -106,4 +108,25 @@ public class RideOffer extends ParseObject {
         return getSeatCount().intValue() - getPassengers().length();
     }
 
+    public void addPassenger(ParseUser user) {
+        String objectId = user.getObjectId();
+
+        JSONArray passengers = getPassengers();
+        passengers.put(objectId);
+
+        setPassengers(passengers);
+    }
+
+    public void removePassenger(ParseUser user) throws JSONException {
+        String objectId = user.getObjectId();
+
+        JSONArray passengers = getPassengers();
+        for(int i = 0; i < passengers.length(); i++){
+            if(passengers.get(i).equals(objectId)){
+                passengers.remove(i);
+                break;
+            }
+        }
+        setPassengers(passengers);
+    }
 }

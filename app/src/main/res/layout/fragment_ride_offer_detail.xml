@@ -89,7 +89,7 @@
         tools:text="3 seats\navailable" />
 
     <Button
-        android:id="@+id/btnOfferRide"
+        android:id="@+id/btnBookSeat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvSeatsAvailable"
@@ -99,7 +99,7 @@
 
     <RelativeLayout
         android:id="@+id/rlDriverInfo"
-        android:layout_below="@+id/btnOfferRide"
+        android:layout_below="@+id/btnBookSeat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 

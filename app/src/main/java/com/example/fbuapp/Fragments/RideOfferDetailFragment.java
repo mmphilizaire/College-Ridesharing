@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -42,6 +43,15 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.util.List;
 
 public class RideOfferDetailFragment extends Fragment implements OnMapReadyCallback, TaskLoadedCallback {
 
@@ -52,7 +62,6 @@ public class RideOfferDetailFragment extends Fragment implements OnMapReadyCallb
 
     private RideOffer mRideOffer;
 
-    private ImageView mCloseImageView;
     private TextView mDateTextView;
     private TextView mTimeTextView;
     private  TextView mStartLocationTextView;
@@ -65,6 +74,9 @@ public class RideOfferDetailFragment extends Fragment implements OnMapReadyCallb
     private ImageView mDriverProfilePictureImageView;
     private TextView mDriverNameTextView;
     private TextView mDriverUniversityTextView;
+
+    private Button mBookSeatButton;
+    private boolean bookSeat;
 
     public RideOfferDetailFragment(){
     }
@@ -110,10 +122,62 @@ public class RideOfferDetailFragment extends Fragment implements OnMapReadyCallb
             }
         });
 
+        bookSeat = !hasBookedSeat();
+        mBookSeatButton = view.findViewById(R.id.btnBookSeat);
+        if(!bookSeat){
+            mBookSeatButton.setText("Cancel Seat");
+        }
+        mBookSeatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(bookSeat){
+                    bookSeat();
+                }
+                else{
+                    try {
+                        cancelSeat();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
         if (isServicesOK()) {
             initializeMap();
         }
 
+    }
+
+    private boolean hasBookedSeat() {
+        String objectId = ParseUser.getCurrentUser().getObjectId();
+        JSONArray passengers = mRideOffer.getPassengers();
+        for(int i = 0; i < passengers.length(); i++){
+            try {
+                if(passengers.get(i).equals(objectId)){
+                    return true;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    private void bookSeat() {
+        ParseUser user = ParseUser.getCurrentUser();
+        mRideOffer.addPassenger(user);
+        mRideOffer.saveInBackground();
+        mBookSeatButton.setText("Cancel Seat");
+        bookSeat = false;
+    }
+
+    private void cancelSeat() throws JSONException {
+        ParseUser user = ParseUser.getCurrentUser();
+        mRideOffer.removePassenger(user);
+        mRideOffer.saveInBackground();
+        mBookSeatButton.setText("Book Seat");
+        bookSeat = true;
     }
 
     @Override
