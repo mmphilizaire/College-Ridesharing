@@ -1,8 +1,11 @@
 package com.example.fbuapp.Fragments;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +16,19 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.fbuapp.LoginActivity;
 import com.example.fbuapp.R;
+import com.example.fbuapp.RideStreamPageFragment;
+import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
+
+import java.io.File;
 
 public class ProfileFragment extends Fragment {
 
@@ -71,6 +81,15 @@ public class ProfileFragment extends Fragment {
         mRidesDrivenTextView.setText("Driven " + ridesDrivenCount(mUser) + " Rides");
         mRidesRiddenTextView.setText("Ridden " + ridesRiddenCount(mUser) + " Rides");
 
+        mProfilePictureImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mUser == ParseUser.getCurrentUser()){
+                    changeProfilePicture();
+                }
+            }
+        });
+
         if(mUser == ParseUser.getCurrentUser()){
             mLogoutButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -84,6 +103,13 @@ public class ProfileFragment extends Fragment {
         }
 
 
+    }
+
+    private void changeProfilePicture() {
+        FragmentManager fragmentManager = getFragmentManager();
+        ProfilePictureDialogFragment profilePictureDialogFragment = ProfilePictureDialogFragment.newInstance();
+        profilePictureDialogFragment.setTargetFragment(ProfileFragment.this, 200);
+        profilePictureDialogFragment.show(fragmentManager, "profile_picture_fragment");
     }
 
     private void logOutUser() {
@@ -101,5 +127,16 @@ public class ProfileFragment extends Fragment {
         return 0;
     }
 
+    public void setProfilePicture(Uri profilePicture){
+        Glide.with(getContext()).load(profilePicture).transform(new CircleCrop()).into(mProfilePictureImageView);
+    }
+
+    public void setProfilePicture(Bitmap profilePicture) {
+        Glide.with(getContext()).load(profilePicture).transform(new CircleCrop()).into(mProfilePictureImageView);
+    }
+
+    public ParseUser getUser(){
+        return mUser;
+    }
 
 }

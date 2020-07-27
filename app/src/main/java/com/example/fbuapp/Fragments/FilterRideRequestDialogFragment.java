@@ -147,7 +147,7 @@ public class FilterRideRequestDialogFragment extends DialogFragment implements D
         if(mDateCalendar == null){
             mDateCalendar = Calendar.getInstance();
         }
-        mDateCalendar.set(year, month-1, dayOfMonth);
+        mDateCalendar.set(year, month, dayOfMonth);
         mDateTextView.setText(date);
     }
 
