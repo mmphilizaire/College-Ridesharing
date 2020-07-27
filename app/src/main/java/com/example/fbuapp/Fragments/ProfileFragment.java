@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,12 @@ import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.fbuapp.LoginActivity;
 import com.example.fbuapp.R;
 import com.example.fbuapp.RideStreamPageFragment;
+import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
+
+import java.io.File;
 
 public class ProfileFragment extends Fragment {
 
@@ -122,8 +128,35 @@ public class ProfileFragment extends Fragment {
     }
 
     public void setProfilePicture(Uri profilePicture){
-        //mProfilePictureImageView.setImageBitmap(profilePicture);
         Glide.with(getContext()).load(profilePicture).transform(new CircleCrop()).into(mProfilePictureImageView);
+//
+//        File profilePictureFile = new File(profilePicture.getPath());
+//        ParseFile profilePictureParseFile = new ParseFile(profilePictureFile);
+//        ParseUser user = ParseUser.getCurrentUser();
+//        profilePictureParseFile.saveInBackground(new SaveCallback() {
+//            @Override
+//            public void done(ParseException e) {
+//                if(e != null){
+//                    Log.e("Mishka", e.toString());
+//                }
+//                else{
+//                    Log.e("Mishka", "success");
+//                }
+//            }
+//        });
+//        user.put("profilePicture", profilePictureParseFile);
+//        user.put("firstName", "Mishka");
+//        user.saveInBackground(new SaveCallback() {
+//            @Override
+//            public void done(ParseException e) {
+//                if(e != null){
+//                    Log.e("Mishka", e.toString());
+//                }
+//                else{
+//                    Log.e("Mishka", "success");
+//                }
+//            }
+//        });
     }
 
     public ParseUser getUser(){
