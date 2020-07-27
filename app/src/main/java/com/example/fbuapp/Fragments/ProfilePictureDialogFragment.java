@@ -36,6 +36,7 @@ import com.parse.SaveCallback;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -130,14 +131,16 @@ public class ProfilePictureDialogFragment extends DialogFragment {
             }
         }
 
-        File defaultProfilePicture = new File(mediaStorageDir.getPath() + File.separator + "default_pfp.png");
+        Bitmap defaultProfilePicture = BitmapFactory.decodeResource(getContext().getResources(),
+                R.drawable.default_pfp);
 
-        ParseFile defaultProfilePictureParse = new ParseFile(defaultProfilePicture);
-        defaultProfilePictureParse.saveInBackground();
+        persistImage(defaultProfilePicture);
+        saveProfilePicture();
 
-        ParseUser user = ParseUser.getCurrentUser();
-        user.put("profilePicture", defaultProfilePictureParse);
-        user.saveInBackground();
+        ProfileFragment fragment = (ProfileFragment)getTargetFragment();
+        fragment.setProfilePicture(defaultProfilePicture);
+        dismiss();
+
     }
 
     private void takePicture() {
@@ -178,7 +181,7 @@ public class ProfilePictureDialogFragment extends DialogFragment {
     private void startGallery() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         if (galleryIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-            startActivityForResult(galleryIntent, 1000);
+            startActivityForResult(galleryIntent, GALLERY_IMAGE_REQUEST_CODE);
         }
     }
 
@@ -189,7 +192,7 @@ public class ProfilePictureDialogFragment extends DialogFragment {
             if (data != null) {
                 Uri returnUri = data.getData();
                 Bitmap image = loadFromUri(returnUri);
-                persistImage(image, mPhotoFileName);
+                persistImage(image);
                 saveProfilePicture();
                 ProfileFragment fragment = (ProfileFragment)getTargetFragment();
                 fragment.setProfilePicture(returnUri);
@@ -256,7 +259,7 @@ public class ProfilePictureDialogFragment extends DialogFragment {
         return image;
     }
 
-    private void persistImage(Bitmap image, String s) {
+    private void persistImage(Bitmap image) {
         mPhotoFile = getFile();
         if(mPhotoFile == null){
             return;
