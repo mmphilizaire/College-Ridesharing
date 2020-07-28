@@ -130,33 +130,45 @@ public class RideOfferDetailFragment extends Fragment implements OnMapReadyCallb
             }
         });
 
-        bookSeat = !hasBookedSeat();
         mBookSeatButton = view.findViewById(R.id.btnBookSeat);
-        if(!bookSeat){
-            mBookSeatButton.setText("Cancel Seat");
+        if(myRideOffer()){
+            mBookSeatButton.setVisibility(View.INVISIBLE);
         }
-        mBookSeatButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(bookSeat){
-                    bookSeat();
-                    loadSeats();
-                }
-                else{
-                    try {
-                        cancelSeat();
+        else{
+            bookSeat = !hasBookedSeat();
+            if(!bookSeat){
+                mBookSeatButton.setText("Cancel Seat");
+            }
+            mBookSeatButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(bookSeat){
+                        bookSeat();
                         loadSeats();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                    }
+                    else{
+                        try {
+                            cancelSeat();
+                            loadSeats();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
 
         if (isServicesOK()) {
             initializeMap();
         }
 
+    }
+
+    public boolean myRideOffer(){
+        if(mRideOffer.getUser().getObjectId().equals(ParseUser.getCurrentUser().getObjectId())){
+            return true;
+        }
+        return false;
     }
 
     private ParseUser getUser(String objectId) {
