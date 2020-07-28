@@ -2,7 +2,7 @@
 <resources>
     <string-array name="sort_array">
         <item>Most Recently Uploaded</item>
-        <item>Departure Date &amp; Time: Earliest to Latest</item>
-        <item>Departure Date &amp; Time: Latest to Earliest</item>
+        <item>Earliest to Latest Departure</item>
+        <item>Latest to Earliest Departure</item>
     </string-array>
 </resources>

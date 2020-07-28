@@ -12,9 +12,8 @@
         <Spinner
             android:id="@+id/spSort"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:entries="@array/sort_array"
-            android:prompt="Sort By" />
+            android:layout_height="50dp"
+            android:entries="@array/sort_array" />
 
         <Button
             android:id="@+id/btnFilter"

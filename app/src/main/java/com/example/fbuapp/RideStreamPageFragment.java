@@ -10,8 +10,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.Spinner;
 
 import com.example.fbuapp.Fragments.FilterRideOfferDialogFragment;
 import com.example.fbuapp.Fragments.FilterRideRequestDialogFragment;
@@ -33,6 +34,7 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
     public static final String ARG_PAGE = "ARG_PAGE";
 
     private int mPage;
+    private int mSortBy = 0;
 
     private RideOffersAdapter mOffersAdapter;
     private RideRequestsAdapter mRequestsAdpater;
@@ -40,7 +42,7 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
     private ArrayList<RideRequest> mRideRequests;
     private RecyclerView mRideOffersRecyclerView;
     private Button mFilterButton;
-    private Button mSortButton;
+    private Spinner mSortSpinner;
 
     public RideStreamPageFragment() {
         // Required empty public constructor
@@ -67,7 +69,7 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
         View view = inflater.inflate(R.layout.fragment_ride_page_stream, container, false);
 
         mFilterButton = view.findViewById(R.id.btnFilter);
-        mSortButton = view.findViewById(R.id.btnSort);
+        mSortSpinner = view.findViewById(R.id.spSort);
 
         mFilterButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,10 +82,32 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
                 }
             }
         });
-        mSortButton.setOnClickListener(new View.OnClickListener() {
+
+        mSortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View view) {
-                sortResults();
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                switch(i){
+                    case 0:
+                        mSortBy = 0;
+                        break;
+                    case 1:
+                        mSortBy = 1;
+                        break;
+                    case 2:
+                        mSortBy = 2;
+                        break;
+                }
+                if(mPage == 1){
+                    rideOffersList();
+                }
+                else{
+                    rideRequestsList();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
 
@@ -120,15 +144,12 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
         filterDialogFragment.show(fragmentManager, "filter_fragment");
     }
 
-    private void sortResults(){
-
-    }
-
     private void rideOffersList() {
         ParseQuery<RideOffer> query = ParseQuery.getQuery(RideOffer.class);
         query.include(RideOffer.KEY_USER);
         query.include(RideOffer.KEY_START_LOCATION);
         query.include(RideOffer.KEY_END_LOCATION);
+        sortRideOffers(query);
         query.setLimit(20);
         query.findInBackground(new FindCallback<RideOffer>() {
             @Override
@@ -137,6 +158,7 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
                     //error handling
                     return;
                 }
+                mOffersAdapter.clear();
                 mOffersAdapter.addAll(objects);
             }
         });
@@ -147,6 +169,7 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
         query.include(RideRequest.KEY_USER);
         query.include(RideRequest.KEY_START_LOCATION);
         query.include(RideRequest.KEY_END_LOCATION);
+        sortRideRequests(query);
         query.setLimit(20);
         query.findInBackground(new FindCallback<RideRequest>() {
             @Override
@@ -155,6 +178,7 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
                     //error handling
                     return;
                 }
+                mRequestsAdpater.clear();
                 mRequestsAdpater.addAll(objects);
             }
         });
@@ -166,6 +190,7 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
         query.include(RideRequest.KEY_USER);
         query.include(RideRequest.KEY_START_LOCATION);
         query.include(RideRequest.KEY_END_LOCATION);
+        sortRideRequests(query);
         query.setLimit(20);
         query.findInBackground(new FindCallback<RideRequest>() {
             @Override
@@ -199,6 +224,7 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
         query.include(RideOffer.KEY_USER);
         query.include(RideOffer.KEY_START_LOCATION);
         query.include(RideOffer.KEY_END_LOCATION);
+        sortRideOffers(query);
         query.setLimit(20);
         query.findInBackground(new FindCallback<RideOffer>() {
             @Override
@@ -230,6 +256,30 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
                 mOffersAdapter.addAll(filtered);
             }
         });
+    }
+
+    private void sortRideOffers(ParseQuery<RideOffer> query) {
+        if(mSortBy == 0){
+            query.orderByDescending("createdAt");
+        }
+        else if(mSortBy == 1){
+            query.orderByAscending("departureTime");
+        }
+        else{
+            query.orderByDescending("departureTime");
+        }
+    }
+
+    private void sortRideRequests(ParseQuery<RideRequest> query) {
+        if(mSortBy == 0){
+            query.orderByDescending("createdAt");
+        }
+        else if(mSortBy == 1){
+            query.orderByAscending("earliestDeparture");
+        }
+        else{
+            query.orderByDescending("earliestDeparture");
+        }
     }
 
 }
