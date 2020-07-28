@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -36,6 +37,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.parse.ParseUser;
 
 public class RideRequestDetailFragment extends Fragment implements OnMapReadyCallback, TaskLoadedCallback {
 
@@ -57,6 +59,8 @@ public class RideRequestDetailFragment extends Fragment implements OnMapReadyCal
     private ImageView mUserProfilePictureImageView;
     private TextView mUserNameTextView;
     private TextView mUserUniversityTextView;
+
+    private Button mOfferRideButton;
 
     public RideRequestDetailFragment(){
     }
@@ -93,7 +97,9 @@ public class RideRequestDetailFragment extends Fragment implements OnMapReadyCal
         mUserNameTextView = view.findViewById(R.id.tvUserName);
         mUserUniversityTextView = view.findViewById(R.id.tvUniversity);
 
-        bind();
+        mOfferRideButton = view.findViewById(R.id.btnOfferRide);
+
+        bindData();
 
         mUserInfoRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,10 +108,29 @@ public class RideRequestDetailFragment extends Fragment implements OnMapReadyCal
             }
         });
 
+        if(myRideRequest()){
+            mOfferRideButton.setVisibility(View.INVISIBLE);
+        }
+        else {
+            mOfferRideButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+        }
+
         if (isServicesOK()) {
             initializeMap();
         }
 
+    }
+
+    public boolean myRideRequest(){
+        if(mRideRequest.getUser().getObjectId().equals(ParseUser.getCurrentUser().getObjectId())){
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -209,7 +234,7 @@ public class RideRequestDetailFragment extends Fragment implements OnMapReadyCal
         mapFragment.getMapAsync(this);
     }
 
-    private void bind(){
+    private void bindData(){
         mEarliestDateTextView.setText(mRideRequest.getDateWithYear(mRideRequest.getEarliestDeparture()));
         mEarliestTimeTextView.setText(mRideRequest.getTime(mRideRequest.getEarliestDeparture()));
         mLatestDateTextView.setText(mRideRequest.getDateWithYear(mRideRequest.getLatestDeparture()));

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sort_array">
+        <item>Most Recently Uploaded</item>
+        <item>Earliest to Latest Departure</item>
+        <item>Latest to Earliest Departure</item>
+    </string-array>
+</resources>
