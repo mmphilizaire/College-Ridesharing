@@ -1,11 +1,10 @@
 package com.example.fbuapp.Fragments;
 
-import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +16,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
@@ -32,7 +28,6 @@ import com.example.fbuapp.R;
 import com.example.fbuapp.TaskLoadedCallback;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -78,6 +73,8 @@ public class RideOfferDetailFragment extends Fragment implements OnMapReadyCallb
     private Button mBookSeatButton;
     private boolean bookSeat;
 
+    private ImageView[] mPassengers;
+
     public RideOfferDetailFragment(){
     }
 
@@ -113,7 +110,18 @@ public class RideOfferDetailFragment extends Fragment implements OnMapReadyCallb
         mDriverNameTextView = view.findViewById(R.id.tvDriverName);
         mDriverUniversityTextView = view.findViewById(R.id.tvUniversity);
 
-        bind();
+        mPassengers = new ImageView[6];
+
+        mPassengers[0] = view.findViewById(R.id.ivPassenger1);
+        mPassengers[1] = view.findViewById(R.id.ivPassenger2);
+        mPassengers[2] = view.findViewById(R.id.ivPassenger3);
+        mPassengers[3] = view.findViewById(R.id.ivPassenger4);
+        mPassengers[4] = view.findViewById(R.id.ivPassenger5);
+        mPassengers[5] = view.findViewById(R.id.ivPassenger6);
+
+        loadSeats();
+
+        bindData();
 
         mDriverInfoRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,10 +140,12 @@ public class RideOfferDetailFragment extends Fragment implements OnMapReadyCallb
             public void onClick(View view) {
                 if(bookSeat){
                     bookSeat();
+                    loadSeats();
                 }
                 else{
                     try {
                         cancelSeat();
+                        loadSeats();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -145,6 +155,19 @@ public class RideOfferDetailFragment extends Fragment implements OnMapReadyCallb
 
         if (isServicesOK()) {
             initializeMap();
+        }
+
+    }
+
+    private ParseUser getUser(String objectId) {
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereEqualTo("objectId", objectId);
+        try {
+            List<ParseUser> users = query.find();
+            return users.get(0);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
         }
 
     }
@@ -162,6 +185,26 @@ public class RideOfferDetailFragment extends Fragment implements OnMapReadyCallb
             }
         }
         return false;
+    }
+
+    private void loadSeats(){
+        JSONArray passengers = mRideOffer.getPassengers();
+        for(int i = 0; i < passengers.length(); i++){
+            try {
+                String objectId = (String) passengers.get(i);
+                ParseUser user = getUser(objectId);
+                Glide.with(getContext()).load(user.getParseFile("profilePicture").getUrl()).transform(new CircleCrop()).into(mPassengers[i]);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        for(int i = passengers.length(); i < mRideOffer.getSeatCount().intValue(); i++){
+            mPassengers[i].setImageResource(R.drawable.ic_empty_seat);
+        }
+        for(int i = mRideOffer.getSeatCount().intValue(); i < 6; i++){
+            mPassengers[i].setVisibility(View.GONE);
+        }
+        mSeatsAvailableTextView.setText(mRideOffer.getSeatsAvailable() + " seats\navailable");
     }
 
     private void bookSeat() {
@@ -281,13 +324,12 @@ public class RideOfferDetailFragment extends Fragment implements OnMapReadyCallb
         mapFragment.getMapAsync(this);
     }
 
-    private void bind(){
+    private void bindData(){
         mDateTextView.setText(mRideOffer.getDateWithYear());
         mTimeTextView.setText(mRideOffer.getTime());
         mStartLocationTextView.setText(mRideOffer.getStartLocation().getCity() + ",\n" + mRideOffer.getStartLocation().getState());
         mEndLocationTextView.setText(mRideOffer.getEndLocation().getCity() + ",\n" + mRideOffer.getEndLocation().getState());
         mPricePerSeatTextView.setText("$" + mRideOffer.getSeatPrice() + " PER SEAT");
-        mSeatsAvailableTextView.setText(mRideOffer.getSeatsAvailable() + " seats\navailable");
 
         Glide.with(this).load(mRideOffer.getUser().getParseFile("profilePicture").getUrl()).transform(new CircleCrop()).into(mDriverProfilePictureImageView);
         mDriverNameTextView.setText(mRideOffer.getUser().getString("firstName"));
