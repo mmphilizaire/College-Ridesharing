@@ -1,22 +1,23 @@
-package com.example.fbuapp;
+package com.example.fbuapp.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.fbuapp.Navigation;
+import com.example.fbuapp.databinding.ActivityLoginBinding;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
 public class LoginActivity extends AppCompatActivity {
+
+    private ActivityLoginBinding mBinding;
 
     private EditText mEmailEditText;
     private EditText mPasswordEditText;
@@ -26,17 +27,27 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        mBinding = ActivityLoginBinding.inflate(getLayoutInflater());
+        setContentView(mBinding.getRoot());
 
         if(ParseUser.getCurrentUser() != null){
-            goMainActivity();
+            Navigation.goMainActivity(LoginActivity.this);
         }
 
-        mEmailEditText = findViewById(R.id.etEmail);
-        mPasswordEditText = findViewById(R.id.etPassword);
-        mLoginButton = findViewById(R.id.btnLogin);
-        mSignUpTextView = findViewById(R.id.tvLogin);
+        bind();
 
+        setOnClickListeners();
+
+    }
+
+    private void bind() {
+        mEmailEditText = mBinding.etEmail;
+        mPasswordEditText = mBinding.etPassword;
+        mLoginButton = mBinding.btnLogin;
+        mSignUpTextView = mBinding.tvLogin;
+    }
+
+    private void setOnClickListeners(){
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -49,22 +60,9 @@ public class LoginActivity extends AppCompatActivity {
         mSignUpTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                goRegisterActivity();
+                Navigation.goRegisterActivity(LoginActivity.this);
             }
         });
-
-    }
-
-    private void goMainActivity() {
-        Intent main = new Intent(this, MainActivity.class);
-        startActivity(main);
-        finish();
-    }
-
-    private void goRegisterActivity() {
-        Intent main = new Intent(this, RegisterActivity.class);
-        startActivity(main);
-        finish();
     }
 
     private void loginUser(String email, String password) {
@@ -74,22 +72,28 @@ public class LoginActivity extends AppCompatActivity {
                 if(e != null){
                     switch(e.getCode()){
                         case ParseException.OBJECT_NOT_FOUND:
-                            Toast.makeText(LoginActivity.this, "Email or password invalid!", Toast.LENGTH_LONG).show();
+                            createToast("Email or password invalid!");
                             break;
                         case ParseException.USERNAME_MISSING:
-                            Toast.makeText(LoginActivity.this, "Must enter email!", Toast.LENGTH_LONG).show();
+                            createToast("Must enter email!");
                             break;
                         case ParseException.PASSWORD_MISSING:
-                            Toast.makeText(LoginActivity.this, "Must enter password!", Toast.LENGTH_LONG).show();
+                            createToast("Must enter password!");
                             break;
                         default:
-                            Toast.makeText(LoginActivity.this, "Server error!", Toast.LENGTH_LONG).show();
+                            createToast("Issue logging in!");
                             e.printStackTrace();
                     }
                     return;
                 }
-                goMainActivity();
+                createToast("Success logging in!");
+                Navigation.goMainActivity(LoginActivity.this);
             }
         });
     }
+
+    private void createToast(String text){
+        Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+    }
+
 }

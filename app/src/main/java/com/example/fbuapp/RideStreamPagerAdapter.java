@@ -10,14 +10,13 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.example.fbuapp.Fragments.RideStreamFragment;
 
-public class RideStreamFragmentPagerAdapter extends FragmentPagerAdapter {
+public class RideStreamPagerAdapter extends FragmentPagerAdapter {
 
     final int PAGE_COUNT = 2;
     private String tabTitles[] = new String[] { "Offers", "Requests"};
 
-    public RideStreamFragmentPagerAdapter(FragmentManager fragmentManager){
+    public RideStreamPagerAdapter(FragmentManager fragmentManager){
         super(fragmentManager);
-        //super(fragmentManager);
     }
 
     @Override

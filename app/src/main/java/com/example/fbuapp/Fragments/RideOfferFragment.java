@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.os.Parcelable;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,8 +38,6 @@ public class RideOfferFragment extends Fragment implements DatePickerDialog.OnDa
     public static final int START_REQUEST_CODE = 1234;
     public static final int END_REQUEST_CODE = 4321;
 
-    private FragmentManager mFragmentManager;
-
     private EditText mStartLocationEditText;
     private EditText mEndLocationEditText;
     private TextView mDepartureDateTextView;
@@ -54,10 +53,6 @@ public class RideOfferFragment extends Fragment implements DatePickerDialog.OnDa
 
     public RideOfferFragment() {
         // Required empty public constructor
-    }
-
-    public RideOfferFragment(FragmentManager fragmentManager) {
-        mFragmentManager = fragmentManager;
     }
 
     @Override

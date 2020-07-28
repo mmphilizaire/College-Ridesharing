@@ -19,19 +19,20 @@ import com.example.fbuapp.Fragments.FilterRideRequestDialogFragment;
 import com.example.fbuapp.Models.Location;
 import com.example.fbuapp.Models.RideOffer;
 import com.example.fbuapp.Models.RideRequest;
+import com.example.fbuapp.databinding.FragmentRideStreamPageBinding;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class RideStreamPageFragment extends Fragment implements FilterRideOfferDialogFragment.FilterRideOfferDialogListener, FilterRideRequestDialogFragment.FilterRideRequestDialogListener {
 
     public static final String ARG_PAGE = "ARG_PAGE";
+
+    private FragmentRideStreamPageBinding mBinding;
 
     private int mPage;
     private int mSortBy = 0;
@@ -41,6 +42,7 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
     private ArrayList<RideOffer> mRideOffers;
     private ArrayList<RideRequest> mRideRequests;
     private RecyclerView mRideOffersRecyclerView;
+    private RecyclerView mRideRequestsRecyclerView;
     private Button mFilterButton;
     private Spinner mSortSpinner;
 
@@ -57,32 +59,57 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mPage = getArguments().getInt(ARG_PAGE);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_ride_page_stream, container, false);
+        super.onCreate(savedInstanceState);
+        mBinding = FragmentRideStreamPageBinding.inflate(inflater, container, false);
+        mPage = getArguments().getInt(ARG_PAGE);
 
-        mFilterButton = view.findViewById(R.id.btnFilter);
-        mSortSpinner = view.findViewById(R.id.spSort);
+        bind();
 
+        if(mPage == 1){
+            createRideOfferStream();
+        }
+        else{
+            createRideRequestStream();
+        }
+
+        return mBinding.getRoot();
+    }
+
+    private void createRideRequestStream() {
         mFilterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mPage == 1){
-                    filterRideOfferResults();
-                }
-                else{
-                    filterRideRequestResults();
-                }
+                filterRideRequestResults();
             }
         });
+        mRideRequestsRecyclerView = mBinding.rvRideOffers;
+        mRideRequests = new ArrayList<>();
+        mRequestsAdpater = new RideRequestsAdapter(mRideRequests, getContext(), this);
+        mRideRequestsRecyclerView.setAdapter(mRequestsAdpater);
+        mRideRequestsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        setSortListener();
+        rideRequestsList();
+    }
 
+    private void createRideOfferStream() {
+        mFilterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filterRideOfferResults();
+            }
+        });
+        mRideOffersRecyclerView = mBinding.rvRideOffers;
+        mRideOffers = new ArrayList<>();
+        mOffersAdapter = new RideOffersAdapter(mRideOffers, getContext(), this);
+        mRideOffersRecyclerView.setAdapter(mOffersAdapter);
+        mRideOffersRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        setSortListener();
+        rideOffersList();
+    }
+
+    private void setSortListener() {
         mSortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -106,28 +133,13 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
+            public void onNothingSelected(AdapterView<?> adapterView) { }
         });
+    }
 
-        if(mPage == 1){
-            mRideOffersRecyclerView = view.findViewById(R.id.rvRideOffers);
-            mRideOffers = new ArrayList<>();
-            mOffersAdapter = new RideOffersAdapter(mRideOffers, getContext(), this);
-            mRideOffersRecyclerView.setAdapter(mOffersAdapter);
-            mRideOffersRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            rideOffersList();
-        }
-        else{
-            mRideOffersRecyclerView = view.findViewById(R.id.rvRideOffers);
-            mRideRequests = new ArrayList<>();
-            mRequestsAdpater = new RideRequestsAdapter(mRideRequests, getContext(), this);
-            mRideOffersRecyclerView.setAdapter(mRequestsAdpater);
-            mRideOffersRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            rideRequestsList();
-        }
-        return view;
+    private void bind() {
+        mFilterButton = mBinding.btnFilter;
+        mSortSpinner = mBinding.spSort;
     }
 
     private void filterRideOfferResults(){

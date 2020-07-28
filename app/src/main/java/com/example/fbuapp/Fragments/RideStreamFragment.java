@@ -7,16 +7,20 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.fbuapp.R;
-import com.example.fbuapp.RideStreamFragmentPagerAdapter;
+import com.example.fbuapp.RideStreamPagerAdapter;
+import com.example.fbuapp.databinding.FragmentRideStreamBinding;
 import com.google.android.material.tabs.TabLayout;
 
 public class RideStreamFragment extends Fragment {
+
+    private FragmentRideStreamBinding mBinding;
+
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
 
     public RideStreamFragment() {
         // Required empty public constructor
@@ -25,21 +29,23 @@ public class RideStreamFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_ride_stream, container, false);
+        mBinding = FragmentRideStreamBinding.inflate(inflater, container, false);
+        return mBinding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Get the ViewPager and set it's PagerAdapter so that it can display items
-        ViewPager viewPager = view.findViewById(R.id.viewpager);
-        viewPager.setAdapter(new RideStreamFragmentPagerAdapter(getChildFragmentManager()));
+        bind();
 
-        // Give the TabLayout the ViewPager
-        TabLayout tabLayout = view.findViewById(R.id.sliding_tabs);
+        viewPager.setAdapter(new RideStreamPagerAdapter(getChildFragmentManager()));
         tabLayout.setupWithViewPager(viewPager);
 
+    }
+
+    private void bind() {
+        viewPager = mBinding.viewPager;
+        tabLayout = mBinding.slidingTabs;
     }
 }

@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,15 +19,9 @@ import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
-import com.example.fbuapp.LoginActivity;
+import com.example.fbuapp.Activities.LoginActivity;
 import com.example.fbuapp.R;
-import com.example.fbuapp.RideStreamPageFragment;
-import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
-
-import java.io.File;
 
 public class ProfileFragment extends Fragment {
 
@@ -42,6 +35,10 @@ public class ProfileFragment extends Fragment {
     private TextView mRidesRiddenTextView;
 
     private Button mLogoutButton;
+
+    public ProfileFragment(ParseUser user){
+        ProfileFragment.newInstance(user);
+    }
 
     public static ProfileFragment newInstance(ParseUser user){
         ProfileFragment profile = new ProfileFragment();
