@@ -114,7 +114,7 @@ public class RideOfferDetailFragment extends Fragment implements OnMapReadyCallb
             }
         });
 
-        if(myRideOffer()){
+        if(myRideOffer() || fullRide()){
             mBookSeatButton.setVisibility(View.INVISIBLE);
         }
         else{
@@ -143,6 +143,10 @@ public class RideOfferDetailFragment extends Fragment implements OnMapReadyCallb
             initializeMap();
         }
 
+    }
+
+    private boolean fullRide() {
+        return mRideOffer.getSeatsAvailable() == 0;
     }
 
     private void bind() {
