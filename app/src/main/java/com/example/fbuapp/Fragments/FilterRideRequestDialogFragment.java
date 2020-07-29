@@ -17,7 +17,11 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.fbuapp.MapActivity;
 import com.example.fbuapp.Models.Location;
+import com.example.fbuapp.Models.RideOfferFilter;
+import com.example.fbuapp.Models.RideRequestFilter;
 import com.example.fbuapp.R;
+import com.example.fbuapp.databinding.FragmentDialogFilterRideOfferBinding;
+import com.example.fbuapp.databinding.FragmentDialogFilterRideRequestBinding;
 import com.parse.ParseGeoPoint;
 
 import java.util.Calendar;
@@ -26,9 +30,12 @@ import static android.app.Activity.RESULT_OK;
 
 public class FilterRideRequestDialogFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
+    private FragmentDialogFilterRideRequestBinding mBinding;
+
     public static final int START_REQUEST_CODE = 1234;
     public static final int END_REQUEST_CODE = 4321;
 
+    public RideRequestFilter mRideRequestFilter;
     public Location mStartLocation;
     public Location mEndLocation;
     private Calendar mDateCalendar;
@@ -41,34 +48,28 @@ public class FilterRideRequestDialogFragment extends DialogFragment implements D
     private Button mApplyFilterButton;
 
     public interface FilterRideRequestDialogListener{
-        void onFinishRideRequestFilterDialog(Location start, int radiusStart, Location end, int radiusEnd, Calendar date);
+        void onFinishRideRequestFilterDialog(RideRequestFilter filter);
     }
 
     public FilterRideRequestDialogFragment(){
 
     }
 
-    public static FilterRideRequestDialogFragment newInstance(){
-        FilterRideRequestDialogFragment filter = new FilterRideRequestDialogFragment();
-        return filter;
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        return inflater.inflate(R.layout.fragment_dialog_filter_ride_request, container);
+        mBinding = FragmentDialogFilterRideRequestBinding.inflate(inflater, container, false);
+        return mBinding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mRideRequestFilter = new RideRequestFilter();
+        bind();
+        setOnClickListeners();
+    }
 
-        mStartLocationEditText = view.findViewById(R.id.etStartLocation);
-        mStartMileRadiusEditText = view.findViewById(R.id.etStartMileRadius);
-        mEndLocationEditText = view.findViewById(R.id.etEndLocation);
-        mEndMileRadiusEditText = view.findViewById(R.id.etEndMileRadius);
-        mDateTextView = view.findViewById(R.id.tvDate);
-        mApplyFilterButton = view.findViewById(R.id.btnApply);
-
+    private void setOnClickListeners() {
         mStartLocationEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,11 +97,21 @@ public class FilterRideRequestDialogFragment extends DialogFragment implements D
             @Override
             public void onClick(View view) {
                 FilterRideRequestDialogListener listener = (FilterRideRequestDialogListener) getTargetFragment();
-                listener.onFinishRideRequestFilterDialog(mStartLocation, Integer.parseInt(mStartMileRadiusEditText.getText().toString()), mEndLocation, Integer.parseInt(mEndMileRadiusEditText.getText().toString()), mDateCalendar);
+                mRideRequestFilter.setStartMileRadius(Integer.parseInt(mStartMileRadiusEditText.getText().toString()));
+                mRideRequestFilter.setEndMileRadius(Integer.parseInt(mEndMileRadiusEditText.getText().toString()));
+                listener.onFinishRideRequestFilterDialog(mRideRequestFilter);
                 dismiss();
             }
         });
+    }
 
+    private void bind() {
+        mStartLocationEditText = mBinding.etStartLocation;
+        mStartMileRadiusEditText = mBinding.etStartMileRadius;
+        mEndLocationEditText = mBinding.etEndLocation;
+        mEndMileRadiusEditText = mBinding.etEndMileRadius;
+        mDateTextView = mBinding.tvDate;
+        mApplyFilterButton = mBinding.btnApply;
     }
 
     @Override
@@ -116,6 +127,7 @@ public class FilterRideRequestDialogFragment extends DialogFragment implements D
             mStartLocation.setCity(data.getExtras().getString("city"));
             mStartLocation.setState(data.getExtras().getString("state"));
             mStartLocation.setGeoPoint(new ParseGeoPoint(latitude, longitude));
+            mRideRequestFilter.setStartLocation(mStartLocation);
             mStartLocationEditText.setText(mStartLocation.getCity() + ", " + mStartLocation.getState());
         }
         else if(resultCode == RESULT_OK && requestCode == END_REQUEST_CODE){
@@ -129,6 +141,7 @@ public class FilterRideRequestDialogFragment extends DialogFragment implements D
             mEndLocation.setCity(data.getExtras().getString("city"));
             mEndLocation.setState(data.getExtras().getString("state"));
             mEndLocation.setGeoPoint(new ParseGeoPoint(latitude, longitude));
+            mRideRequestFilter.setEndLocation(mEndLocation);
             mEndLocationEditText.setText(mEndLocation.getCity() + ", " + mEndLocation.getState());
         }
     }
@@ -148,6 +161,7 @@ public class FilterRideRequestDialogFragment extends DialogFragment implements D
             mDateCalendar = Calendar.getInstance();
         }
         mDateCalendar.set(year, month, dayOfMonth);
+        mRideRequestFilter.setDeparture(mDateCalendar.getTime());
         mDateTextView.setText(date);
     }
 

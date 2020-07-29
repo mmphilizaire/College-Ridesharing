@@ -18,7 +18,9 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.fbuapp.MapActivity;
 import com.example.fbuapp.Models.Location;
-import com.example.fbuapp.R;
+import com.example.fbuapp.Models.RideOfferFilter;
+import com.example.fbuapp.Navigation;
+import com.example.fbuapp.databinding.FragmentDialogFilterRideOfferBinding;
 import com.parse.ParseGeoPoint;
 
 import java.util.Calendar;
@@ -27,9 +29,12 @@ import static android.app.Activity.RESULT_OK;
 
 public class FilterRideOfferDialogFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
+    private FragmentDialogFilterRideOfferBinding mBinding;
+
     public static final int START_REQUEST_CODE = 1234;
     public static final int END_REQUEST_CODE = 4321;
 
+    public RideOfferFilter mRideOfferFilter;
     public Location mStartLocation;
     public Location mEndLocation;
     private Calendar mEarliestDateCalendar;
@@ -46,36 +51,28 @@ public class FilterRideOfferDialogFragment extends DialogFragment implements Dat
     private Button mApplyFilterButton;
 
     public interface FilterRideOfferDialogListener{
-        void onFinishRideOfferFilterDialog(Location start, int radiusStart, Location end, int radiusEnd, Calendar earliest, Calendar latest, boolean hideFullRides);
+        void onFinishRideOfferFilterDialog(RideOfferFilter filter);
     }
 
     public FilterRideOfferDialogFragment(){
 
     }
 
-    public static FilterRideOfferDialogFragment newInstance(){
-        FilterRideOfferDialogFragment filter = new FilterRideOfferDialogFragment();
-        return filter;
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        return inflater.inflate(R.layout.fragment_dialog_filter_ride_offer, container);
+        mBinding = FragmentDialogFilterRideOfferBinding.inflate(inflater, container, false);
+        return mBinding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mRideOfferFilter = new RideOfferFilter();
+        bind();
+        setOnClickListeners();
+    }
 
-        mStartLocationEditText = view.findViewById(R.id.etStartLocation);
-        mStartMileRadiusEditText = view.findViewById(R.id.etStartMileRadius);
-        mEndLocationEditText = view.findViewById(R.id.etEndLocation);
-        mEndMileRadiusEditText = view.findViewById(R.id.etEndMileRadius);
-        mEarliestDateTextView = view.findViewById(R.id.tvEarliestDate);
-        mLatestDateTextView = view.findViewById(R.id.tvLatestDate);
-        mHideFullRidesCheckBox = view.findViewById(R.id.cbHideFullRides);
-        mApplyFilterButton = view.findViewById(R.id.btnApply);
-
+    private void setOnClickListeners() {
         mStartLocationEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -112,11 +109,24 @@ public class FilterRideOfferDialogFragment extends DialogFragment implements Dat
             @Override
             public void onClick(View view) {
                 FilterRideOfferDialogListener listener = (FilterRideOfferDialogListener) getTargetFragment();
-                listener.onFinishRideOfferFilterDialog(mStartLocation, Integer.parseInt(mStartMileRadiusEditText.getText().toString()), mEndLocation, Integer.parseInt(mEndMileRadiusEditText.getText().toString()), mEarliestDateCalendar, mLatestDateCalendar, mHideFullRidesCheckBox.isChecked());
+                mRideOfferFilter.setStartMileRadius(Integer.parseInt(mStartMileRadiusEditText.getText().toString()));
+                mRideOfferFilter.setEndMileRadius(Integer.parseInt(mEndMileRadiusEditText.getText().toString()));
+                mRideOfferFilter.setHideFullRides(mHideFullRidesCheckBox.isChecked());
+                listener.onFinishRideOfferFilterDialog(mRideOfferFilter);
                 dismiss();
             }
         });
+    }
 
+    private void bind() {
+        mStartLocationEditText = mBinding.etStartLocation;
+        mStartMileRadiusEditText = mBinding.etStartMileRadius;
+        mEndLocationEditText = mBinding.etEndLocation;
+        mEndMileRadiusEditText = mBinding.etEndMileRadius;
+        mEarliestDateTextView = mBinding.tvEarliestDate;
+        mLatestDateTextView = mBinding.tvLatestDate;
+        mHideFullRidesCheckBox = mBinding.cbHideFullRides;
+        mApplyFilterButton = mBinding.btnApply;
     }
 
     @Override
@@ -132,6 +142,7 @@ public class FilterRideOfferDialogFragment extends DialogFragment implements Dat
             mStartLocation.setCity(data.getExtras().getString("city"));
             mStartLocation.setState(data.getExtras().getString("state"));
             mStartLocation.setGeoPoint(new ParseGeoPoint(latitude, longitude));
+            mRideOfferFilter.setStartLocation(mStartLocation);
             mStartLocationEditText.setText(mStartLocation.getCity() + ", " + mStartLocation.getState());
         }
         else if(resultCode == RESULT_OK && requestCode == END_REQUEST_CODE){
@@ -145,6 +156,7 @@ public class FilterRideOfferDialogFragment extends DialogFragment implements Dat
             mEndLocation.setCity(data.getExtras().getString("city"));
             mEndLocation.setState(data.getExtras().getString("state"));
             mEndLocation.setGeoPoint(new ParseGeoPoint(latitude, longitude));
+            mRideOfferFilter.setEndLocation(mEndLocation);
             mEndLocationEditText.setText(mEndLocation.getCity() + ", " + mEndLocation.getState());
         }
     }
@@ -165,6 +177,7 @@ public class FilterRideOfferDialogFragment extends DialogFragment implements Dat
                 mEarliestDateCalendar = Calendar.getInstance();
             }
             mEarliestDateCalendar.set(year, month, dayOfMonth);
+            mRideOfferFilter.setEarliestDeparture(mEarliestDateCalendar.getTime());
             mEarliestDateTextView.setText(date);
         }
         else {
@@ -172,6 +185,7 @@ public class FilterRideOfferDialogFragment extends DialogFragment implements Dat
                 mLatestDateCalendar = Calendar.getInstance();
             }
             mLatestDateCalendar.set(year, month, dayOfMonth);
+            mRideOfferFilter.setLatestDeparture(mLatestDateCalendar.getTime());
             mLatestDateTextView.setText(date);
         }
     }

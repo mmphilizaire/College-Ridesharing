@@ -68,20 +68,19 @@ public class MainActivity extends AppCompatActivity {
         mFragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
     }
 
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults)
-//    {
-//        switch (requestCode) {
-//            case 1000:
-//                // If request is cancelled, the result arrays are empty.
-//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    //startGallery();
-//                    ACCESS_GRANTED = true;
-//                } else {
-//                    //didn't grant access
-//                    ACCESS_GRANTED = false;
-//                }
-//                break;
-//        }
-//    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults)
+    {
+        switch (requestCode) {
+            case 1000:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //granted access
+                } else {
+                    //didn't grant access
+
+                }
+                break;
+        }
+    }
 }

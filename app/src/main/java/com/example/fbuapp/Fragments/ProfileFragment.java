@@ -104,7 +104,7 @@ public class ProfileFragment extends Fragment {
 
     private void changeProfilePicture() {
         FragmentManager fragmentManager = getFragmentManager();
-        ProfilePictureDialogFragment profilePictureDialogFragment = ProfilePictureDialogFragment.newInstance();
+        ProfilePictureDialogFragment profilePictureDialogFragment = new ProfilePictureDialogFragment();
         profilePictureDialogFragment.setTargetFragment(ProfileFragment.this, 200);
         profilePictureDialogFragment.show(fragmentManager, "profile_picture_fragment");
     }

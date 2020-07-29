@@ -2,11 +2,14 @@ package com.example.fbuapp;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +21,9 @@ import com.example.fbuapp.Fragments.FilterRideOfferDialogFragment;
 import com.example.fbuapp.Fragments.FilterRideRequestDialogFragment;
 import com.example.fbuapp.Models.Location;
 import com.example.fbuapp.Models.RideOffer;
+import com.example.fbuapp.Models.RideOfferFilter;
 import com.example.fbuapp.Models.RideRequest;
+import com.example.fbuapp.Models.RideRequestFilter;
 import com.example.fbuapp.databinding.FragmentRideStreamPageBinding;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -36,6 +41,9 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
 
     private int mPage;
     private int mSortBy = 0;
+
+    private RideOfferFilter mRideOfferFilter;
+    private RideRequestFilter mRideRequestFilter;
 
     private RideOffersAdapter mOffersAdapter;
     private RideRequestsAdapter mRequestsAdpater;
@@ -64,7 +72,12 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
         super.onCreate(savedInstanceState);
         mBinding = FragmentRideStreamPageBinding.inflate(inflater, container, false);
         mPage = getArguments().getInt(ARG_PAGE);
+        return mBinding.getRoot();
+    }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         bind();
 
         if(mPage == 1){
@@ -73,8 +86,6 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
         else{
             createRideRequestStream();
         }
-
-        return mBinding.getRoot();
     }
 
     private void createRideRequestStream() {
@@ -84,6 +95,7 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
                 filterRideRequestResults();
             }
         });
+        mRideRequestFilter = new RideRequestFilter();
         mRideRequestsRecyclerView = mBinding.rvRideOffers;
         mRideRequests = new ArrayList<>();
         mRequestsAdpater = new RideRequestsAdapter(mRideRequests, getContext(), this);
@@ -100,6 +112,7 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
                 filterRideOfferResults();
             }
         });
+        mRideOfferFilter = new RideOfferFilter();
         mRideOffersRecyclerView = mBinding.rvRideOffers;
         mRideOffers = new ArrayList<>();
         mOffersAdapter = new RideOffersAdapter(mRideOffers, getContext(), this);
@@ -113,17 +126,7 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
         mSortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                switch(i){
-                    case 0:
-                        mSortBy = 0;
-                        break;
-                    case 1:
-                        mSortBy = 1;
-                        break;
-                    case 2:
-                        mSortBy = 2;
-                        break;
-                }
+                mSortBy = i;
                 if(mPage == 1){
                     rideOffersList();
                 }
@@ -144,14 +147,14 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
 
     private void filterRideOfferResults(){
         FragmentManager fragmentManager = getFragmentManager();
-        FilterRideOfferDialogFragment filterDialogFragment = FilterRideOfferDialogFragment.newInstance();
+        FilterRideOfferDialogFragment filterDialogFragment = new FilterRideOfferDialogFragment();
         filterDialogFragment.setTargetFragment(RideStreamPageFragment.this, 200);
         filterDialogFragment.show(fragmentManager, "filter_fragment");
     }
 
     private void filterRideRequestResults(){
         FragmentManager fragmentManager = getFragmentManager();
-        FilterRideRequestDialogFragment filterDialogFragment = FilterRideRequestDialogFragment.newInstance();
+        FilterRideRequestDialogFragment filterDialogFragment = new FilterRideRequestDialogFragment();
         filterDialogFragment.setTargetFragment(RideStreamPageFragment.this, 200);
         filterDialogFragment.show(fragmentManager, "filter_fragment");
     }
@@ -170,10 +173,30 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
                     //error handling
                     return;
                 }
+                List<RideOffer> filtered = new ArrayList<>();
+                for(RideOffer object : objects){
+                    if(mRideOfferFilter.hasStartLocation() && object.getStartLocation().getGeoPoint().distanceInMilesTo(mRideOfferFilter.getStartLocation().getGeoPoint()) > mRideOfferFilter.getStartMileRadius()){
+                        continue;
+                    }
+                    if(mRideOfferFilter.hasEndLocation() && object.getEndLocation().getGeoPoint().distanceInMilesTo(mRideOfferFilter.getEndLocation().getGeoPoint()) > mRideOfferFilter.getEndMileRadius()){
+                        continue;
+                    }
+                    if(mRideOfferFilter.hasEarliestDeparture() && !object.getDepartureTime().after(mRideOfferFilter.getEarliestDeparture())){
+                        continue;
+                    }
+                    if(mRideOfferFilter.hasLatestDeparture() && !object.getDepartureTime().before(mRideOfferFilter.getLatestDeparture())){
+                        continue;
+                    }
+                    if(mRideOfferFilter.getHideFullRides() && object.getPassengers().length() == object.getSeatCount().intValue()){
+                        continue;
+                    }
+                    filtered.add(object);
+                }
                 mOffersAdapter.clear();
-                mOffersAdapter.addAll(objects);
+                mOffersAdapter.addAll(filtered);
             }
         });
+
     }
 
     private void rideRequestsList() {
@@ -190,36 +213,15 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
                     //error handling
                     return;
                 }
-                mRequestsAdpater.clear();
-                mRequestsAdpater.addAll(objects);
-            }
-        });
-    }
-
-    @Override
-    public void onFinishRideRequestFilterDialog(final Location start, final int radiusStart, final Location end, final int radiusEnd, final Calendar date){
-        ParseQuery<RideRequest> query = ParseQuery.getQuery(RideRequest.class);
-        query.include(RideRequest.KEY_USER);
-        query.include(RideRequest.KEY_START_LOCATION);
-        query.include(RideRequest.KEY_END_LOCATION);
-        sortRideRequests(query);
-        query.setLimit(20);
-        query.findInBackground(new FindCallback<RideRequest>() {
-            @Override
-            public void done(List<RideRequest> objects, ParseException e) {
-                if(e != null){
-                    //error handling
-                    return;
-                }
                 List<RideRequest> filtered = new ArrayList<>();
                 for(RideRequest object : objects){
-                    if(start != null && object.getStartLocation().getGeoPoint().distanceInMilesTo(start.getGeoPoint()) > radiusStart){
+                    if(mRideRequestFilter.hasStartLocation() && object.getStartLocation().getGeoPoint().distanceInMilesTo(mRideRequestFilter.getStartLocation().getGeoPoint()) > mRideRequestFilter.getStartMileRadius()){
                         continue;
                     }
-                    if(end != null && object.getEndLocation().getGeoPoint().distanceInMilesTo(end.getGeoPoint()) > radiusEnd){
+                    if(mRideRequestFilter.hasEndLocation() && object.getEndLocation().getGeoPoint().distanceInMilesTo(mRideRequestFilter.getEndLocation().getGeoPoint()) > mRideRequestFilter.getEndMileRadius()){
                         continue;
                     }
-                    if(date != null && (!object.getEarliestDeparture().before(date.getTime()) || !object.getLatestDeparture().after(date.getTime()))){
+                    if(mRideRequestFilter.hasDeparture() && (!object.getEarliestDeparture().before(mRideRequestFilter.getDeparture()) || !object.getLatestDeparture().after(mRideRequestFilter.getDeparture()))){
                         continue;
                     }
                     filtered.add(object);
@@ -231,43 +233,15 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
     }
 
     @Override
-    public void onFinishRideOfferFilterDialog(final Location start, final int radiusStart, final Location end, final int radiusEnd, final Calendar earliest, final Calendar latest, final boolean hideFullRides){
-        ParseQuery<RideOffer> query = ParseQuery.getQuery(RideOffer.class);
-        query.include(RideOffer.KEY_USER);
-        query.include(RideOffer.KEY_START_LOCATION);
-        query.include(RideOffer.KEY_END_LOCATION);
-        sortRideOffers(query);
-        query.setLimit(20);
-        query.findInBackground(new FindCallback<RideOffer>() {
-            @Override
-            public void done(List<RideOffer> objects, ParseException e) {
-                if(e != null){
-                    //error handling
-                    return;
-                }
-                List<RideOffer> filtered = new ArrayList<>();
-                for(RideOffer object : objects){
-                    if(start != null && object.getStartLocation().getGeoPoint().distanceInMilesTo(start.getGeoPoint()) > radiusStart){
-                        continue;
-                    }
-                    if(end != null && object.getEndLocation().getGeoPoint().distanceInMilesTo(end.getGeoPoint()) > radiusEnd){
-                        continue;
-                    }
-                    if(earliest != null && !object.getDepartureTime().after(earliest.getTime())){
-                        continue;
-                    }
-                    if(latest != null && !object.getDepartureTime().before(latest.getTime())){
-                        continue;
-                    }
-                    if(hideFullRides && object.getPassengers().length() == object.getSeatCount().intValue()){
-                        continue;
-                    }
-                    filtered.add(object);
-                }
-                mOffersAdapter.clear();
-                mOffersAdapter.addAll(filtered);
-            }
-        });
+    public void onFinishRideRequestFilterDialog(RideRequestFilter filter){
+        mRideRequestFilter = filter;
+        rideRequestsList();
+    }
+
+    @Override
+    public void onFinishRideOfferFilterDialog(RideOfferFilter filter){
+        mRideOfferFilter = filter;
+        rideOffersList();
     }
 
     private void sortRideOffers(ParseQuery<RideOffer> query) {

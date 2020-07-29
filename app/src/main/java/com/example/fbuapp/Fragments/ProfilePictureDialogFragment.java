@@ -55,11 +55,6 @@ public class ProfilePictureDialogFragment extends DialogFragment {
 
     }
 
-    public static ProfilePictureDialogFragment newInstance(){
-        ProfilePictureDialogFragment dialogFragment = new ProfilePictureDialogFragment();
-        return dialogFragment;
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         return inflater.inflate(R.layout.fragment_dialog_profile_picture, container);
@@ -68,6 +63,7 @@ public class ProfilePictureDialogFragment extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
 
         mChoosePictureTextView = view.findViewById(R.id.tvLibrary);
         mTakePictureTextView = view.findViewById(R.id.tvTakePhoto);
@@ -156,21 +152,6 @@ public class ProfilePictureDialogFragment extends DialogFragment {
             startActivityForResult(intent, CAPTURE_IMAGE_REQUEST_CODE);
         }
     }
-
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults)
-//    {
-//        switch (requestCode) {
-//            case 1000:
-//                // If request is cancelled, the result arrays are empty.
-//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                    startGallery();
-//                } else {
-//                    //didn't grant access
-//                }
-//                break;
-//        }
-//    }
 
     private void startGallery() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
