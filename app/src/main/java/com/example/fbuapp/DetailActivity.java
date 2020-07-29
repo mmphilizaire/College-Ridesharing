@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import com.parse.ParseUser;
 public class DetailActivity extends AppCompatActivity {
 
     private ActivityDetailBinding mBinding;
+    private Fragment currentFragment;
 
     FragmentManager mFragmentManager = getSupportFragmentManager();
     private Toolbar mToolbar;
@@ -48,11 +50,12 @@ public class DetailActivity extends AppCompatActivity {
         RideOffer rideOffer = (RideOffer) getIntent().getParcelableExtra("rideOffer");
         RideRequest rideRequest = (RideRequest) getIntent().getParcelableExtra("rideRequest");
         if(rideOffer != null){
-            mFragmentManager.beginTransaction().replace(R.id.flContainer, RideOfferDetailFragment.newInstance(rideOffer)).commit();
+            currentFragment = RideOfferDetailFragment.newInstance(rideOffer);
         }
         else{
-            mFragmentManager.beginTransaction().replace(R.id.flContainer, RideRequestDetailFragment.newInstance(rideRequest)).commit();
+            currentFragment = RideRequestDetailFragment.newInstance(rideRequest);
         }
+        mFragmentManager.beginTransaction().replace(R.id.flContainer, currentFragment).commit();
     }
 
     private void configureToolbar() {
@@ -94,13 +97,18 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     public void getProfile(final RideRequest rideRequest){
+        final FragmentTransaction transaction = mFragmentManager.beginTransaction();
+
         final ProfileFragment profileFragment = ProfileFragment.newInstance(rideRequest.getUser());
-        mFragmentManager.beginTransaction().replace(R.id.flContainer, ProfileFragment.newInstance(rideRequest.getUser())).commit();
+        transaction.hide(currentFragment).commit();
+        transaction.add(R.id.flContainer, profileFragment).commit();
+
         mBackImageView.setVisibility(View.VISIBLE);
         mBackImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mFragmentManager.beginTransaction().replace(R.id.flContainer, RideRequestDetailFragment.newInstance(rideRequest)).commit();
+                transaction.show(currentFragment).commit();
+                transaction.remove(profileFragment).commit();
                 mBackImageView.setVisibility(View.GONE);
             }
         });
