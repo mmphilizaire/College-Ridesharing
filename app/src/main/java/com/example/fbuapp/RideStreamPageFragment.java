@@ -278,6 +278,7 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
                     mScrollListener.resetState();
                 }
                 mRequestsAdpater.addAll(filtered);
+                mSwipeRefreshLayout.setRefreshing(false);
             }
         });
     }

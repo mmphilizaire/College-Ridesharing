@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,8 @@ public class ProfileFragment extends Fragment {
     private FragmentProfileBinding mBinding;
 
     private ParseUser mUser;
+
+    public ProfilePictureDialogFragment profilePictureDialogFragment;
 
     private ImageView mProfilePictureImageView;
     private TextView mNameTextView;
@@ -116,7 +119,7 @@ public class ProfileFragment extends Fragment {
 
     private void changeProfilePicture() {
         FragmentManager fragmentManager = getFragmentManager();
-        ProfilePictureDialogFragment profilePictureDialogFragment = new ProfilePictureDialogFragment();
+        profilePictureDialogFragment = new ProfilePictureDialogFragment();
         profilePictureDialogFragment.setTargetFragment(ProfileFragment.this, 200);
         profilePictureDialogFragment.show(fragmentManager, "profile_picture_fragment");
     }
@@ -142,6 +145,10 @@ public class ProfileFragment extends Fragment {
 
     public void setProfilePicture(Bitmap profilePicture) {
         Glide.with(getContext()).load(profilePicture).transform(new CircleCrop()).into(mProfilePictureImageView);
+    }
+
+    public void grantPermissions(){
+        profilePictureDialogFragment.startGallery();
     }
 
     public ParseUser getUser(){

@@ -24,6 +24,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.fbuapp.Activities.MainActivity;
 import com.example.fbuapp.R;
 import com.example.fbuapp.databinding.FragmentDialogProfilePictureBinding;
 import com.parse.ParseFile;
@@ -45,7 +46,7 @@ public class ProfilePictureDialogFragment extends DialogFragment {
 
     private static final String TAG = "ProfilePictureFragment";
     private static final int CAPTURE_IMAGE_REQUEST_CODE = 342;
-    private static final int GALLERY_IMAGE_REQUEST_CODE = 762;
+    public static final int GALLERY_IMAGE_REQUEST_CODE = 762;
 
     private TextView mChoosePictureTextView;
     private TextView mTakePictureTextView;
@@ -61,7 +62,7 @@ public class ProfilePictureDialogFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        mBinding = FragmentDialogProfilePictureBinding.inflate(inflater, container, true);
+        mBinding = FragmentDialogProfilePictureBinding.inflate(inflater, container, false);
         return mBinding.getRoot();
     }
 
@@ -79,8 +80,7 @@ public class ProfilePictureDialogFragment extends DialogFragment {
             public void onClick(View view) {
                 try {
                     if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, GALLERY_IMAGE_REQUEST_CODE);
-                        //TODO: check if access if granted from mainactivity and if so, call startGallery
+                        ActivityCompat.requestPermissions((MainActivity)getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, GALLERY_IMAGE_REQUEST_CODE);
                     } else {
                         startGallery();
                     }
@@ -163,7 +163,7 @@ public class ProfilePictureDialogFragment extends DialogFragment {
         }
     }
 
-    private void startGallery() {
+    public void startGallery() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         if (galleryIntent.resolveActivity(getActivity().getPackageManager()) != null) {
             startActivityForResult(galleryIntent, GALLERY_IMAGE_REQUEST_CODE);

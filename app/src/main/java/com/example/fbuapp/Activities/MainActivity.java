@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentManager;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.fbuapp.Fragments.ProfileFragment;
@@ -17,6 +18,8 @@ import com.example.fbuapp.R;
 import com.example.fbuapp.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
+
+import static com.example.fbuapp.Fragments.ProfilePictureDialogFragment.GALLERY_IMAGE_REQUEST_CODE;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -72,13 +75,11 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults)
     {
         switch (requestCode) {
-            case 1000:
+            case GALLERY_IMAGE_REQUEST_CODE:
+                ProfileFragment fragment = (ProfileFragment) mCurrentFragment;
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    //granted access
-                } else {
-                    //didn't grant access
-
+                    fragment.grantPermissions();
                 }
                 break;
         }
