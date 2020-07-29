@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -47,6 +48,7 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
     private RideOfferFilter mRideOfferFilter;
     private RideRequestFilter mRideRequestFilter;
 
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private RideOffersAdapter mOffersAdapter;
     private RideRequestsAdapter mRequestsAdpater;
     private ArrayList<RideOffer> mRideOffers;
@@ -84,12 +86,26 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
         super.onViewCreated(view, savedInstanceState);
         bind();
 
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                // Make sure you call swipeContainer.setRefreshing(false)
+                // once the network request has completed successfully.
+                if(mPage == 1){
+                    rideOffersList(0, true);
+                }
+                else{
+                    rideRequestsList(0, true);
+                }
+            }
+        });
+
         mLinearLayoutManager = new LinearLayoutManager(getContext());
 
         mScrollListener = new EndlessRecyclerViewScrollListener(mLinearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                Log.e("Mishka", "get more");
                 if(mPage == 1){
                     rideOffersList(page, false);
                 }
@@ -167,6 +183,7 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
     private void bind() {
         mFilterButton = mBinding.btnFilter;
         mSortSpinner = mBinding.spSort;
+        mSwipeRefreshLayout = mBinding.swipeContainer;
     }
 
     private void filterRideOfferResults(){
@@ -222,6 +239,7 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
                     mScrollListener.resetState();
                 }
                 mOffersAdapter.addAll(filtered);
+                mSwipeRefreshLayout.setRefreshing(false);
             }
         });
 
