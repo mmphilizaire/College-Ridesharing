@@ -1,5 +1,6 @@
 package com.example.fbuapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -36,6 +37,7 @@ import java.util.List;
 public class RideStreamPageFragment extends Fragment implements FilterRideOfferDialogFragment.FilterRideOfferDialogListener, FilterRideRequestDialogFragment.FilterRideRequestDialogListener {
 
     public static final String ARG_PAGE = "ARG_PAGE";
+    public static final int DETAIL_REQUEST_CODE = 212;
 
     private FragmentRideStreamPageBinding mBinding;
 
@@ -115,7 +117,7 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
         mRideOfferFilter = new RideOfferFilter();
         mRideOffersRecyclerView = mBinding.rvRideOffers;
         mRideOffers = new ArrayList<>();
-        mOffersAdapter = new RideOffersAdapter(mRideOffers, getContext());
+        mOffersAdapter = new RideOffersAdapter(mRideOffers, this);
         mRideOffersRecyclerView.setAdapter(mOffersAdapter);
         mRideOffersRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         setSortListener();
@@ -268,4 +270,11 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == DETAIL_REQUEST_CODE){
+            rideOffersList();
+        }
+    }
 }

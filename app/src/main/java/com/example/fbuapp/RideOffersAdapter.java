@@ -22,14 +22,18 @@ import com.parse.ParseFile;
 
 import java.util.List;
 
+import static com.example.fbuapp.RideStreamPageFragment.DETAIL_REQUEST_CODE;
+
 public class RideOffersAdapter extends RecyclerView.Adapter<RideOffersAdapter.ViewHolder> {
 
     private List<RideOffer> mRideOffers;
     private Context mContext;
+    Fragment mFragment;
 
-    public RideOffersAdapter(List<RideOffer> rideOffers, Context context){
+    public RideOffersAdapter(List<RideOffer> rideOffers, Fragment fragment){
         mRideOffers = rideOffers;
-        mContext = context;
+        mContext = fragment.getContext();
+        mFragment = fragment;
     }
 
     @Override
@@ -107,7 +111,7 @@ public class RideOffersAdapter extends RecyclerView.Adapter<RideOffersAdapter.Vi
             int position = getAdapterPosition();
             Intent rideOfferDetails = new Intent(mContext, DetailActivity.class);
             rideOfferDetails.putExtra("rideOffer", mRideOffers.get(position));
-            mContext.startActivity(rideOfferDetails);
+            mFragment.startActivityForResult(rideOfferDetails, DETAIL_REQUEST_CODE);
         }
     }
 
