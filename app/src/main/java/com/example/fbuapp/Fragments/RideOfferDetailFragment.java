@@ -26,6 +26,8 @@ import com.example.fbuapp.Models.Location;
 import com.example.fbuapp.Models.RideOffer;
 import com.example.fbuapp.R;
 import com.example.fbuapp.TaskLoadedCallback;
+import com.example.fbuapp.databinding.FragmentRideOfferBinding;
+import com.example.fbuapp.databinding.FragmentRideOfferDetailBinding;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.maps.CameraUpdate;
@@ -49,6 +51,8 @@ import org.json.JSONException;
 import java.util.List;
 
 public class RideOfferDetailFragment extends Fragment implements OnMapReadyCallback, TaskLoadedCallback {
+
+    private FragmentRideOfferDetailBinding mBinding;
 
     private static final int ERROR_DIALOG_REQUEST = 9001;
 
@@ -88,39 +92,19 @@ public class RideOfferDetailFragment extends Fragment implements OnMapReadyCallb
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        return inflater.inflate(R.layout.fragment_ride_offer_detail, container, false);
+        mBinding = FragmentRideOfferDetailBinding.inflate(inflater, container, false);
+        return mBinding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         mRideOffer = getArguments().getParcelable("rideOffer");
-
-        mDriverInfoRelativeLayout = view.findViewById(R.id.rlDriverInfo);
-
-        mDateTextView = view.findViewById(R.id.tvDate);
-        mTimeTextView = view.findViewById(R.id.tvTime);
-        mStartLocationTextView = view.findViewById(R.id.tvStart);
-        mEndLocationTextView = view.findViewById(R.id.tvEnd);
-        mPricePerSeatTextView = view.findViewById(R.id.tvSeatPrice);
-        mSeatsAvailableTextView = view.findViewById(R.id.tvSeatsAvailable);
-
-        mDriverProfilePictureImageView = view.findViewById(R.id.ivProfilePicture);
-        mDriverNameTextView = view.findViewById(R.id.tvDriverName);
-        mDriverUniversityTextView = view.findViewById(R.id.tvUniversity);
 
         mPassengers = new ImageView[6];
 
-        mPassengers[0] = view.findViewById(R.id.ivPassenger1);
-        mPassengers[1] = view.findViewById(R.id.ivPassenger2);
-        mPassengers[2] = view.findViewById(R.id.ivPassenger3);
-        mPassengers[3] = view.findViewById(R.id.ivPassenger4);
-        mPassengers[4] = view.findViewById(R.id.ivPassenger5);
-        mPassengers[5] = view.findViewById(R.id.ivPassenger6);
-
+        bind();
         loadSeats();
-
         bindData();
 
         mDriverInfoRelativeLayout.setOnClickListener(new View.OnClickListener() {
@@ -130,7 +114,6 @@ public class RideOfferDetailFragment extends Fragment implements OnMapReadyCallb
             }
         });
 
-        mBookSeatButton = view.findViewById(R.id.btnBookSeat);
         if(myRideOffer()){
             mBookSeatButton.setVisibility(View.INVISIBLE);
         }
@@ -144,12 +127,10 @@ public class RideOfferDetailFragment extends Fragment implements OnMapReadyCallb
                 public void onClick(View view) {
                     if(bookSeat){
                         bookSeat();
-                        loadSeats();
                     }
                     else{
                         try {
                             cancelSeat();
-                            loadSeats();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -162,6 +143,30 @@ public class RideOfferDetailFragment extends Fragment implements OnMapReadyCallb
             initializeMap();
         }
 
+    }
+
+    private void bind() {
+        mDriverInfoRelativeLayout = mBinding.rlDriverInfo;
+
+        mDateTextView = mBinding.tvDate;
+        mTimeTextView = mBinding.tvTime;
+        mStartLocationTextView = mBinding.tvStart;
+        mEndLocationTextView = mBinding.tvEnd;
+        mPricePerSeatTextView = mBinding.tvSeatPrice;
+        mSeatsAvailableTextView = mBinding.tvSeatsAvailable;
+
+        mDriverProfilePictureImageView = mBinding.ivProfilePicture;
+        mDriverNameTextView = mBinding.tvDriverName;
+        mDriverUniversityTextView = mBinding.tvUniversity;
+
+        mPassengers[0] = mBinding.ivPassenger1;
+        mPassengers[1] = mBinding.ivPassenger2;
+        mPassengers[2] = mBinding.ivPassenger3;
+        mPassengers[3] = mBinding.ivPassenger4;
+        mPassengers[4] = mBinding.ivPassenger5;
+        mPassengers[5] = mBinding.ivPassenger6;
+
+        mBookSeatButton = mBinding.btnBookSeat;
     }
 
     public boolean myRideOffer(){
@@ -225,6 +230,7 @@ public class RideOfferDetailFragment extends Fragment implements OnMapReadyCallb
         mRideOffer.saveInBackground();
         mBookSeatButton.setText("Cancel Seat");
         bookSeat = false;
+        loadSeats();
     }
 
     private void cancelSeat() throws JSONException {
@@ -233,6 +239,7 @@ public class RideOfferDetailFragment extends Fragment implements OnMapReadyCallb
         mRideOffer.saveInBackground();
         mBookSeatButton.setText("Book Seat");
         bookSeat = true;
+        loadSeats();
     }
 
     @Override

@@ -25,6 +25,7 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.fbuapp.R;
+import com.example.fbuapp.databinding.FragmentDialogProfilePictureBinding;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
@@ -40,9 +41,12 @@ import static com.parse.Parse.getApplicationContext;
 
 public class ProfilePictureDialogFragment extends DialogFragment {
 
+    FragmentDialogProfilePictureBinding mBinding;
+
     private static final String TAG = "ProfilePictureFragment";
     private static final int CAPTURE_IMAGE_REQUEST_CODE = 342;
     private static final int GALLERY_IMAGE_REQUEST_CODE = 762;
+
     private TextView mChoosePictureTextView;
     private TextView mTakePictureTextView;
     private TextView mRemovePictureTextView;
@@ -57,19 +61,19 @@ public class ProfilePictureDialogFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        return inflater.inflate(R.layout.fragment_dialog_profile_picture, container);
+        mBinding = FragmentDialogProfilePictureBinding.inflate(inflater, container, true);
+        return mBinding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        bind();
+        setOnClickListeners();
+    }
 
-        mChoosePictureTextView = view.findViewById(R.id.tvLibrary);
-        mTakePictureTextView = view.findViewById(R.id.tvTakePhoto);
-        mRemovePictureTextView = view.findViewById(R.id.tvRemove);
-        mCancelTextView = view.findViewById(R.id.tvCancel);
-
+    private void setOnClickListeners() {
         mChoosePictureTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -106,7 +110,13 @@ public class ProfilePictureDialogFragment extends DialogFragment {
                 dismiss();
             }
         });
+    }
 
+    private void bind() {
+        mChoosePictureTextView = mBinding.tvLibrary;
+        mTakePictureTextView = mBinding.tvTakePhoto;
+        mRemovePictureTextView = mBinding.tvRemove;
+        mCancelTextView = mBinding.tvCancel;
     }
 
     private void removePicture() {

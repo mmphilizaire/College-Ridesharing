@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.fbuapp.databinding.ActivityMapBinding;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -41,6 +42,8 @@ import java.util.List;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
+    private ActivityMapBinding mBinding;
+
     private static final int ERROR_DIALOG_REQUEST = 9001;
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
@@ -59,13 +62,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map);
+        mBinding = ActivityMapBinding.inflate(getLayoutInflater());
+        setContentView(mBinding.getRoot());
 
-        mSearchEditText = findViewById(R.id.etSearch);
-        mCloseRelativeLayout = findViewById(R.id.rlClose);
-        mSelectRelativeLayout = findViewById(R.id.rlUseAddress);
-        mCurrentLocationRelativeLayout = findViewById(R.id.rlCurrentLocation);
+        bind();
+        setOnClickListeners();
 
+        if (isServicesOK()) {
+            getLocationPermission();
+        }
+
+    }
+
+    private void setOnClickListeners() {
         mCloseRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,11 +105,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 myLocation();
             }
         });
+    }
 
-        if (isServicesOK()) {
-            getLocationPermission();
-        }
-
+    private void bind() {
+        mSearchEditText = mBinding.etSearch;
+        mCloseRelativeLayout = mBinding.rlClose;
+        mSelectRelativeLayout = mBinding.rlUseAddress;
+        mCurrentLocationRelativeLayout = mBinding.rlCurrentLocation;
     }
 
     @Override
@@ -235,7 +246,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         }
                     }
                     mLocationPermissionsGranted = true;
-                    //initialize our map
                     initializeMap();
                 }
             }

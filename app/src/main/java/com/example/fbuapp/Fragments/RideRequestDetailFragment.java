@@ -25,6 +25,7 @@ import com.example.fbuapp.Models.Location;
 import com.example.fbuapp.Models.RideRequest;
 import com.example.fbuapp.R;
 import com.example.fbuapp.TaskLoadedCallback;
+import com.example.fbuapp.databinding.FragmentRideRequestDetailBinding;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.maps.CameraUpdate;
@@ -42,6 +43,8 @@ import com.parse.ParseUser;
 public class RideRequestDetailFragment extends Fragment implements OnMapReadyCallback, TaskLoadedCallback {
 
     private static final int ERROR_DIALOG_REQUEST = 9001;
+
+    private FragmentRideRequestDetailBinding mBinding;
 
     private GoogleMap mMap;
     private Polyline mPolyline;
@@ -75,7 +78,8 @@ public class RideRequestDetailFragment extends Fragment implements OnMapReadyCal
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        return inflater.inflate(R.layout.fragment_ride_request_detail, container, false);
+        mBinding = FragmentRideRequestDetailBinding.inflate(inflater, container, false);
+        return mBinding.getRoot();
     }
 
     @Override
@@ -84,21 +88,7 @@ public class RideRequestDetailFragment extends Fragment implements OnMapReadyCal
 
         mRideRequest = getArguments().getParcelable("rideRequest");
 
-        mUserInfoRelativeLayout = view.findViewById(R.id.rlUserInfo);
-
-        mEarliestDateTextView = view.findViewById(R.id.tvEarliestDate);
-        mEarliestTimeTextView = view.findViewById(R.id.tvEarliestTime);
-        mLatestDateTextView = view.findViewById(R.id.tvLatestDate);
-        mLatestTimeTextView = view.findViewById(R.id.tvLatestTime);
-        mStartLocationTextView = view.findViewById(R.id.tvStart);
-        mEndLocationTextView = view.findViewById(R.id.tvEnd);
-
-        mUserProfilePictureImageView = view.findViewById(R.id.ivProfilePicture);
-        mUserNameTextView = view.findViewById(R.id.tvUserName);
-        mUserUniversityTextView = view.findViewById(R.id.tvUniversity);
-
-        mOfferRideButton = view.findViewById(R.id.btnOfferRide);
-
+        bind();
         bindData();
 
         mUserInfoRelativeLayout.setOnClickListener(new View.OnClickListener() {
@@ -124,6 +114,20 @@ public class RideRequestDetailFragment extends Fragment implements OnMapReadyCal
             initializeMap();
         }
 
+    }
+
+    private void bind() {
+        mUserInfoRelativeLayout = mBinding.rlUserInfo;
+        mEarliestDateTextView = mBinding.tvEarliestDate;
+        mEarliestTimeTextView = mBinding.tvEarliestTime;
+        mLatestDateTextView = mBinding.tvLatestDate;
+        mLatestTimeTextView = mBinding.tvLatestTime;
+        mStartLocationTextView = mBinding.tvStart;
+        mEndLocationTextView = mBinding.tvEnd;
+        mUserProfilePictureImageView = mBinding.ivProfilePicture;
+        mUserNameTextView = mBinding.tvUserName;
+        mUserUniversityTextView = mBinding.tvUniversity;
+        mOfferRideButton = mBinding.btnOfferRide;
     }
 
     public boolean myRideRequest(){

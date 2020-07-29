@@ -19,6 +19,8 @@ import com.example.fbuapp.Fragments.RideOfferDetailFragment;
 import com.example.fbuapp.Fragments.RideRequestDetailFragment;
 import com.example.fbuapp.Fragments.RideRequestFragment;
 import com.example.fbuapp.Models.RideRequest;
+import com.example.fbuapp.databinding.ItemRideOfferBinding;
+import com.example.fbuapp.databinding.ItemRideRequestBinding;
 import com.parse.ParseFile;
 
 import java.util.List;
@@ -27,24 +29,22 @@ public class RideRequestsAdapter extends RecyclerView.Adapter<RideRequestsAdapte
 
     private List<RideRequest> mRideRequests;
     private Context mContext;
-    private Fragment mFragment;
 
-    public RideRequestsAdapter(List<RideRequest> rideRequests, Context context, Fragment fragment){
+    public RideRequestsAdapter(List<RideRequest> rideRequests, Context context){
         mRideRequests = rideRequests;
         mContext = context;
-        mFragment = fragment;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_ride_request, parent, false);
-        return new ViewHolder(view);
+        ItemRideRequestBinding binding = ItemRideRequestBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new RideRequestsAdapter.ViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         RideRequest rideRequest = mRideRequests.get(position);
-        holder.bind(rideRequest);
+        holder.bindData(rideRequest);
     }
 
     @Override
@@ -64,6 +64,8 @@ public class RideRequestsAdapter extends RecyclerView.Adapter<RideRequestsAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        private ItemRideRequestBinding mBinding;
+
         public ImageView mProfilePictureImageView;
         public TextView mNameTextView;
         public TextView mEarliestDateTextView;
@@ -73,22 +75,25 @@ public class RideRequestsAdapter extends RecyclerView.Adapter<RideRequestsAdapte
         public TextView mStartLocationTextView;
         public TextView mEndLocationTextView;
 
-        public ViewHolder(@NonNull View itemView){
-            super(itemView);
-            itemView.setOnClickListener(this);
-
-            mProfilePictureImageView = itemView.findViewById(R.id.ivProfilePicture);
-            mNameTextView = itemView.findViewById(R.id.tvName);
-            mEarliestDateTextView = itemView.findViewById(R.id.tvEarliestDate);
-            mEarliestTimeTextView = itemView.findViewById(R.id.tvEarliestTime);
-            mLatestDateTextView = itemView.findViewById(R.id.tvLatestDate);
-            mLatestTimeTextView = itemView.findViewById(R.id.tvLatestTime);
-            mStartLocationTextView = itemView.findViewById(R.id.tvStart);
-            mEndLocationTextView = itemView.findViewById(R.id.tvEnd);
-
+        public ViewHolder(@NonNull ItemRideRequestBinding binding){
+            super(binding.getRoot());
+            mBinding = binding;
+            mBinding.getRoot().setOnClickListener(this);
+            bind();
         }
 
-        public void bind(RideRequest rideRequest) {
+        private void bind() {
+            mProfilePictureImageView = mBinding.ivProfilePicture;
+            mNameTextView = mBinding.tvName;
+            mEarliestDateTextView = mBinding.tvEarliestDate;
+            mEarliestTimeTextView = mBinding.tvEarliestTime;
+            mLatestDateTextView = mBinding.tvLatestDate;
+            mLatestTimeTextView = mBinding.tvLatestTime;
+            mStartLocationTextView = mBinding.tvStart;
+            mEndLocationTextView = mBinding.tvEnd;
+        }
+
+        public void bindData(RideRequest rideRequest) {
             ParseFile profilePicture = rideRequest.getUser().getParseFile("profilePicture");
             Glide.with(mContext).load(profilePicture.getUrl()).transform(new CircleCrop()).into(mProfilePictureImageView);
             mNameTextView.setText(rideRequest.getUser().getString("firstName"));
@@ -106,11 +111,6 @@ public class RideRequestsAdapter extends RecyclerView.Adapter<RideRequestsAdapte
             Intent rideRequestDetails = new Intent(mContext, DetailActivity.class);
             rideRequestDetails.putExtra("rideRequest", mRideRequests.get(position));
             mContext.startActivity(rideRequestDetails);
-//            int position = getAdapterPosition();
-//            FragmentManager fragmentManager = mFragment.getFragmentManager();
-//            RideRequestDetailFragment detailFragment = RideRequestDetailFragment.newInstance(mRideRequests.get(position));
-//            detailFragment.setTargetFragment(mFragment, 200);
-//            detailFragment.show(fragmentManager, "detail_fragment");
         }
 
     }

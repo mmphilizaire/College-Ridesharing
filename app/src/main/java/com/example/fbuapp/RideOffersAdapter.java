@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.fbuapp.Fragments.RideOfferDetailFragment;
 import com.example.fbuapp.Models.RideOffer;
+import com.example.fbuapp.databinding.ItemRideOfferBinding;
 import com.parse.ParseFile;
 
 import java.util.List;
@@ -25,24 +26,22 @@ public class RideOffersAdapter extends RecyclerView.Adapter<RideOffersAdapter.Vi
 
     private List<RideOffer> mRideOffers;
     private Context mContext;
-    private Fragment mFragment;
 
-    public RideOffersAdapter(List<RideOffer> rideOffers, Context context, Fragment fragment){
+    public RideOffersAdapter(List<RideOffer> rideOffers, Context context){
         mRideOffers = rideOffers;
         mContext = context;
-        mFragment = fragment;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_ride_offer, parent, false);
-        return new ViewHolder(view);
+        ItemRideOfferBinding binding = ItemRideOfferBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new ViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         RideOffer rideOffer = mRideOffers.get(position);
-        holder.bind(rideOffer);
+        holder.bindData(rideOffer);
     }
 
     @Override
@@ -62,7 +61,7 @@ public class RideOffersAdapter extends RecyclerView.Adapter<RideOffersAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-       // private RideOffer mRideOffer;
+        private ItemRideOfferBinding mBinding;
 
         public ImageView mProfilePictureImageView;
         public TextView mNameTextView;
@@ -73,22 +72,25 @@ public class RideOffersAdapter extends RecyclerView.Adapter<RideOffersAdapter.Vi
         public TextView mPricePerSeatTextView;
         public TextView mSeatsAvailableTextView;
 
-        public ViewHolder(@NonNull View itemView){
-            super(itemView);
-            itemView.setOnClickListener(this);
-
-            mProfilePictureImageView = itemView.findViewById(R.id.ivProfilePicture);
-            mNameTextView = itemView.findViewById(R.id.tvName);
-            mDateTextView = itemView.findViewById(R.id.tvDate);
-            mTimeTextView = itemView.findViewById(R.id.tvTime);
-            mStartLocationTextView = itemView.findViewById(R.id.tvStart);
-            mEndLocationTextView = itemView.findViewById(R.id.tvEnd);
-            mPricePerSeatTextView = itemView.findViewById(R.id.tvSeatPrice);
-            mSeatsAvailableTextView = itemView.findViewById(R.id.tvSeats);
-
+        public ViewHolder(@NonNull ItemRideOfferBinding binding){
+            super(binding.getRoot());
+            mBinding = binding;
+            mBinding.getRoot().setOnClickListener(this);
+            bind();
         }
 
-        public void bind(RideOffer rideOffer) {
+        public void bind(){
+            mProfilePictureImageView = mBinding.ivProfilePicture;
+            mNameTextView = mBinding.tvName;
+            mDateTextView = mBinding.tvDate;
+            mTimeTextView = mBinding.tvTime;
+            mStartLocationTextView = mBinding.tvStart;
+            mEndLocationTextView = mBinding.tvEnd;
+            mPricePerSeatTextView = mBinding.tvSeatPrice;
+            mSeatsAvailableTextView = mBinding.tvSeats;
+        }
+
+        public void bindData(RideOffer rideOffer) {
             ParseFile profilePicture = rideOffer.getUser().getParseFile("profilePicture");
             Glide.with(mContext).load(profilePicture.getUrl()).transform(new CircleCrop()).into(mProfilePictureImageView);
             mNameTextView.setText(rideOffer.getUser().getString("firstName"));
@@ -106,10 +108,6 @@ public class RideOffersAdapter extends RecyclerView.Adapter<RideOffersAdapter.Vi
             Intent rideOfferDetails = new Intent(mContext, DetailActivity.class);
             rideOfferDetails.putExtra("rideOffer", mRideOffers.get(position));
             mContext.startActivity(rideOfferDetails);
-//            FragmentManager fragmentManager = mFragment.getFragmentManager();
-//            RideOfferDetailFragment detailFragment = RideOfferDetailFragment.newInstance(mRideOffers.get(position));
-//            detailFragment.setTargetFragment(mFragment, 200);
-//            detailFragment.show(fragmentManager, "detail_fragment");
         }
     }
 

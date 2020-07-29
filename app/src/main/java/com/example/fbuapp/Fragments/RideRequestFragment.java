@@ -26,6 +26,7 @@ import com.example.fbuapp.MapActivity;
 import com.example.fbuapp.Models.RideOffer;
 import com.example.fbuapp.R;
 import com.example.fbuapp.Models.RideRequest;
+import com.example.fbuapp.databinding.FragmentRideRequestBinding;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 
@@ -35,10 +36,10 @@ import static android.app.Activity.RESULT_OK;
 
 public class RideRequestFragment extends Fragment implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
+    FragmentRideRequestBinding mBinding;
+
     public static final int START_REQUEST_CODE = 1234;
     public static final int END_REQUEST_CODE = 4321;
-
-    private FragmentManager mFragmentManager;
 
     private EditText mStartLocationEditText;
     private EditText mEndLocationEditText;
@@ -59,15 +60,11 @@ public class RideRequestFragment extends Fragment implements DatePickerDialog.On
         // Required empty public constructor
     }
 
-    public RideRequestFragment(FragmentManager fragmentManager) {
-        mFragmentManager = fragmentManager;
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_ride_request, container, false);
+        mBinding = FragmentRideRequestBinding.inflate(inflater, container, false);
+        return mBinding.getRoot();
     }
 
     @Override
@@ -80,15 +77,11 @@ public class RideRequestFragment extends Fragment implements DatePickerDialog.On
         mLatestDepartureCalendar = Calendar.getInstance();
         mEarliestDeparture = false;
 
-        mEarliestDateTextView = view.findViewById(R.id.tvEarliestDate);
-        mEarliestTimeTextView = view.findViewById(R.id.tvEarliestTime);
-        mLatestDateTextView = view.findViewById(R.id.tvLatestDate);
-        mLatestTimeTextView = view.findViewById(R.id.tvLatestTime);
-        mStartLocationEditText = view.findViewById(R.id.etStartLocation);
-        mEndLocationEditText = view.findViewById(R.id.etEndLocation);
+        bind();
+        setOnClickListeners();
+    }
 
-        mCreateButton = view.findViewById(R.id.btnRequest);
-
+    private void setOnClickListeners() {
         mEarliestDateTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -141,20 +134,33 @@ public class RideRequestFragment extends Fragment implements DatePickerDialog.On
             @Override
             public void onClick(View view) {
                 if(!missingInfo()){
-                    RideRequest rideRequest = new RideRequest();
-                    rideRequest.setUser(ParseUser.getCurrentUser());
-                    rideRequest.setEarliestDeparture(mEarliestDepartureCalendar.getTime());
-                    rideRequest.setLatestDeparture(mLatestDepartureCalendar.getTime());
-                    rideRequest.setStartLocation(mStartLocation);
-                    rideRequest.setEndLocation(mEndLocation);
-                    rideRequest.saveInBackground();
+                    saveRideRequest();
                 }
                 else{
                     Toast.makeText(getActivity(), "Missing information!", Toast.LENGTH_LONG).show();
                 }
             }
         });
+    }
 
+    private void saveRideRequest() {
+        RideRequest rideRequest = new RideRequest();
+        rideRequest.setUser(ParseUser.getCurrentUser());
+        rideRequest.setEarliestDeparture(mEarliestDepartureCalendar.getTime());
+        rideRequest.setLatestDeparture(mLatestDepartureCalendar.getTime());
+        rideRequest.setStartLocation(mStartLocation);
+        rideRequest.setEndLocation(mEndLocation);
+        rideRequest.saveInBackground();
+    }
+
+    private void bind() {
+        mEarliestDateTextView = mBinding.tvEarliestDate;
+        mEarliestTimeTextView = mBinding.tvEarliestTime;
+        mLatestDateTextView = mBinding.tvLatestDate;
+        mLatestTimeTextView = mBinding.tvLatestTime;
+        mStartLocationEditText = mBinding.etStartLocation;
+        mEndLocationEditText = mBinding.etEndLocation;
+        mCreateButton = mBinding.btnRequest;
     }
 
     private boolean missingInfo() {

@@ -22,23 +22,41 @@ import com.example.fbuapp.Fragments.RideRequestFragment;
 import com.example.fbuapp.Fragments.RideStreamFragment;
 import com.example.fbuapp.Models.RideOffer;
 import com.example.fbuapp.Models.RideRequest;
+import com.example.fbuapp.databinding.ActivityDetailBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.Parse;
 import com.parse.ParseUser;
 
 public class DetailActivity extends AppCompatActivity {
 
+    private ActivityDetailBinding mBinding;
+
     FragmentManager mFragmentManager = getSupportFragmentManager();
-    private ImageView mCloseImageView;
     private Toolbar mToolbar;
     private ImageView mBackImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
+        mBinding = ActivityDetailBinding.inflate(getLayoutInflater());
+        setContentView(mBinding.getRoot());
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        configureToolbar();
+
+        mBackImageView = (ImageView) findViewById(R.id.ivBack);
+
+        RideOffer rideOffer = (RideOffer) getIntent().getParcelableExtra("rideOffer");
+        RideRequest rideRequest = (RideRequest) getIntent().getParcelableExtra("rideRequest");
+        if(rideOffer != null){
+            mFragmentManager.beginTransaction().replace(R.id.flContainer, RideOfferDetailFragment.newInstance(rideOffer)).commit();
+        }
+        else{
+            mFragmentManager.beginTransaction().replace(R.id.flContainer, RideRequestDetailFragment.newInstance(rideRequest)).commit();
+        }
+    }
+
+    private void configureToolbar() {
+        mToolbar = mBinding.toolbar;
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -53,19 +71,6 @@ public class DetailActivity extends AppCompatActivity {
                 }
             }
         });
-
-        mBackImageView = (ImageView) findViewById(R.id.ivBack);
-
-        RideOffer rideOffer = (RideOffer) getIntent().getParcelableExtra("rideOffer");
-        if(rideOffer != null){
-            mFragmentManager.beginTransaction().replace(R.id.flContainer, RideOfferDetailFragment.newInstance(rideOffer)).commit();
-        }
-        else{
-            RideRequest rideRequest = (RideRequest) getIntent().getParcelableExtra("rideRequest");
-            mFragmentManager.beginTransaction().replace(R.id.flContainer, RideRequestDetailFragment.newInstance(rideRequest)).commit();
-        }
-
-
     }
 
     @Override

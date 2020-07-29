@@ -98,7 +98,7 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
         mRideRequestFilter = new RideRequestFilter();
         mRideRequestsRecyclerView = mBinding.rvRideOffers;
         mRideRequests = new ArrayList<>();
-        mRequestsAdpater = new RideRequestsAdapter(mRideRequests, getContext(), this);
+        mRequestsAdpater = new RideRequestsAdapter(mRideRequests, getContext());
         mRideRequestsRecyclerView.setAdapter(mRequestsAdpater);
         mRideRequestsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         setSortListener();
@@ -115,7 +115,7 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
         mRideOfferFilter = new RideOfferFilter();
         mRideOffersRecyclerView = mBinding.rvRideOffers;
         mRideOffers = new ArrayList<>();
-        mOffersAdapter = new RideOffersAdapter(mRideOffers, getContext(), this);
+        mOffersAdapter = new RideOffersAdapter(mRideOffers, getContext());
         mRideOffersRecyclerView.setAdapter(mOffersAdapter);
         mRideOffersRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         setSortListener();

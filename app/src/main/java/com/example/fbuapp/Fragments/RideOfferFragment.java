@@ -26,6 +26,7 @@ import com.example.fbuapp.Models.Location;
 import com.example.fbuapp.MapActivity;
 import com.example.fbuapp.R;
 import com.example.fbuapp.Models.RideOffer;
+import com.example.fbuapp.databinding.FragmentRideOfferBinding;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 
@@ -34,6 +35,8 @@ import java.util.Calendar;
 import static android.app.Activity.RESULT_OK;
 
 public class RideOfferFragment extends Fragment implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+
+    private FragmentRideOfferBinding mBinding;
 
     public static final int START_REQUEST_CODE = 1234;
     public static final int END_REQUEST_CODE = 4321;
@@ -58,8 +61,8 @@ public class RideOfferFragment extends Fragment implements DatePickerDialog.OnDa
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_ride_offer, container, false);
+        mBinding = FragmentRideOfferBinding.inflate(inflater, container, false);
+        return mBinding.getRoot();
     }
 
     @Override
@@ -70,15 +73,11 @@ public class RideOfferFragment extends Fragment implements DatePickerDialog.OnDa
         mEndLocation = new Location();
         mDepartureCalendar = Calendar.getInstance();
 
-        mDepartureDateTextView = view.findViewById(R.id.tvDepartureDate);
-        mDepartureTimeTextView = view.findViewById(R.id.tvDepartureTime);
-        mStartLocationEditText = view.findViewById(R.id.etStartLocation);
-        mEndLocationEditText = view.findViewById(R.id.etEndLocation);
-        mSeatCountEditText = view.findViewById(R.id.etSeatCount);
-        mSeatPriceEditText = view.findViewById(R.id.etSeatPrice);
+        bind();
+        setOnClickListeners();
+    }
 
-        mCreateButton = view.findViewById(R.id.btnOffer);
-
+    private void setOnClickListeners() {
         mDepartureDateTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,21 +112,34 @@ public class RideOfferFragment extends Fragment implements DatePickerDialog.OnDa
             @Override
             public void onClick(View view) {
                 if(!missingInfo()){
-                    RideOffer rideOffer = new RideOffer();
-                    rideOffer.setUser(ParseUser.getCurrentUser());
-                    rideOffer.setDepartureTime(mDepartureCalendar.getTime());
-                    rideOffer.setSeatPrice((Number) Integer.parseInt(mSeatPriceEditText.getText().toString()));
-                    rideOffer.setSeatCount((Number) Integer.parseInt(mSeatCountEditText.getText().toString()));
-                    rideOffer.setStartLocation(mStartLocation);
-                    rideOffer.setEndLocation(mEndLocation);
-                    rideOffer.saveInBackground();
+                    saveRideOffer();
                 }
                 else{
                     Toast.makeText(getActivity(), "Missing information!", Toast.LENGTH_LONG).show();
                 }
             }
         });
+    }
 
+    private void saveRideOffer() {
+        RideOffer rideOffer = new RideOffer();
+        rideOffer.setUser(ParseUser.getCurrentUser());
+        rideOffer.setDepartureTime(mDepartureCalendar.getTime());
+        rideOffer.setSeatPrice((Number) Integer.parseInt(mSeatPriceEditText.getText().toString()));
+        rideOffer.setSeatCount((Number) Integer.parseInt(mSeatCountEditText.getText().toString()));
+        rideOffer.setStartLocation(mStartLocation);
+        rideOffer.setEndLocation(mEndLocation);
+        rideOffer.saveInBackground();
+    }
+
+    private void bind() {
+        mDepartureDateTextView = mBinding.tvDepartureDate;
+        mDepartureTimeTextView = mBinding.tvDepartureTime;
+        mStartLocationEditText = mBinding.etStartLocation;
+        mEndLocationEditText = mBinding.etEndLocation;
+        mSeatCountEditText = mBinding.etSeatCount;
+        mSeatPriceEditText = mBinding.etSeatPrice;
+        mCreateButton = mBinding.btnOffer;
     }
 
     private boolean missingInfo() {
@@ -195,7 +207,6 @@ public class RideOfferFragment extends Fragment implements DatePickerDialog.OnDa
         mDepartureCalendar.set(year, month, dayOfMonth);
         mDepartureCalendar.set(year, month, dayOfMonth);
         mDepartureDateTextView.setText(date);
-
     }
 
     @Override
