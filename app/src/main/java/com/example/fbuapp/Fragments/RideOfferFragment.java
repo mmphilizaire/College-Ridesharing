@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.example.fbuapp.Models.Location;
 import com.example.fbuapp.MapActivity;
+import com.example.fbuapp.Models.RideRequest;
 import com.example.fbuapp.R;
 import com.example.fbuapp.Models.RideOffer;
 import com.example.fbuapp.databinding.FragmentRideOfferBinding;
@@ -40,6 +41,8 @@ public class RideOfferFragment extends Fragment implements DatePickerDialog.OnDa
 
     public static final int START_REQUEST_CODE = 1234;
     public static final int END_REQUEST_CODE = 4321;
+
+    private RideRequest mRideRequest;
 
     private EditText mStartLocationEditText;
     private EditText mEndLocationEditText;
@@ -58,6 +61,14 @@ public class RideOfferFragment extends Fragment implements DatePickerDialog.OnDa
         // Required empty public constructor
     }
 
+    public static RideOfferFragment newInstance(RideRequest rideRequest) {
+        Bundle args = new Bundle();
+        args.putParcelable("rideRequest", rideRequest);
+        RideOfferFragment fragment = new RideOfferFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -68,13 +79,26 @@ public class RideOfferFragment extends Fragment implements DatePickerDialog.OnDa
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if(getArguments() != null){
+            mRideRequest = getArguments().getParcelable("rideRequest");
+        }
 
         mStartLocation = new Location();
         mEndLocation = new Location();
         mDepartureCalendar = Calendar.getInstance();
 
         bind();
+        if(mRideRequest != null){
+            bindData();
+        }
         setOnClickListeners();
+    }
+
+    private void bindData() {
+        mStartLocation = mRideRequest.getStartLocation();
+        mStartLocationEditText.setText(mStartLocation.getCity() + ", " + mStartLocation.getState());
+        mEndLocation = mRideRequest.getEndLocation();
+        mEndLocationEditText.setText(mEndLocation.getCity() + ", " + mEndLocation.getState());
     }
 
     private void setOnClickListeners() {
