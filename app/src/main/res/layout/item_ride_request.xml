@@ -1,19 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp">
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvStart"
+        android:layout_toEndOf="@+id/tvName"
+        app:srcCompat="@drawable/ic_to" />
 
     <ImageView
         android:id="@+id/ivProfilePicture"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
+        android:padding="2dp"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
@@ -27,6 +37,9 @@
         android:layout_marginTop="0dp"
         android:layout_marginEnd="0dp"
         android:gravity="center"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        android:textStyle="bold"
         tools:text="Mishka" />
 
     <TextView
@@ -37,7 +50,10 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
         android:layout_toEndOf="@+id/ivProfilePicture"
-        tools:text="July 11" />
+        android:padding="2dp"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        tools:text="Friday, July 11" />
 
     <TextView
         android:id="@+id/tvEarliestTime"
@@ -47,6 +63,9 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
         android:layout_toEndOf="@+id/ivProfilePicture"
+        android:padding="2dp"
+        android:textColor="#000000"
+        android:textSize="18sp"
         tools:text="6:30PM" />
 
     <TextView
@@ -57,7 +76,10 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="0dp"
         android:layout_marginEnd="0dp"
-        tools:text="July 11" />
+        android:padding="2dp"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        tools:text="Friday, July 11" />
 
     <TextView
         android:id="@+id/tvLatestTime"
@@ -67,6 +89,9 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="0dp"
         android:layout_marginEnd="0dp"
+        android:padding="2dp"
+        android:textColor="#000000"
+        android:textSize="18sp"
         tools:text="6:30PM" />
 
     <TextView
@@ -77,6 +102,9 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
         android:layout_toEndOf="@+id/ivProfilePicture"
+        android:padding="2dp"
+        android:textColor="#000000"
+        android:textSize="16sp"
         tools:text="Alexandria, VA" />
 
     <TextView
@@ -84,9 +112,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvStart"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        android:layout_toEndOf="@+id/ivProfilePicture"
+        android:layout_toEndOf="@+id/imageView3"
+        android:padding="2dp"
+        android:textColor="#000000"
+        android:textSize="16sp"
         tools:text="Chapel Hill, NC" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvLatestTime"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/tvLatestDate"
+        android:layout_toEndOf="@+id/tvEarliestDate"
+        android:adjustViewBounds="true"
+        android:scaleType="centerInside"
+        app:srcCompat="@drawable/ic_arrow" />
 
 </RelativeLayout>

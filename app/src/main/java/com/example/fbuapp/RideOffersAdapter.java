@@ -101,7 +101,7 @@ public class RideOffersAdapter extends RecyclerView.Adapter<RideOffersAdapter.Vi
             mStartLocationTextView.setText(rideOffer.getStartLocation().getCity()+", "+rideOffer.getStartLocation().getState());
             mEndLocationTextView.setText(rideOffer.getEndLocation().getCity()+", "+rideOffer.getEndLocation().getState());
             mPricePerSeatTextView.setText("$" + rideOffer.getSeatPrice().toString() + "\nper seat");
-            mSeatsAvailableTextView.setText(rideOffer.getSeatsAvailable() + " seats left");
+            mSeatsAvailableTextView.setText(rideOffer.getSeatsAvailable() + " seats left!");
         }
 
         @Override

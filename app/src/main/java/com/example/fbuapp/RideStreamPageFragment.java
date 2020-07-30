@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -35,6 +36,8 @@ import com.parse.ParseQuery;
 import java.util.ArrayList;
 import java.util.List;
 
+import static androidx.recyclerview.widget.DividerItemDecoration.HORIZONTAL;
+
 public class RideStreamPageFragment extends Fragment implements FilterRideOfferDialogFragment.FilterRideOfferDialogListener, FilterRideRequestDialogFragment.FilterRideRequestDialogListener {
 
     public static final String ARG_PAGE = "ARG_PAGE";
@@ -58,6 +61,7 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
     private RecyclerView mRideRequestsRecyclerView;
     private EndlessRecyclerViewScrollListener mScrollListener;
     private LinearLayoutManager mLinearLayoutManager;
+    private DividerItemDecoration mItemDecor;
     private Button mFilterButton;
     private Spinner mSortSpinner;
 
@@ -116,6 +120,8 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
             }
         };
 
+        mItemDecor = new DividerItemDecoration(getContext(), mLinearLayoutManager.getOrientation());
+
         if(mPage == 1){
             createRideOfferStream();
         }
@@ -139,6 +145,7 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
         mRideRequestsRecyclerView.setAdapter(mRequestsAdpater);
         mRideRequestsRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRideRequestsRecyclerView.addOnScrollListener(mScrollListener);
+        mRideRequestsRecyclerView.addItemDecoration(mItemDecor);
         setSortListener();
         rideRequestsList(0, false);
     }
@@ -157,6 +164,7 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
         mRideOffersRecyclerView.setAdapter(mOffersAdapter);
         mRideOffersRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRideOffersRecyclerView.addOnScrollListener(mScrollListener);
+        mRideOffersRecyclerView.addItemDecoration(mItemDecor);
         setSortListener();
         rideOffersList(0, false);
     }

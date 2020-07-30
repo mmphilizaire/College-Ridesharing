@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp">
 
     <ImageView
         android:id="@+id/ivProfilePicture"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
+        android:padding="2dp"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
@@ -23,10 +25,10 @@
         android:layout_below="@+id/ivProfilePicture"
         android:layout_alignEnd="@+id/ivProfilePicture"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="0dp"
         android:gravity="center"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        android:textStyle="bold"
         tools:text="Mishka" />
 
     <TextView
@@ -37,7 +39,10 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
         android:layout_toEndOf="@+id/ivProfilePicture"
-        tools:text="July 11" />
+        android:padding="2dp"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        tools:text="Friday, July 11" />
 
     <TextView
         android:id="@+id/tvTime"
@@ -47,6 +52,9 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
         android:layout_toEndOf="@+id/ivProfilePicture"
+        android:padding="2dp"
+        android:textColor="#000000"
+        android:textSize="18sp"
         tools:text="6:30PM" />
 
     <TextView
@@ -57,17 +65,21 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
         android:layout_toEndOf="@+id/ivProfilePicture"
-        tools:text="Alexandria, VA" />
+        android:padding="2dp"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        tools:text="Alexandria, Virginia" />
 
     <TextView
         android:id="@+id/tvEnd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvStart"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        android:layout_toEndOf="@+id/ivProfilePicture"
-        tools:text="Chapel Hill, NC" />
+        android:layout_toEndOf="@+id/imageView2"
+        android:padding="2dp"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        tools:text="Chapel Hill, North Carolina" />
 
     <TextView
         android:id="@+id/tvSeatPrice"
@@ -78,6 +90,9 @@
         android:layout_marginTop="0dp"
         android:layout_marginEnd="0dp"
         android:gravity="center"
+        android:padding="2dp"
+        android:textColor="#000000"
+        android:textSize="16sp"
         tools:text="$23\nper seat" />
 
     <TextView
@@ -88,6 +103,17 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="0dp"
         android:layout_marginEnd="0dp"
+        android:padding="2dp"
+        android:textColor="#000000"
+        android:textSize="16sp"
         tools:text="2 seats left!" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvStart"
+        android:layout_toEndOf="@+id/tvName"
+        app:srcCompat="@drawable/ic_to" />
 
 </RelativeLayout>
