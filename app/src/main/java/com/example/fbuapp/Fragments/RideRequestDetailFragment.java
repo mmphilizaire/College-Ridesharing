@@ -105,7 +105,8 @@ public class RideRequestDetailFragment extends Fragment implements OnMapReadyCal
             mOfferRideButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    DetailActivity activity = (DetailActivity) getActivity();
+                    activity.createRideOffer(mRideRequest);
                 }
             });
         }

@@ -19,9 +19,10 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import com.example.fbuapp.Activities.MainActivity;
 import com.example.fbuapp.Fragments.FilterRideOfferDialogFragment;
 import com.example.fbuapp.Fragments.FilterRideRequestDialogFragment;
-import com.example.fbuapp.Fragments.ProfileFragment;
+import com.example.fbuapp.Fragments.RideOfferFragment;
 import com.example.fbuapp.Models.RideOffer;
 import com.example.fbuapp.Models.RideOfferFilter;
 import com.example.fbuapp.Models.RideRequest;
@@ -30,7 +31,6 @@ import com.example.fbuapp.databinding.FragmentRideStreamPageBinding;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,8 @@ import java.util.List;
 public class RideStreamPageFragment extends Fragment implements FilterRideOfferDialogFragment.FilterRideOfferDialogListener, FilterRideRequestDialogFragment.FilterRideRequestDialogListener {
 
     public static final String ARG_PAGE = "ARG_PAGE";
-    public static final int DETAIL_REQUEST_CODE = 212;
+    public static final int REFRESH_REQUEST_CODE = 212;
+    public static final int CREATE_REQUEST_CODE = 571;
 
     private FragmentRideStreamPageBinding mBinding;
 
@@ -134,7 +135,7 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
         mRideRequestFilter = new RideRequestFilter();
         mRideRequestsRecyclerView = mBinding.rvRideOffers;
         mRideRequests = new ArrayList<>();
-        mRequestsAdpater = new RideRequestsAdapter(mRideRequests, getContext());
+        mRequestsAdpater = new RideRequestsAdapter(mRideRequests, this);
         mRideRequestsRecyclerView.setAdapter(mRequestsAdpater);
         mRideRequestsRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRideRequestsRecyclerView.addOnScrollListener(mScrollListener);
@@ -324,8 +325,13 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == DETAIL_REQUEST_CODE){
+        if(requestCode == REFRESH_REQUEST_CODE){
             rideOffersList(0, true);
+        }
+        else if(requestCode == CREATE_REQUEST_CODE && data != null){
+            RideRequest rideRequest = data.getParcelableExtra("rideRequest");
+            MainActivity activity = (MainActivity) getActivity();
+            activity.replaceFragment(RideOfferFragment.newInstance(rideRequest));
         }
     }
 }

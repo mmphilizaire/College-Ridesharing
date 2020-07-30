@@ -114,4 +114,12 @@ public class DetailActivity extends AppCompatActivity {
         });
     }
 
+    public void createRideOffer(RideRequest rideRequest){
+        Log.e("Mishka", rideRequest.getUser().getUsername());
+        Intent data = new Intent();
+        data.putExtra("rideRequest", rideRequest);
+        setResult(RESULT_OK, data);
+        finish();
+    }
+
 }

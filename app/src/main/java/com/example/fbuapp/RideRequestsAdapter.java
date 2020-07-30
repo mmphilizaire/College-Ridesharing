@@ -25,14 +25,19 @@ import com.parse.ParseFile;
 
 import java.util.List;
 
+import static com.example.fbuapp.RideStreamPageFragment.CREATE_REQUEST_CODE;
+import static com.example.fbuapp.RideStreamPageFragment.REFRESH_REQUEST_CODE;
+
 public class RideRequestsAdapter extends RecyclerView.Adapter<RideRequestsAdapter.ViewHolder> {
 
     private List<RideRequest> mRideRequests;
+    private Fragment mFragment;
     private Context mContext;
 
-    public RideRequestsAdapter(List<RideRequest> rideRequests, Context context){
+    public RideRequestsAdapter(List<RideRequest> rideRequests, Fragment fragment){
         mRideRequests = rideRequests;
-        mContext = context;
+        mFragment = fragment;
+        mContext = fragment.getContext();
     }
 
     @Override
@@ -110,7 +115,7 @@ public class RideRequestsAdapter extends RecyclerView.Adapter<RideRequestsAdapte
             int position = getAdapterPosition();
             Intent rideRequestDetails = new Intent(mContext, DetailActivity.class);
             rideRequestDetails.putExtra("rideRequest", mRideRequests.get(position));
-            mContext.startActivity(rideRequestDetails);
+            mFragment.startActivityForResult(rideRequestDetails, CREATE_REQUEST_CODE);
         }
 
     }
