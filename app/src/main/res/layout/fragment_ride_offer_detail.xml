@@ -13,7 +13,9 @@
         android:layout_below="@+id/tvDetails"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:textSize="20sp"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        android:textStyle="bold"
         tools:text="July 19, 2020" />
 
     <TextView
@@ -23,16 +25,20 @@
         android:layout_below="@+id/tvDate"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:textSize="16sp"
+        android:layout_marginTop="4dp"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:textStyle="bold"
         tools:text="6:00 PM" />
 
     <fragment
         android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="500dp"
         android:layout_height="300dp"
         android:layout_below="@+id/tvTime"
-        tools:context=".RideOfferDetailFragment"
-        android:name="com.google.android.gms.maps.SupportMapFragment" />
+        android:layout_marginTop="4dp"
+        tools:context=".RideOfferDetailFragment" />
 
     <TextView
         android:id="@+id/tvStart"
@@ -41,8 +47,10 @@
         android:layout_below="@+id/map"
         android:layout_alignParentStart="true"
         android:layout_marginStart="0dp"
+        android:layout_marginTop="4dp"
         android:gravity="center"
-        android:textSize="18sp"
+        android:textColor="#000000"
+        android:textSize="20sp"
         tools:text="Alexandria,\nVirginia" />
 
     <TextView
@@ -51,8 +59,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/map"
         android:layout_alignParentEnd="true"
+        android:layout_marginTop="4dp"
         android:gravity="center"
-        android:textSize="18sp"
+        android:textColor="#000000"
+        android:textSize="20sp"
         tools:text="Chapel Hill,\nNorth Carolina" />
 
     <ImageView
@@ -62,7 +72,7 @@
         android:layout_above="@+id/tvSeatPrice"
         android:layout_below="@+id/map"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="0dp"
         android:layout_marginBottom="0dp"
         android:layout_toStartOf="@+id/tvEnd"
@@ -76,7 +86,10 @@
         android:layout_below="@+id/tvStart"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
+        android:layout_marginTop="4dp"
+        android:textColor="#000000"
         android:textSize="18sp"
+        android:textStyle="bold"
         tools:text="$23 PER SEAT" />
 
     <TextView
@@ -85,7 +98,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/tvSeatPrice"
         android:layout_alignParentEnd="true"
+        android:layout_marginTop="4dp"
+        android:textColor="#000000"
         android:textSize="16sp"
+        android:textStyle="bold"
         tools:text="3 seats\navailable" />
 
     <Button
@@ -95,13 +111,15 @@
         android:layout_below="@+id/tvSeatsAvailable"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
+        android:layout_marginTop="4dp"
         android:text="Book a Seat" />
 
     <RelativeLayout
         android:id="@+id/rlDriverInfo"
-        android:layout_below="@+id/btnBookSeat"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnBookSeat"
+        android:layout_marginTop="4dp">
 
         <TextView
             android:id="@+id/tvDriverTitle"
@@ -127,6 +145,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvDriverTitle"
             android:layout_toEndOf="@+id/ivProfilePicture"
+            android:padding="2dp"
+            android:textColor="#000000"
             android:textSize="18sp"
             tools:text="Mishka" />
 
@@ -136,6 +156,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvDriverName"
             android:layout_toEndOf="@+id/ivProfilePicture"
+            android:padding="2dp"
+            android:textColor="#000000"
             android:textSize="18sp"
             tools:text="UNC Chapel Hill" />
 
@@ -148,6 +170,7 @@
         android:layout_above="@+id/btnBookSeat"
         android:layout_below="@+id/tvSeatPrice"
         android:layout_alignParentStart="true"
+        android:layout_marginTop="4dp"
         android:layout_toStartOf="@+id/tvSeatsAvailable"
         android:orientation="horizontal">
 
