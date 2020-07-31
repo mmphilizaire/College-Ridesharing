@@ -289,4 +289,8 @@ public class RegisterFragment3 extends Fragment {
         Glide.with(getContext()).load(profilePicture).transform(new CircleCrop()).into(mProfilePictureImageView);
     }
 
+    public ParseUser getUser(){
+        return mUser;
+    }
+
 }

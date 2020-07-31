@@ -6,15 +6,15 @@
     android:orientation="vertical"
     android:paddingLeft="20dp"
     android:paddingRight="20dp"
-    tools:context=".Fragments.RegisterNameFragment">
+    tools:context=".Fragments.RegisterFragment1">
 
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="70dp"
         android:layout_marginBottom="20dp"
+        android:gravity="center_horizontal"
         android:text="Tell Us About Yourself"
         android:textColor="#000000"
         android:textSize="30sp"

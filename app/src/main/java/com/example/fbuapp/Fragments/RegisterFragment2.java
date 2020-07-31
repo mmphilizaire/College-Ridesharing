@@ -63,6 +63,10 @@ public class RegisterFragment2 extends Fragment {
             public void onClick(View view) {
                 String email = mEmailEditText.getText().toString();
                 String password = mPasswordEditText.getText().toString();
+                if(email.equals("") || password.equals("")){
+                    createToast("Missing information!");
+                    return;
+                }
                 updateUser(email, password);
                 RegisterActivity activity = (RegisterActivity) getActivity();
                 activity.goToNextFragment(mUser);
@@ -103,6 +107,10 @@ public class RegisterFragment2 extends Fragment {
 
     private void createToast(String text){
         Toast.makeText(getContext(), text, Toast.LENGTH_LONG).show();
+    }
+
+    public ParseUser getUser(){
+        return mUser;
     }
 
 }

@@ -10,6 +10,9 @@
     <style name="DetailTheme" parent="Theme.AppCompat.Light.NoActionBar">
     </style>
 
+    <style name="RegisterTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    </style>
+
     <style name="MapDialogFragmentTheme" parent="Theme.AppCompat.Light.DialogWhenLarge">
         <item name="android:statusBarColor">#000000</item>
         <item name="windowNoTitle">true</item>
