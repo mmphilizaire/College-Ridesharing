@@ -1,6 +1,5 @@
 package com.example.fbuapp;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -17,16 +16,10 @@ import android.widget.ImageView;
 
 import com.example.fbuapp.Fragments.ProfileFragment;
 import com.example.fbuapp.Fragments.RideOfferDetailFragment;
-import com.example.fbuapp.Fragments.RideOfferFragment;
 import com.example.fbuapp.Fragments.RideRequestDetailFragment;
-import com.example.fbuapp.Fragments.RideRequestFragment;
-import com.example.fbuapp.Fragments.RideStreamFragment;
 import com.example.fbuapp.Models.RideOffer;
 import com.example.fbuapp.Models.RideRequest;
 import com.example.fbuapp.databinding.ActivityDetailBinding;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.parse.Parse;
-import com.parse.ParseUser;
 
 public class DetailActivity extends AppCompatActivity {
 

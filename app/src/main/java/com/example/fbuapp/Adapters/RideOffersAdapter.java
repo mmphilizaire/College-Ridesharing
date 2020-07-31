@@ -1,4 +1,4 @@
-package com.example.fbuapp;
+package com.example.fbuapp.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.example.fbuapp.DetailActivity;
 import com.example.fbuapp.Models.RideOffer;
 import com.example.fbuapp.databinding.ItemRideOfferBinding;
 import com.parse.ParseFile;

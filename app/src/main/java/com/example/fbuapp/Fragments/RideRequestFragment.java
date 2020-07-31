@@ -8,7 +8,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -22,9 +21,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.fbuapp.Models.Location;
-import com.example.fbuapp.MapActivity;
-import com.example.fbuapp.Models.RideOffer;
-import com.example.fbuapp.R;
+import com.example.fbuapp.Activities.MapActivity;
 import com.example.fbuapp.Models.RideRequest;
 import com.example.fbuapp.databinding.FragmentRideRequestBinding;
 import com.parse.ParseGeoPoint;

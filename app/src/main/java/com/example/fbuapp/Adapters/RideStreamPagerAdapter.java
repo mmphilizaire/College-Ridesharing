@@ -1,4 +1,4 @@
-package com.example.fbuapp;
+package com.example.fbuapp.Adapters;
 
 import android.content.Context;
 import android.util.Log;
@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.example.fbuapp.Fragments.RideStreamFragment;
+import com.example.fbuapp.RideStreamPageFragment;
 
 public class RideStreamPagerAdapter extends FragmentPagerAdapter {
 

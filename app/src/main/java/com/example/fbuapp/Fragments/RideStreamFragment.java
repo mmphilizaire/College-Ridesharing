@@ -11,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.fbuapp.RideStreamPagerAdapter;
+import com.example.fbuapp.Adapters.RideStreamPagerAdapter;
 import com.example.fbuapp.databinding.FragmentRideStreamBinding;
 import com.google.android.material.tabs.TabLayout;
 

@@ -7,11 +7,10 @@ import androidx.fragment.app.FragmentManager;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.fbuapp.Fragments.ProfileFragment;
-import com.example.fbuapp.Fragments.RideOfferFragment;
+import com.example.fbuapp.CreateRideOffer.RideOfferFragment;
 import com.example.fbuapp.Fragments.RideRequestFragment;
 import com.example.fbuapp.Fragments.RideStreamFragment;
 import com.example.fbuapp.R;

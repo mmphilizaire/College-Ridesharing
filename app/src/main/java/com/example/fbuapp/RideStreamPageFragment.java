@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +20,11 @@ import android.widget.Button;
 import android.widget.Spinner;
 
 import com.example.fbuapp.Activities.MainActivity;
+import com.example.fbuapp.Adapters.RideOffersAdapter;
+import com.example.fbuapp.Adapters.RideRequestsAdapter;
 import com.example.fbuapp.Fragments.FilterRideOfferDialogFragment;
 import com.example.fbuapp.Fragments.FilterRideRequestDialogFragment;
-import com.example.fbuapp.Fragments.RideOfferFragment;
+import com.example.fbuapp.CreateRideOffer.RideOfferFragment;
 import com.example.fbuapp.Models.RideOffer;
 import com.example.fbuapp.Models.RideOfferFilter;
 import com.example.fbuapp.Models.RideRequest;
@@ -35,8 +36,6 @@ import com.parse.ParseQuery;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static androidx.recyclerview.widget.DividerItemDecoration.HORIZONTAL;
 
 public class RideStreamPageFragment extends Fragment implements FilterRideOfferDialogFragment.FilterRideOfferDialogListener, FilterRideRequestDialogFragment.FilterRideRequestDialogListener {
 

@@ -16,10 +16,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import com.example.fbuapp.MapActivity;
+import com.example.fbuapp.Activities.MapActivity;
 import com.example.fbuapp.Models.Location;
 import com.example.fbuapp.Models.RideOfferFilter;
-import com.example.fbuapp.Navigation;
 import com.example.fbuapp.databinding.FragmentDialogFilterRideOfferBinding;
 import com.parse.ParseGeoPoint;
 
