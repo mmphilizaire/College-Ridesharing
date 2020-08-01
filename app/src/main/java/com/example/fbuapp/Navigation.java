@@ -5,7 +5,7 @@ import android.content.Intent;
 
 import com.example.fbuapp.Activities.LoginActivity;
 import com.example.fbuapp.Activities.MainActivity;
-import com.example.fbuapp.Activities.RegisterActivity;
+import com.example.fbuapp.SignUp.RegisterActivity;
 
 public class Navigation {
 

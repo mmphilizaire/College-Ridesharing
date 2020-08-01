@@ -12,12 +12,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.fbuapp.Adapters.RideStreamPagerAdapter;
+import com.example.fbuapp.Models.RideOffer;
+import com.example.fbuapp.Models.RideRequest;
 import com.example.fbuapp.databinding.FragmentRideStreamBinding;
 import com.google.android.material.tabs.TabLayout;
 
 public class RideStreamFragment extends Fragment {
 
     private FragmentRideStreamBinding mBinding;
+
+    private RideRequest mRideRequest;
+    private RideOffer mRideOffer;
 
     private ViewPager viewPager;
     private TabLayout tabLayout;
@@ -26,9 +31,29 @@ public class RideStreamFragment extends Fragment {
         // Required empty public constructor
     }
 
+    public static RideStreamFragment newInstance(RideOffer rideOffer) {
+        Bundle args = new Bundle();
+        RideStreamFragment fragment = new RideStreamFragment();
+        args.putParcelable("rideOffer", rideOffer);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static RideStreamFragment newInstance(RideRequest rideRequest) {
+        Bundle args = new Bundle();
+        RideStreamFragment fragment = new RideStreamFragment();
+        args.putParcelable("rideRequest", rideRequest);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if(getArguments() != null){
+            mRideOffer = getArguments().getParcelable("rideOffer");
+            mRideRequest = getArguments().getParcelable("rideRequest");
+        }
         mBinding = FragmentRideStreamBinding.inflate(inflater, container, false);
         return mBinding.getRoot();
     }
@@ -39,7 +64,14 @@ public class RideStreamFragment extends Fragment {
 
         bind();
 
-        viewPager.setAdapter(new RideStreamPagerAdapter(getChildFragmentManager()));
+        RideStreamPagerAdapter adapter = new RideStreamPagerAdapter(getChildFragmentManager());
+        viewPager.setAdapter(adapter);
+        if(mRideRequest != null){
+            viewPager.setCurrentItem(2);
+        }
+        else{
+            viewPager.setCurrentItem(1);
+        }
         tabLayout.setupWithViewPager(viewPager);
 
     }

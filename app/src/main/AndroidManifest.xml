@@ -37,7 +37,7 @@
                 android:resource="@xml/fileprovider" />
         </provider>
 
-        <activity android:name=".Activities.RegisterActivity"
+        <activity android:name=".SignUp.RegisterActivity"
             android:theme="@style/DetailTheme" />
         <activity android:name=".DetailActivity"
             android:theme="@style/DetailTheme" />

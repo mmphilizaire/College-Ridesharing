@@ -13,6 +13,8 @@ import com.example.fbuapp.Fragments.ProfileFragment;
 import com.example.fbuapp.CreateRideOffer.RideOfferFragment;
 import com.example.fbuapp.Fragments.RideRequestFragment;
 import com.example.fbuapp.Fragments.RideStreamFragment;
+import com.example.fbuapp.Models.RideOffer;
+import com.example.fbuapp.Models.RideRequest;
 import com.example.fbuapp.R;
 import com.example.fbuapp.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -68,6 +70,19 @@ public class MainActivity extends AppCompatActivity {
 
     public void replaceFragment(Fragment fragment){
         mFragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+    }
+
+    public void goToRideOfferStream(RideOffer rideOffer){
+        //mCurrentFragment = RideStreamFragment.newInstance(rideOffer);
+        mBottomNavigationView.setSelectedItemId(R.id.action_ride_stream);
+        //replaceFragment(mCurrentFragment);
+    }
+
+    public void goToRideRequestStream(RideRequest rideRequest){
+        //TODO: go to ride requests instead of offers
+        //mCurrentFragment = RideStreamFragment.newInstance(rideRequest);
+        //replaceFragment(mCurrentFragment);
+        mBottomNavigationView.setSelectedItemId(R.id.action_ride_stream);
     }
 
     @Override

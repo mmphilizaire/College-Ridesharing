@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.fbuapp.Activities.MainActivity;
 import com.example.fbuapp.Models.Location;
 import com.example.fbuapp.Activities.MapActivity;
 import com.example.fbuapp.Models.RideRequest;
@@ -47,6 +48,7 @@ public class RideOfferFragment extends Fragment implements DatePickerDialog.OnDa
     private TextView mDepartureTimeTextView;
     private EditText mSeatPriceEditText;
     private EditText mSeatCountEditText;
+    private RideOffer mRideOffer;
 
     public Button mCreateButton;
 
@@ -134,6 +136,8 @@ public class RideOfferFragment extends Fragment implements DatePickerDialog.OnDa
             public void onClick(View view) {
                 if(!missingInfo()){
                     saveRideOffer();
+                    MainActivity activity = (MainActivity) getActivity();
+                    activity.goToRideOfferStream(mRideOffer);
                 }
                 else{
                     Toast.makeText(getActivity(), "Missing information!", Toast.LENGTH_LONG).show();
@@ -143,14 +147,14 @@ public class RideOfferFragment extends Fragment implements DatePickerDialog.OnDa
     }
 
     private void saveRideOffer() {
-        RideOffer rideOffer = new RideOffer();
-        rideOffer.setUser(ParseUser.getCurrentUser());
-        rideOffer.setDepartureTime(mDepartureCalendar.getTime());
-        rideOffer.setSeatPrice((Number) Integer.parseInt(mSeatPriceEditText.getText().toString()));
-        rideOffer.setSeatCount((Number) Integer.parseInt(mSeatCountEditText.getText().toString()));
-        rideOffer.setStartLocation(mStartLocation);
-        rideOffer.setEndLocation(mEndLocation);
-        rideOffer.saveInBackground();
+        mRideOffer = new RideOffer();
+        mRideOffer.setUser(ParseUser.getCurrentUser());
+        mRideOffer.setDepartureTime(mDepartureCalendar.getTime());
+        mRideOffer.setSeatPrice((Number) Integer.parseInt(mSeatPriceEditText.getText().toString()));
+        mRideOffer.setSeatCount((Number) Integer.parseInt(mSeatCountEditText.getText().toString()));
+        mRideOffer.setStartLocation(mStartLocation);
+        mRideOffer.setEndLocation(mEndLocation);
+        mRideOffer.saveInBackground();
     }
 
     private void bind() {

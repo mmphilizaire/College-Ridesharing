@@ -1,4 +1,4 @@
-package com.example.fbuapp.Activities;
+package com.example.fbuapp.SignUp;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -12,9 +12,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.fbuapp.Fragments.RegisterFragment2;
-import com.example.fbuapp.Fragments.RegisterFragment3;
-import com.example.fbuapp.Fragments.RegisterFragment1;
 import com.example.fbuapp.Navigation;
 import com.example.fbuapp.R;
 import com.example.fbuapp.databinding.ActivityRegisterBinding;

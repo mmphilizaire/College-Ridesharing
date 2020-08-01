@@ -1,4 +1,4 @@
-package com.example.fbuapp.Fragments;
+package com.example.fbuapp.SignUp;
 
 import android.os.Bundle;
 
@@ -13,8 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.fbuapp.Activities.RegisterActivity;
-import com.example.fbuapp.Navigation;
 import com.example.fbuapp.databinding.FragmentRegister2Binding;
 import com.parse.ParseException;
 import com.parse.ParseUser;

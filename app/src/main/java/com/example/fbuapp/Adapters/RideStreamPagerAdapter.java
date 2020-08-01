@@ -20,6 +20,7 @@ public class RideStreamPagerAdapter extends FragmentPagerAdapter {
         super(fragmentManager);
     }
 
+
     @Override
     public Fragment getItem(int position) {
         return RideStreamPageFragment.newInstance(position+1);

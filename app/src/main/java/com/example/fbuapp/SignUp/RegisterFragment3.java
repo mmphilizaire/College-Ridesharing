@@ -1,4 +1,4 @@
-package com.example.fbuapp.Fragments;
+package com.example.fbuapp.SignUp;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -20,17 +20,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
-import com.example.fbuapp.Activities.RegisterActivity;
 import com.example.fbuapp.Navigation;
 import com.example.fbuapp.R;
-import com.example.fbuapp.databinding.FragmentRegister2Binding;
 import com.example.fbuapp.databinding.FragmentRegister3Binding;
 import com.parse.ParseFile;
 import com.parse.ParseUser;

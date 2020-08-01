@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.fbuapp.Activities.MainActivity;
 import com.example.fbuapp.Models.Location;
 import com.example.fbuapp.Activities.MapActivity;
 import com.example.fbuapp.Models.RideRequest;
@@ -37,6 +38,8 @@ public class RideRequestFragment extends Fragment implements DatePickerDialog.On
 
     public static final int START_REQUEST_CODE = 1234;
     public static final int END_REQUEST_CODE = 4321;
+
+    private RideRequest mRideRequest;
 
     private EditText mStartLocationEditText;
     private EditText mEndLocationEditText;
@@ -132,6 +135,8 @@ public class RideRequestFragment extends Fragment implements DatePickerDialog.On
             public void onClick(View view) {
                 if(!missingInfo()){
                     saveRideRequest();
+                    MainActivity activity = (MainActivity) getActivity();
+                    activity.goToRideRequestStream(mRideRequest);
                 }
                 else{
                     Toast.makeText(getActivity(), "Missing information!", Toast.LENGTH_LONG).show();
@@ -141,13 +146,13 @@ public class RideRequestFragment extends Fragment implements DatePickerDialog.On
     }
 
     private void saveRideRequest() {
-        RideRequest rideRequest = new RideRequest();
-        rideRequest.setUser(ParseUser.getCurrentUser());
-        rideRequest.setEarliestDeparture(mEarliestDepartureCalendar.getTime());
-        rideRequest.setLatestDeparture(mLatestDepartureCalendar.getTime());
-        rideRequest.setStartLocation(mStartLocation);
-        rideRequest.setEndLocation(mEndLocation);
-        rideRequest.saveInBackground();
+         mRideRequest = new RideRequest();
+        mRideRequest.setUser(ParseUser.getCurrentUser());
+        mRideRequest.setEarliestDeparture(mEarliestDepartureCalendar.getTime());
+        mRideRequest.setLatestDeparture(mLatestDepartureCalendar.getTime());
+        mRideRequest.setStartLocation(mStartLocation);
+        mRideRequest.setEndLocation(mEndLocation);
+        mRideRequest.saveInBackground();
     }
 
     private void bind() {
