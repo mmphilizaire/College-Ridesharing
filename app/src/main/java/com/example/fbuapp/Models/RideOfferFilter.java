@@ -1,24 +1,27 @@
 package com.example.fbuapp.Models;
 
+import org.parceler.Parcel;
+
 import java.util.Date;
 
+@Parcel
 public class RideOfferFilter {
 
-    private boolean hasStartLocation;
-    private Location startLocation;
-    private int startMileRadius;
+     boolean hasStartLocation;
+     Location startLocation;
+     int startMileRadius;
 
-    private boolean hasEndLocation;
-    private Location endLocation;
-    private int endMileRadius;
+     boolean hasEndLocation;
+     Location endLocation;
+     int endMileRadius;
 
-    private boolean hasEarliestDeparture;
-    private Date earliestDeparture;
+     boolean hasEarliestDeparture;
+     Date earliestDeparture;
 
-    private boolean hasLatestDeparture;
-    private Date latestDeparture;
+     boolean hasLatestDeparture;
+     Date latestDeparture;
 
-    private boolean hideFullRides;
+     boolean hideFullRides;
 
     public RideOfferFilter(){
 

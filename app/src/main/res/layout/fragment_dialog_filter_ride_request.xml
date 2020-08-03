@@ -53,8 +53,7 @@
             android:layout_height="wrap_content"
             android:ems="2"
             android:focusable="auto"
-            android:inputType="number"
-            android:text="10" />
+            android:inputType="number" />
 
     </LinearLayout>
 
@@ -96,8 +95,7 @@
             android:layout_height="wrap_content"
             android:ems="2"
             android:focusable="auto"
-            android:inputType="number"
-            android:text="10" />
+            android:inputType="number" />
 
     </LinearLayout>
 

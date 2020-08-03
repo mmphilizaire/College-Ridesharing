@@ -3,6 +3,9 @@ package com.example.fbuapp.Fragments;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +24,8 @@ import com.example.fbuapp.Models.Location;
 import com.example.fbuapp.Models.RideOfferFilter;
 import com.example.fbuapp.databinding.FragmentDialogFilterRideOfferBinding;
 import com.parse.ParseGeoPoint;
+
+import org.parceler.Parcels;
 
 import java.util.Calendar;
 
@@ -57,6 +62,14 @@ public class FilterRideOfferDialogFragment extends DialogFragment implements Dat
 
     }
 
+    public static FilterRideOfferDialogFragment newInstance(RideOfferFilter filter) {
+        FilterRideOfferDialogFragment fragment = new FilterRideOfferDialogFragment();
+        Bundle args = new Bundle();
+        args.putParcelable("filter", Parcels.wrap(filter));
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         mBinding = FragmentDialogFilterRideOfferBinding.inflate(inflater, container, false);
@@ -66,9 +79,28 @@ public class FilterRideOfferDialogFragment extends DialogFragment implements Dat
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mRideOfferFilter = new RideOfferFilter();
+        mRideOfferFilter = (RideOfferFilter) Parcels.unwrap(getArguments().getParcelable("filter"));
         bind();
+        bindData();
         setOnClickListeners();
+    }
+
+    private void bindData() {
+        if(mRideOfferFilter.hasStartLocation()){
+            mStartLocationEditText.setText(mRideOfferFilter.getStartLocation().getCity() + ", " + mRideOfferFilter.getStartLocation().getState());
+            mStartMileRadiusEditText.setText(String.valueOf(mRideOfferFilter.getStartMileRadius()));
+        }
+        if(mRideOfferFilter.hasEndLocation()){
+            mEndLocationEditText.setText(mRideOfferFilter.getEndLocation().getCity() + ", " + mRideOfferFilter.getEndLocation().getState());
+            mEndMileRadiusEditText.setText(String.valueOf(mRideOfferFilter.getEndMileRadius()));
+        }
+        if(mRideOfferFilter.hasEarliestDeparture()){
+            mEarliestDateTextView.setText((String) DateFormat.format("MM/d/yyyy", mRideOfferFilter.getEarliestDeparture()));
+        }
+        if(mRideOfferFilter.hasLatestDeparture()){
+            mLatestDateTextView.setText((String) DateFormat.format("MM/d/yyyy", mRideOfferFilter.getLatestDeparture()));
+        }
+        mHideFullRidesCheckBox.setChecked(mRideOfferFilter.getHideFullRides());
     }
 
     private void setOnClickListeners() {
@@ -143,6 +175,9 @@ public class FilterRideOfferDialogFragment extends DialogFragment implements Dat
             mStartLocation.setGeoPoint(new ParseGeoPoint(latitude, longitude));
             mRideOfferFilter.setStartLocation(mStartLocation);
             mStartLocationEditText.setText(mStartLocation.getCity() + ", " + mStartLocation.getState());
+            if(mStartMileRadiusEditText.getText().equals("")){
+                mStartMileRadiusEditText.setText("10");
+            }
         }
         else if(resultCode == RESULT_OK && requestCode == END_REQUEST_CODE){
             if(mEndLocation == null){
@@ -157,6 +192,9 @@ public class FilterRideOfferDialogFragment extends DialogFragment implements Dat
             mEndLocation.setGeoPoint(new ParseGeoPoint(latitude, longitude));
             mRideOfferFilter.setEndLocation(mEndLocation);
             mEndLocationEditText.setText(mEndLocation.getCity() + ", " + mEndLocation.getState());
+            if(mEndLocationEditText.getText().equals("")){
+                mEndMileRadiusEditText.setText("10");
+            }
         }
     }
 

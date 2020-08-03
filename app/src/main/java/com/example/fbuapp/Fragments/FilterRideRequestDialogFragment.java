@@ -3,6 +3,7 @@ package com.example.fbuapp.Fragments;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +18,12 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.fbuapp.Activities.MapActivity;
 import com.example.fbuapp.Models.Location;
+import com.example.fbuapp.Models.RideOfferFilter;
 import com.example.fbuapp.Models.RideRequestFilter;
 import com.example.fbuapp.databinding.FragmentDialogFilterRideRequestBinding;
 import com.parse.ParseGeoPoint;
+
+import org.parceler.Parcels;
 
 import java.util.Calendar;
 
@@ -52,6 +56,14 @@ public class FilterRideRequestDialogFragment extends DialogFragment implements D
 
     }
 
+    public static FilterRideRequestDialogFragment newInstance(RideRequestFilter filter) {
+        FilterRideRequestDialogFragment fragment = new FilterRideRequestDialogFragment();
+        Bundle args = new Bundle();
+        args.putParcelable("filter", Parcels.wrap(filter));
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         mBinding = FragmentDialogFilterRideRequestBinding.inflate(inflater, container, false);
@@ -61,9 +73,24 @@ public class FilterRideRequestDialogFragment extends DialogFragment implements D
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mRideRequestFilter = new RideRequestFilter();
+        mRideRequestFilter = (RideRequestFilter) Parcels.unwrap(getArguments().getParcelable("filter"));
         bind();
+        bindData();
         setOnClickListeners();
+    }
+
+    private void bindData() {
+        if(mRideRequestFilter.hasStartLocation()){
+            mStartLocationEditText.setText(mRideRequestFilter.getStartLocation().getCity() + ", " + mRideRequestFilter.getStartLocation().getState());
+            mStartMileRadiusEditText.setText(String.valueOf(mRideRequestFilter.getStartMileRadius()));
+        }
+        if(mRideRequestFilter.hasEndLocation()){
+            mEndLocationEditText.setText(mRideRequestFilter.getEndLocation().getCity() + ", " + mRideRequestFilter.getEndLocation().getState());
+            mEndMileRadiusEditText.setText(String.valueOf(mRideRequestFilter.getEndMileRadius()));
+        }
+        if(mRideRequestFilter.hasDeparture()){
+            mDateTextView.setText((String) DateFormat.format("MM/d/yyyy", mRideRequestFilter.getDeparture()));
+        }
     }
 
     private void setOnClickListeners() {
@@ -126,6 +153,9 @@ public class FilterRideRequestDialogFragment extends DialogFragment implements D
             mStartLocation.setGeoPoint(new ParseGeoPoint(latitude, longitude));
             mRideRequestFilter.setStartLocation(mStartLocation);
             mStartLocationEditText.setText(mStartLocation.getCity() + ", " + mStartLocation.getState());
+            if(mStartLocationEditText.getText().equals("")){
+                mStartMileRadiusEditText.setText("10");
+            }
         }
         else if(resultCode == RESULT_OK && requestCode == END_REQUEST_CODE){
             if(mEndLocation == null){
@@ -140,6 +170,9 @@ public class FilterRideRequestDialogFragment extends DialogFragment implements D
             mEndLocation.setGeoPoint(new ParseGeoPoint(latitude, longitude));
             mRideRequestFilter.setEndLocation(mEndLocation);
             mEndLocationEditText.setText(mEndLocation.getCity() + ", " + mEndLocation.getState());
+            if(mEndLocationEditText.getText().equals("")){
+                mEndMileRadiusEditText.setText("10");
+            }
         }
     }
 

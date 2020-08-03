@@ -131,13 +131,13 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
     }
 
     private void createRideRequestStream() {
+        mRideRequestFilter = new RideRequestFilter();
         mFilterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 filterRideRequestResults();
             }
         });
-        mRideRequestFilter = new RideRequestFilter();
         mRideRequestsRecyclerView = mBinding.rvRideOffers;
         mRideRequests = new ArrayList<>();
         mRequestsAdpater = new RideRequestsAdapter(mRideRequests, this);
@@ -150,13 +150,13 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
     }
 
     private void createRideOfferStream() {
+        mRideOfferFilter = new RideOfferFilter();
         mFilterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 filterRideOfferResults();
             }
         });
-        mRideOfferFilter = new RideOfferFilter();
         mRideOffersRecyclerView = mBinding.rvRideOffers;
         mRideOffers = new ArrayList<>();
         mOffersAdapter = new RideOffersAdapter(mRideOffers, this);
@@ -196,16 +196,16 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
 
     private void filterRideOfferResults(){
         FragmentManager fragmentManager = getFragmentManager();
-        FilterRideOfferDialogFragment filterDialogFragment = new FilterRideOfferDialogFragment();
+        FilterRideOfferDialogFragment filterDialogFragment = FilterRideOfferDialogFragment.newInstance(mRideOfferFilter);
         filterDialogFragment.setTargetFragment(RideStreamPageFragment.this, 200);
         filterDialogFragment.show(fragmentManager, "filter_fragment");
     }
 
     private void filterRideRequestResults(){
         FragmentManager fragmentManager = getFragmentManager();
-        FilterRideRequestDialogFragment filterDialogFragment = new FilterRideRequestDialogFragment();
-        filterDialogFragment.setTargetFragment(RideStreamPageFragment.this, 200);
-        filterDialogFragment.show(fragmentManager, "filter_fragment");
+        //FilterRideRequestDialogFragment filterDialogFragment = FilterRideRequestDialogFragment.newInstance(mRideRequestFilter);
+        //filterDialogFragment.setTargetFragment(RideStreamPageFragment.this, 200);
+        //filterDialogFragment.show(fragmentManager, "filter_fragment");
     }
 
     private void rideOffersList(int page, final boolean clear) {
