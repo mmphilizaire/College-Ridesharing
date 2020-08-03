@@ -73,16 +73,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void goToRideOfferStream(RideOffer rideOffer){
-        //mCurrentFragment = RideStreamFragment.newInstance(rideOffer);
+        mCurrentFragment = RideStreamFragment.newInstance(rideOffer);
+        replaceFragment(mCurrentFragment);
         mBottomNavigationView.setSelectedItemId(R.id.action_ride_stream);
-        //replaceFragment(mCurrentFragment);
     }
 
     public void goToRideRequestStream(RideRequest rideRequest){
-        //TODO: go to ride requests instead of offers
-        //mCurrentFragment = RideStreamFragment.newInstance(rideRequest);
-        //replaceFragment(mCurrentFragment);
         mBottomNavigationView.setSelectedItemId(R.id.action_ride_stream);
+        mCurrentFragment = RideStreamFragment.newInstance(rideRequest);
+        replaceFragment(mCurrentFragment);
     }
 
     @Override
