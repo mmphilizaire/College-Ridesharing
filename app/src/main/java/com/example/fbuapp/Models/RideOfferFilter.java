@@ -33,7 +33,12 @@ public class RideOfferFilter {
 
     public void setStartLocation(Location startLocation) {
         this.startLocation = startLocation;
-        this.hasStartLocation = true;
+        if(startLocation == null){
+            this.hasStartLocation = false;
+        }
+        else{
+            this.hasStartLocation = true;
+        }
     }
 
     public int getStartMileRadius() {
@@ -50,7 +55,12 @@ public class RideOfferFilter {
 
     public void setEndLocation(Location endLocation) {
         this.endLocation = endLocation;
-        this.hasEndLocation = true;
+        if(endLocation == null){
+            this.hasEndLocation = false;
+        }
+        else{
+            this.hasEndLocation = true;
+        }
     }
 
     public int getEndMileRadius() {
@@ -67,7 +77,12 @@ public class RideOfferFilter {
 
     public void setEarliestDeparture(Date earliestDeparture) {
         this.earliestDeparture = earliestDeparture;
-        this.hasEarliestDeparture = true;
+        if(earliestDeparture == null){
+            this.hasEarliestDeparture = false;
+        }
+        else{
+            this.hasEarliestDeparture = true;
+        }
     }
 
     public Date getLatestDeparture() {
@@ -76,7 +91,12 @@ public class RideOfferFilter {
 
     public void setLatestDeparture(Date latestDeparture) {
         this.latestDeparture = latestDeparture;
-        this.hasLatestDeparture = true;
+        if(latestDeparture == null){
+            this.hasLatestDeparture = false;
+        }
+        else{
+            this.hasLatestDeparture = true;
+        }
     }
 
     public boolean getHideFullRides() {

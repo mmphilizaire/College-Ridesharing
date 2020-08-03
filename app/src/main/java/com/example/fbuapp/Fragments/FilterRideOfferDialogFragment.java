@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -53,6 +54,11 @@ public class FilterRideOfferDialogFragment extends DialogFragment implements Dat
     private TextView mLatestDateTextView;
     private CheckBox mHideFullRidesCheckBox;
     private Button mApplyFilterButton;
+
+    private ImageView mDeleteStartLocationImageView;
+    private ImageView mDeleteEndLocationImageView;
+    private ImageView mDeleteEarliestDateImageView;
+    private ImageView mDeleteLatestDateImageView;
 
     public interface FilterRideOfferDialogListener{
         void onFinishRideOfferFilterDialog(RideOfferFilter filter);
@@ -140,13 +146,56 @@ public class FilterRideOfferDialogFragment extends DialogFragment implements Dat
             @Override
             public void onClick(View view) {
                 FilterRideOfferDialogListener listener = (FilterRideOfferDialogListener) getTargetFragment();
-                mRideOfferFilter.setStartMileRadius(Integer.parseInt(mStartMileRadiusEditText.getText().toString()));
-                mRideOfferFilter.setEndMileRadius(Integer.parseInt(mEndMileRadiusEditText.getText().toString()));
+                if(!mStartMileRadiusEditText.getText().toString().equals("")){
+                    mRideOfferFilter.setStartMileRadius(Integer.parseInt(mStartMileRadiusEditText.getText().toString()));
+                }
+                if(!mEndMileRadiusEditText.getText().toString().equals("")){
+                    mRideOfferFilter.setEndMileRadius(Integer.parseInt(mEndMileRadiusEditText.getText().toString()));
+                }
                 mRideOfferFilter.setHideFullRides(mHideFullRidesCheckBox.isChecked());
                 listener.onFinishRideOfferFilterDialog(mRideOfferFilter);
                 dismiss();
             }
         });
+
+        mDeleteStartLocationImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mStartLocation = null;
+                mRideOfferFilter.setStartLocation(mStartLocation);
+                mStartLocationEditText.setText("");
+                mStartMileRadiusEditText.setText("");
+            }
+        });
+
+        mDeleteEndLocationImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mEndLocation = null;
+                mRideOfferFilter.setEndLocation(mEndLocation);
+                mEndLocationEditText.setText("");
+                mEndMileRadiusEditText.setText("");
+            }
+        });
+
+        mDeleteEarliestDateImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mEarliestDateCalendar = null;
+                mRideOfferFilter.setEarliestDeparture(null);
+                mEarliestDateTextView.setText("Earliest Date");
+            }
+        });
+
+        mDeleteLatestDateImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mLatestDateCalendar = null;
+                mRideOfferFilter.setLatestDeparture(null);
+                mLatestDateTextView.setText("Latest Date");
+            }
+        });
+
     }
 
     private void bind() {
@@ -158,6 +207,10 @@ public class FilterRideOfferDialogFragment extends DialogFragment implements Dat
         mLatestDateTextView = mBinding.tvLatestDate;
         mHideFullRidesCheckBox = mBinding.cbHideFullRides;
         mApplyFilterButton = mBinding.btnApply;
+        mDeleteStartLocationImageView = mBinding.ivDeleteStart;
+        mDeleteEndLocationImageView = mBinding.ivDeleteEnd;
+        mDeleteEarliestDateImageView = mBinding.ivDeleteEarliestDate;
+        mDeleteLatestDateImageView = mBinding.ivDeleteLatestDate;
     }
 
     @Override
@@ -175,7 +228,7 @@ public class FilterRideOfferDialogFragment extends DialogFragment implements Dat
             mStartLocation.setGeoPoint(new ParseGeoPoint(latitude, longitude));
             mRideOfferFilter.setStartLocation(mStartLocation);
             mStartLocationEditText.setText(mStartLocation.getCity() + ", " + mStartLocation.getState());
-            if(mStartMileRadiusEditText.getText().equals("")){
+            if(mStartMileRadiusEditText.getText().toString().equals("")){
                 mStartMileRadiusEditText.setText("10");
             }
         }
@@ -192,7 +245,7 @@ public class FilterRideOfferDialogFragment extends DialogFragment implements Dat
             mEndLocation.setGeoPoint(new ParseGeoPoint(latitude, longitude));
             mRideOfferFilter.setEndLocation(mEndLocation);
             mEndLocationEditText.setText(mEndLocation.getCity() + ", " + mEndLocation.getState());
-            if(mEndLocationEditText.getText().equals("")){
+            if(mEndMileRadiusEditText.getText().toString().equals("")){
                 mEndMileRadiusEditText.setText("10");
             }
         }

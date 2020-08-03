@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -47,6 +48,10 @@ public class FilterRideRequestDialogFragment extends DialogFragment implements D
     private EditText mEndMileRadiusEditText;
     private TextView mDateTextView;
     private Button mApplyFilterButton;
+
+    private ImageView mDeleteStartLocationImageView;
+    private ImageView mDeleteEndLocationImageView;
+    private ImageView mDeleteDateImageView;
 
     public interface FilterRideRequestDialogListener{
         void onFinishRideRequestFilterDialog(RideRequestFilter filter);
@@ -121,10 +126,43 @@ public class FilterRideRequestDialogFragment extends DialogFragment implements D
             @Override
             public void onClick(View view) {
                 FilterRideRequestDialogListener listener = (FilterRideRequestDialogListener) getTargetFragment();
-                mRideRequestFilter.setStartMileRadius(Integer.parseInt(mStartMileRadiusEditText.getText().toString()));
-                mRideRequestFilter.setEndMileRadius(Integer.parseInt(mEndMileRadiusEditText.getText().toString()));
+                if(!mStartMileRadiusEditText.getText().toString().equals("")){
+                    mRideRequestFilter.setStartMileRadius(Integer.parseInt(mStartMileRadiusEditText.getText().toString()));
+                }
+                if(!mEndMileRadiusEditText.getText().toString().equals("")){
+                    mRideRequestFilter.setEndMileRadius(Integer.parseInt(mEndMileRadiusEditText.getText().toString()));
+                }
                 listener.onFinishRideRequestFilterDialog(mRideRequestFilter);
                 dismiss();
+            }
+        });
+
+        mDeleteStartLocationImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mStartLocation = null;
+                mRideRequestFilter.setStartLocation(mStartLocation);
+                mStartLocationEditText.setText("");
+                mStartMileRadiusEditText.setText("");
+            }
+        });
+
+        mDeleteEndLocationImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mEndLocation = null;
+                mRideRequestFilter.setEndLocation(mEndLocation);
+                mEndLocationEditText.setText("");
+                mEndMileRadiusEditText.setText("");
+            }
+        });
+
+        mDeleteDateImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mDateCalendar = null;
+                mRideRequestFilter.setDeparture(null);
+                mDateTextView.setText("Select Date");
             }
         });
     }
@@ -136,6 +174,9 @@ public class FilterRideRequestDialogFragment extends DialogFragment implements D
         mEndMileRadiusEditText = mBinding.etEndMileRadius;
         mDateTextView = mBinding.tvDate;
         mApplyFilterButton = mBinding.btnApply;
+        mDeleteStartLocationImageView = mBinding.ivDeleteStart;
+        mDeleteEndLocationImageView = mBinding.ivDeleteEnd;
+        mDeleteDateImageView = mBinding.ivDeleteDate;
     }
 
     @Override
@@ -153,7 +194,7 @@ public class FilterRideRequestDialogFragment extends DialogFragment implements D
             mStartLocation.setGeoPoint(new ParseGeoPoint(latitude, longitude));
             mRideRequestFilter.setStartLocation(mStartLocation);
             mStartLocationEditText.setText(mStartLocation.getCity() + ", " + mStartLocation.getState());
-            if(mStartLocationEditText.getText().equals("")){
+            if(mStartMileRadiusEditText.getText().toString().equals("")){
                 mStartMileRadiusEditText.setText("10");
             }
         }
@@ -170,7 +211,7 @@ public class FilterRideRequestDialogFragment extends DialogFragment implements D
             mEndLocation.setGeoPoint(new ParseGeoPoint(latitude, longitude));
             mRideRequestFilter.setEndLocation(mEndLocation);
             mEndLocationEditText.setText(mEndLocation.getCity() + ", " + mEndLocation.getState());
-            if(mEndLocationEditText.getText().equals("")){
+            if(mEndMileRadiusEditText.getText().toString().equals("")){
                 mEndMileRadiusEditText.setText("10");
             }
         }

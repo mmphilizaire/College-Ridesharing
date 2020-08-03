@@ -203,9 +203,9 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
 
     private void filterRideRequestResults(){
         FragmentManager fragmentManager = getFragmentManager();
-        //FilterRideRequestDialogFragment filterDialogFragment = FilterRideRequestDialogFragment.newInstance(mRideRequestFilter);
-        //filterDialogFragment.setTargetFragment(RideStreamPageFragment.this, 200);
-        //filterDialogFragment.show(fragmentManager, "filter_fragment");
+        FilterRideRequestDialogFragment filterDialogFragment = FilterRideRequestDialogFragment.newInstance(mRideRequestFilter);
+        filterDialogFragment.setTargetFragment(RideStreamPageFragment.this, 200);
+        filterDialogFragment.show(fragmentManager, "filter_fragment");
     }
 
     private void rideOffersList(int page, final boolean clear) {

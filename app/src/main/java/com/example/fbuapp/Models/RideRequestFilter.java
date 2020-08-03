@@ -28,7 +28,12 @@ public class RideRequestFilter {
 
     public void setStartLocation(Location startLocation) {
         this.startLocation = startLocation;
-        this.hasStartLocation = true;
+        if(startLocation == null){
+            this.hasStartLocation = false;
+        }
+        else{
+            this.hasStartLocation = true;
+        }
     }
 
     public int getStartMileRadius() {
@@ -45,7 +50,12 @@ public class RideRequestFilter {
 
     public void setEndLocation(Location endLocation) {
         this.endLocation = endLocation;
-        this.hasEndLocation = true;
+        if(endLocation == null){
+            this.hasEndLocation = false;
+        }
+        else{
+            this.hasEndLocation = true;
+        }
     }
 
     public int getEndMileRadius() {
@@ -62,7 +72,12 @@ public class RideRequestFilter {
 
     public void setDeparture(Date departure) {
         this.departure = departure;
-        this.hasDeparture = true;
+        if(departure == null){
+            this.hasDeparture = false;
+        }
+        else{
+            this.hasDeparture = true;
+        }
     }
 
     public boolean hasStartLocation() {
