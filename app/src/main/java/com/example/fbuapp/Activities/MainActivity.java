@@ -9,12 +9,15 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.fbuapp.CreateRideOffer.RideOfferFragment1;
+import com.example.fbuapp.CreateRideOffer.RideOfferFragment2;
+import com.example.fbuapp.CreateRideOffer.RideOfferFragment3;
+import com.example.fbuapp.CreateRideOffer.RideOfferFragment4;
 import com.example.fbuapp.CreateRideRequest.RideRequestFragment1;
 import com.example.fbuapp.CreateRideRequest.RideRequestFragment2;
 import com.example.fbuapp.CreateRideRequest.RideRequestFragment3;
 import com.example.fbuapp.CreateRideRequest.RideRequestFragment4;
 import com.example.fbuapp.Fragments.ProfileFragment;
-import com.example.fbuapp.CreateRideOffer.RideOfferFragment;
 import com.example.fbuapp.Fragments.RideStreamFragment;
 import com.example.fbuapp.Models.RideOffer;
 import com.example.fbuapp.Models.RideRequest;
@@ -54,7 +57,9 @@ public class MainActivity extends AppCompatActivity {
                         mCurrentFragment = new RideStreamFragment();
                         break;
                     case R.id.action_ride_offer:
-                        mCurrentFragment = new RideOfferFragment();
+                        RideOffer rideOffer = new RideOffer();
+                        rideOffer.setUser(ParseUser.getCurrentUser());
+                        mCurrentFragment = RideOfferFragment1.newInstance(rideOffer);
                         break;
                     case R.id.action_ride_request:
                         RideRequest rideRequest = new RideRequest();
@@ -100,6 +105,21 @@ public class MainActivity extends AppCompatActivity {
         }
         else{
             mCurrentFragment = RideRequestFragment4.newInstance(rideRequest);
+            replaceFragment(mCurrentFragment);
+        }
+    }
+
+    public void goToNextRideOfferFragment(RideOffer rideOffer){
+        if(mCurrentFragment instanceof RideOfferFragment1){
+            mCurrentFragment = RideOfferFragment2.newInstance(rideOffer);
+            replaceFragment(mCurrentFragment);
+        }
+        else if(mCurrentFragment instanceof RideOfferFragment2){
+            mCurrentFragment = RideOfferFragment3.newInstance(rideOffer);
+            replaceFragment(mCurrentFragment);
+        }
+        else{
+            mCurrentFragment = RideOfferFragment4.newInstance(rideOffer);
             replaceFragment(mCurrentFragment);
         }
     }
