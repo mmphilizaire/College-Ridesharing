@@ -1,66 +1,108 @@
 package com.example.fbuapp.CreateRideOffer;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.NumberPicker;
+import android.widget.Toast;
 
+import com.example.fbuapp.Activities.MainActivity;
+import com.example.fbuapp.Activities.MapActivity;
+import com.example.fbuapp.Models.Location;
+import com.example.fbuapp.Models.RideOffer;
+import com.example.fbuapp.Models.RideRequest;
 import com.example.fbuapp.R;
+import com.example.fbuapp.databinding.FragmentRideOffer1Binding;
+import com.example.fbuapp.databinding.FragmentRideOffer3Binding;
+import com.example.fbuapp.databinding.FragmentRideRequest1Binding;
+import com.parse.ParseGeoPoint;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link RideOfferFragment3#newInstance} factory method to
- * create an instance of this fragment.
- */
+import static android.app.Activity.RESULT_OK;
+
 public class RideOfferFragment3 extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_RIDE_OFFER = "rideOffer";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    FragmentRideOffer3Binding mBinding;
+
+    private RideOffer mRideOffer;
+
+    private NumberPicker mSeatCountNumberPicker;
+    private EditText mSeatPriceEditText;
+    public Button mNextButton;
 
     public RideOfferFragment3() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RideOfferFragment3.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static RideOfferFragment3 newInstance(String param1, String param2) {
+    public static RideOfferFragment3 newInstance(RideOffer rideOffer) {
         RideOfferFragment3 fragment = new RideOfferFragment3();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putParcelable(ARG_RIDE_OFFER, rideOffer);
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        mRideOffer = getArguments().getParcelable(ARG_RIDE_OFFER);
+        mBinding = FragmentRideOffer3Binding.inflate(getLayoutInflater(), container, false);
+        return mBinding.getRoot();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_ride_offer3, container, false);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        bind();
+        configureNumberPicker();
+        setOnClickListeners();
     }
+
+    private void configureNumberPicker() {
+        mSeatCountNumberPicker.setMinValue(1);
+        mSeatCountNumberPicker.setMaxValue(6);
+        mSeatCountNumberPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+    }
+
+    private void setOnClickListeners() {
+        mNextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!missingInfo()){
+                    mRideOffer.setSeatPrice((Number) Integer.parseInt(mSeatPriceEditText.getText().toString()));
+                    mRideOffer.setSeatCount((Number) mSeatCountNumberPicker.getValue());
+                    MainActivity activity = (MainActivity) getActivity();
+                    //activity.goToNextRideOfferFragment(mRideOffer);
+                }
+                else{
+                    Toast.makeText(getActivity(), "Missing information!", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    private boolean missingInfo() {
+        if(mSeatPriceEditText.getText().toString().equals("")){
+            return true;
+        }
+        return false;
+    }
+
+    private void bind() {
+        mSeatCountNumberPicker = mBinding.npSeatCount;
+        mSeatPriceEditText = mBinding.etSeatPrice;
+        mNextButton = mBinding.btnNext;
+    }
+
 }
