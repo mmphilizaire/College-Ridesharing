@@ -9,9 +9,12 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.fbuapp.CreateRideRequest.RideRequestFragment1;
+import com.example.fbuapp.CreateRideRequest.RideRequestFragment2;
+import com.example.fbuapp.CreateRideRequest.RideRequestFragment3;
+import com.example.fbuapp.CreateRideRequest.RideRequestFragment4;
 import com.example.fbuapp.Fragments.ProfileFragment;
 import com.example.fbuapp.CreateRideOffer.RideOfferFragment;
-import com.example.fbuapp.Fragments.RideRequestFragment;
 import com.example.fbuapp.Fragments.RideStreamFragment;
 import com.example.fbuapp.Models.RideOffer;
 import com.example.fbuapp.Models.RideRequest;
@@ -54,7 +57,9 @@ public class MainActivity extends AppCompatActivity {
                         mCurrentFragment = new RideOfferFragment();
                         break;
                     case R.id.action_ride_request:
-                        mCurrentFragment = new RideRequestFragment();
+                        RideRequest rideRequest = new RideRequest();
+                        rideRequest.setUser(ParseUser.getCurrentUser());
+                        mCurrentFragment = RideRequestFragment1.newInstance(rideRequest);
                         break;
                     case R.id.action_profile:
                     default:
@@ -73,16 +78,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void goToRideOfferStream(RideOffer rideOffer){
-        //mCurrentFragment = RideStreamFragment.newInstance(rideOffer);
+        mCurrentFragment = RideStreamFragment.newInstance(rideOffer);
+        replaceFragment(mCurrentFragment);
         mBottomNavigationView.setSelectedItemId(R.id.action_ride_stream);
-        //replaceFragment(mCurrentFragment);
     }
 
     public void goToRideRequestStream(RideRequest rideRequest){
-        //TODO: go to ride requests instead of offers
-        //mCurrentFragment = RideStreamFragment.newInstance(rideRequest);
-        //replaceFragment(mCurrentFragment);
         mBottomNavigationView.setSelectedItemId(R.id.action_ride_stream);
+        mCurrentFragment = RideStreamFragment.newInstance(rideRequest);
+        replaceFragment(mCurrentFragment);
+    }
+
+    public void goToNextRideRequestFragment(RideRequest rideRequest){
+        if(mCurrentFragment instanceof RideRequestFragment1){
+            mCurrentFragment = RideRequestFragment2.newInstance(rideRequest);
+            replaceFragment(mCurrentFragment);
+        }
+        else if(mCurrentFragment instanceof RideRequestFragment2){
+            mCurrentFragment = RideRequestFragment3.newInstance(rideRequest);
+            replaceFragment(mCurrentFragment);
+        }
+        else{
+            mCurrentFragment = RideRequestFragment4.newInstance(rideRequest);
+            replaceFragment(mCurrentFragment);
+        }
     }
 
     @Override

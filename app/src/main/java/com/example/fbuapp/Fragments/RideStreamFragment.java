@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,10 +68,10 @@ public class RideStreamFragment extends Fragment {
         RideStreamPagerAdapter adapter = new RideStreamPagerAdapter(getChildFragmentManager());
         viewPager.setAdapter(adapter);
         if(mRideRequest != null){
-            viewPager.setCurrentItem(2);
+            viewPager.setCurrentItem(1);
         }
         else{
-            viewPager.setCurrentItem(1);
+            viewPager.setCurrentItem(0);
         }
         tabLayout.setupWithViewPager(viewPager);
 

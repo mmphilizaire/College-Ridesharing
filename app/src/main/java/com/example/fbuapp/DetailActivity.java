@@ -26,6 +26,9 @@ public class DetailActivity extends AppCompatActivity {
     private ActivityDetailBinding mBinding;
     private Fragment currentFragment;
 
+    private RideOffer mRideOffer;
+    private RideRequest mRideRequest;
+
     FragmentManager mFragmentManager = getSupportFragmentManager();
     private Toolbar mToolbar;
     private ImageView mBackImageView;
@@ -40,13 +43,13 @@ public class DetailActivity extends AppCompatActivity {
 
         mBackImageView = (ImageView) findViewById(R.id.ivBack);
 
-        RideOffer rideOffer = (RideOffer) getIntent().getParcelableExtra("rideOffer");
-        RideRequest rideRequest = (RideRequest) getIntent().getParcelableExtra("rideRequest");
-        if(rideOffer != null){
-            currentFragment = RideOfferDetailFragment.newInstance(rideOffer);
+        mRideOffer = (RideOffer) getIntent().getParcelableExtra("rideOffer");
+        mRideRequest = (RideRequest) getIntent().getParcelableExtra("rideRequest");
+        if(mRideOffer != null){
+            currentFragment = RideOfferDetailFragment.newInstance(mRideOffer);
         }
         else{
-            currentFragment = RideRequestDetailFragment.newInstance(rideRequest);
+            currentFragment = RideRequestDetailFragment.newInstance(mRideRequest);
         }
         mFragmentManager.beginTransaction().replace(R.id.flContainer, currentFragment).commit();
     }
@@ -108,7 +111,6 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     public void createRideOffer(RideRequest rideRequest){
-        Log.e("Mishka", rideRequest.getUser().getUsername());
         Intent data = new Intent();
         data.putExtra("rideRequest", rideRequest);
         setResult(RESULT_OK, data);

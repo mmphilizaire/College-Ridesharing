@@ -129,4 +129,18 @@ public class RideOffer extends ParseObject {
         }
         setPassengers(passengers);
     }
+
+    public boolean hasPassenger(ParseUser currentUser) {
+        JSONArray passengers = getPassengers();
+        for(int i = 0; i < passengers.length(); i++){
+            try {
+                if(passengers.get(i).equals(currentUser.getObjectId())){
+                    return true;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
 }
