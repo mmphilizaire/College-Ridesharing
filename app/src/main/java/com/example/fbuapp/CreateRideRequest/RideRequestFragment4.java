@@ -101,6 +101,9 @@ public class RideRequestFragment4 extends Fragment {
             mCreateButton.setVisibility(View.GONE);
             mCancelButton.setVisibility(View.VISIBLE);
         }
+        if(mRideOffers.size() == 0){
+            mResultsTextView.setText("No Matching Ride Offers");
+        }
 
         setOnClickListeners();
     }
@@ -161,36 +164,33 @@ public class RideRequestFragment4 extends Fragment {
         query.include(RideOffer.KEY_END_LOCATION);
         query.setLimit(100);
         query.setSkip(100*page);
-        query.findInBackground(new FindCallback<RideOffer>() {
-            @Override
-            public void done(List<RideOffer> objects, ParseException e) {
-                if(e != null){
-                    //error handling
-                    return;
+        try {
+            List<RideOffer> objects = query.find();
+            List<RideOffer> filtered = new ArrayList<>();
+            for(RideOffer object : objects){
+                if(object.getStartLocation().getGeoPoint().distanceInMilesTo(mRideRequest.getStartLocation().getGeoPoint()) > 20){
+                    continue;
                 }
-                List<RideOffer> filtered = new ArrayList<>();
-                for(RideOffer object : objects){
-                    if(object.getStartLocation().getGeoPoint().distanceInMilesTo(mRideRequest.getStartLocation().getGeoPoint()) > 20){
-                        continue;
-                    }
-                    if(object.getEndLocation().getGeoPoint().distanceInMilesTo(mRideRequest.getEndLocation().getGeoPoint()) > 20){
-                        continue;
-                    }
-                    if(!object.getDepartureTime().after(mRideRequest.getEarliestDeparture())){
-                        continue;
-                    }
-                    if(!object.getDepartureTime().before(mRideRequest.getLatestDeparture())){
-                        continue;
-                    }
-                    if(object.getPassengers().length() == object.getSeatCount().intValue()){
-                        continue;
-                    }
-                    filtered.add(object);
+                if(object.getEndLocation().getGeoPoint().distanceInMilesTo(mRideRequest.getEndLocation().getGeoPoint()) > 20){
+                    continue;
                 }
-                mRideOffers.addAll(filtered);
-                mAdapter.addAll(filtered);
+                if(!object.getDepartureTime().after(mRideRequest.getEarliestDeparture())){
+                    continue;
+                }
+                if(!object.getDepartureTime().before(mRideRequest.getLatestDeparture())){
+                    continue;
+                }
+                if(object.getPassengers().length() == object.getSeatCount().intValue()){
+                    continue;
+                }
+                filtered.add(object);
             }
-        });
+            mRideOffers.addAll(filtered);
+            mAdapter.notifyDataSetChanged();
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean isBooked(){
