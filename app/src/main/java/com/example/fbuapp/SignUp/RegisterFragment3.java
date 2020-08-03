@@ -280,10 +280,12 @@ public class RegisterFragment3 extends Fragment {
 
     public void setProfilePicture(Uri profilePicture){
         Glide.with(getContext()).load(profilePicture).transform(new CircleCrop()).into(mProfilePictureImageView);
+        mFinishButton.setVisibility(View.VISIBLE);
     }
 
     public void setProfilePicture(Bitmap profilePicture) {
         Glide.with(getContext()).load(profilePicture).transform(new CircleCrop()).into(mProfilePictureImageView);
+        mFinishButton.setVisibility(View.VISIBLE);
     }
 
     public ParseUser getUser(){
