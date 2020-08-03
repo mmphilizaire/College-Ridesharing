@@ -2,11 +2,14 @@ package com.example.fbuapp.CreateRideRequest;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -23,16 +26,27 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.fbuapp.Activities.MainActivity;
+import com.example.fbuapp.Adapters.RideOffersAdapter;
+import com.example.fbuapp.CreateRideOffer.RideOfferFragment;
+import com.example.fbuapp.Models.RideOffer;
 import com.example.fbuapp.Models.RideRequest;
 import com.example.fbuapp.R;
 import com.example.fbuapp.databinding.FragmentRideRequest1Binding;
 import com.example.fbuapp.databinding.FragmentRideRequest2Binding;
 import com.example.fbuapp.databinding.FragmentRideRequest4Binding;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+
+import static android.app.Activity.RESULT_OK;
+import static com.example.fbuapp.RideStreamPageFragment.REFRESH_REQUEST_CODE;
 
 public class RideRequestFragment4 extends Fragment {
 
@@ -41,6 +55,8 @@ public class RideRequestFragment4 extends Fragment {
     FragmentRideRequest4Binding mBinding;
 
     private RideRequest mRideRequest;
+    private ArrayList<RideOffer> mRideOffers;
+    private RideOffersAdapter mAdapter;
 
     private TextView mStartLocationTextView;
     private TextView mEndLocationTextView;
@@ -48,7 +64,10 @@ public class RideRequestFragment4 extends Fragment {
     private TextView mEarliestDateTextView;
     private TextView mLatestTimeTextView;
     private TextView mLatestDateTextView;
+    private TextView mResultsTextView;
+    private RecyclerView mResultsRecyclerView;
     public Button mCreateButton;
+    public Button mCancelButton;
 
     public RideRequestFragment4() {
         // Required empty public constructor
@@ -75,27 +94,42 @@ public class RideRequestFragment4 extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         bind();
+        configureResults();
         bindData();
 
+        if(isBooked()){
+            mCreateButton.setVisibility(View.GONE);
+            mCancelButton.setVisibility(View.VISIBLE);
+        }
+
+        setOnClickListeners();
+    }
+
+    private void setOnClickListeners() {
         mCreateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mRideRequest.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        Log.e("Mishka", "save");
-                        if(e != null){
-                            Log.e("Mishka", "exception: " + e.toString());
-                        }
-                        else{
-                            Log.e("Mishka", "no exception");
-                        }
-                    }
-                });
+                mRideRequest.saveInBackground();
                 MainActivity activity = (MainActivity) getActivity();
                 activity.goToRideRequestStream(mRideRequest);
             }
         });
+        mCancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MainActivity activity = (MainActivity) getActivity();
+                //TODO: don't put random rideoffer
+                activity.goToRideOfferStream(new RideOffer());
+            }
+        });
+    }
+
+    private void configureResults() {
+        mRideOffers = new ArrayList<>();
+        mAdapter = new RideOffersAdapter(mRideOffers, this);
+        matchingRideOffers(0);
+        mResultsRecyclerView.setAdapter(mAdapter);
+        mResultsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     private void bind() {
@@ -105,7 +139,10 @@ public class RideRequestFragment4 extends Fragment {
         mLatestTimeTextView = mBinding.tvLatestTime;
         mStartLocationTextView = mBinding.tvStartLocatoion;
         mEndLocationTextView = mBinding.tvEndLocation;
+        mResultsTextView = mBinding.tvResults;
+        mResultsRecyclerView = mBinding.rvResults;
         mCreateButton = mBinding.btnCreate;
+        mCancelButton = mBinding.btnCancel;
     }
 
     public void bindData() {
@@ -117,4 +154,60 @@ public class RideRequestFragment4 extends Fragment {
         mEndLocationTextView.setText(mRideRequest.getEndLocation().getCity()+", "+mRideRequest.getEndLocation().getState());
     }
 
+    private void matchingRideOffers(int page) {
+        ParseQuery<RideOffer> query = ParseQuery.getQuery(RideOffer.class);
+        query.include(RideOffer.KEY_USER);
+        query.include(RideOffer.KEY_START_LOCATION);
+        query.include(RideOffer.KEY_END_LOCATION);
+        query.setLimit(100);
+        query.setSkip(100*page);
+        query.findInBackground(new FindCallback<RideOffer>() {
+            @Override
+            public void done(List<RideOffer> objects, ParseException e) {
+                if(e != null){
+                    //error handling
+                    return;
+                }
+                List<RideOffer> filtered = new ArrayList<>();
+                for(RideOffer object : objects){
+                    if(object.getStartLocation().getGeoPoint().distanceInMilesTo(mRideRequest.getStartLocation().getGeoPoint()) > 20){
+                        continue;
+                    }
+                    if(object.getEndLocation().getGeoPoint().distanceInMilesTo(mRideRequest.getEndLocation().getGeoPoint()) > 20){
+                        continue;
+                    }
+                    if(!object.getDepartureTime().after(mRideRequest.getEarliestDeparture())){
+                        continue;
+                    }
+                    if(!object.getDepartureTime().before(mRideRequest.getLatestDeparture())){
+                        continue;
+                    }
+                    if(object.getPassengers().length() == object.getSeatCount().intValue()){
+                        continue;
+                    }
+                    filtered.add(object);
+                }
+                mRideOffers.addAll(filtered);
+                mAdapter.addAll(filtered);
+            }
+        });
+    }
+
+    public boolean isBooked(){
+        for(int i = 0; i < mRideOffers.size(); i++){
+            if(mRideOffers.get(i).hasPassenger(ParseUser.getCurrentUser())){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(isBooked()){
+            mCreateButton.setVisibility(View.GONE);
+            mCancelButton.setVisibility(View.VISIBLE);
+        }
+    }
 }
