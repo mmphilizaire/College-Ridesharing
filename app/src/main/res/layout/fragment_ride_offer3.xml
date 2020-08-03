@@ -71,7 +71,6 @@
             android:layout_marginRight="30dp"
             android:layout_weight="1"
             android:ems="15"
-            android:focusable="false"
             android:gravity="center"
             android:inputType="number" />
 

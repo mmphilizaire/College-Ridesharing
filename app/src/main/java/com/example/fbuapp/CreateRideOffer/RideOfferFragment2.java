@@ -99,7 +99,7 @@ public class RideOfferFragment2 extends Fragment implements DatePickerDialog.OnD
                 if(!missingInfo()){
                     mRideOffer.setDepartureTime(mDepartureCalendar.getTime());
                     MainActivity activity = (MainActivity) getActivity();
-                    //activity.goToNextRideOfferFragment(mRideOffer);
+                    activity.goToNextRideOfferFragment(mRideOffer);
                 }
                 else{
                     Toast.makeText(getActivity(), "Missing information!", Toast.LENGTH_LONG).show();

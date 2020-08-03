@@ -98,7 +98,7 @@ public class RideOfferFragment1 extends Fragment {
                     mRideOffer.setStartLocation(mStartLocation);
                     mRideOffer.setEndLocation(mEndLocation);
                     MainActivity activity = (MainActivity) getActivity();
-                    //activity.goToNextRideOfferFragment(mRideOffer);
+                    activity.goToNextRideOfferFragment(mRideOffer);
                 }
                 else{
                     Toast.makeText(getActivity(), "Missing information!", Toast.LENGTH_LONG).show();

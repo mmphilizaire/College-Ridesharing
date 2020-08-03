@@ -83,7 +83,7 @@ public class RideOfferFragment3 extends Fragment {
                     mRideOffer.setSeatPrice((Number) Integer.parseInt(mSeatPriceEditText.getText().toString()));
                     mRideOffer.setSeatCount((Number) mSeatCountNumberPicker.getValue());
                     MainActivity activity = (MainActivity) getActivity();
-                    //activity.goToNextRideOfferFragment(mRideOffer);
+                    activity.goToNextRideOfferFragment(mRideOffer);
                 }
                 else{
                     Toast.makeText(getActivity(), "Missing information!", Toast.LENGTH_LONG).show();
