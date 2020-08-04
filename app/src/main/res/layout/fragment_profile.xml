@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="8dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -25,8 +26,9 @@
         android:layout_marginEnd="0dp"
         android:layout_toEndOf="@+id/ivProfilePicture"
         android:gravity="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display2"
         android:textColor="#000000"
+        android:textSize="44sp"
+        android:textStyle="bold"
         tools:text="Mishka P." />
 
     <TextView
@@ -40,8 +42,8 @@
         android:layout_marginEnd="0dp"
         android:layout_toEndOf="@+id/ivProfilePicture"
         android:gravity="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="#050505"
+        android:textSize="24sp"
         tools:text="UNC Chapel Hill" />
 
     <TextView
@@ -51,9 +53,10 @@
         android:layout_below="@+id/ivProfilePicture"
         android:layout_alignParentStart="true"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        android:text="ABOUT"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+        android:layout_marginTop="8dp"
+        android:text="About"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tvMemberSince"
@@ -75,7 +78,7 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        tools:text="Driven 10 Rides" />
+        tools:text="Driven 10 Rides With 27 Passengers" />
 
     <TextView
         android:id="@+id/tvRidesRidden"

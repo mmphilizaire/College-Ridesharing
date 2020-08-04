@@ -21,9 +21,16 @@ import androidx.fragment.app.FragmentManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.fbuapp.Activities.LoginActivity;
+import com.example.fbuapp.Models.RideOffer;
 import com.example.fbuapp.R;
 import com.example.fbuapp.databinding.FragmentProfileBinding;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 public class ProfileFragment extends Fragment {
 
@@ -102,9 +109,31 @@ public class ProfileFragment extends Fragment {
         Glide.with(getContext()).load(mUser.getParseFile("profilePicture").getUrl()).transform(new CircleCrop()).into(mProfilePictureImageView);
         mNameTextView.setText(mUser.getString("firstName")+" "+ mUser.getString("lastName").substring(0,1)+".");
         mUniversityTextView.setText(mUser.getString("university"));
+        List<RideOffer> pastRideOffers = getPastRideOffers();
         mMemberSinceTextView.setText("Member since "+DateFormat.format("MMMM yyyy", mUser.getCreatedAt()));
-        mRidesDrivenTextView.setText("Driven " + ridesDrivenCount(mUser) + " Rides");
-        mRidesRiddenTextView.setText("Ridden " + ridesRiddenCount(mUser) + " Rides");
+        mRidesDrivenTextView.setText("Driven " + ridesDrivenCount(pastRideOffers) + " Rides with " + passengersDrivenCount(pastRideOffers) + " Passengers");
+        mRidesRiddenTextView.setText("Ridden " + ridesRiddenCount(pastRideOffers) + " Rides");
+    }
+
+    private List<RideOffer> getPastRideOffers() {
+        ArrayList<RideOffer> rideOffers = new ArrayList<>();
+        boolean finished = false;
+        while(!finished) {
+            ParseQuery<RideOffer> query = ParseQuery.getQuery("RideOffer");
+            query.include("user");
+            query.whereLessThanOrEqualTo("departureTime", Calendar.getInstance().getTime());
+            List<RideOffer> results = null;
+            try {
+                results = query.find();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            rideOffers.addAll(results);
+            if (results.size() < 100) {
+                finished = true;
+            }
+        }
+        return rideOffers;
     }
 
     private void bindViews() {
@@ -131,12 +160,34 @@ public class ProfileFragment extends Fragment {
         getActivity().finish();
     }
 
-    private int ridesRiddenCount(ParseUser user) {
-        return 0;
+    private int ridesRiddenCount(List<RideOffer> rideOffers) {
+        int ridesRidden = 0;
+        for(RideOffer rideOffer : rideOffers){
+            if(rideOffer.hasPassenger(mUser)){
+                ridesRidden++;
+            }
+        }
+        return ridesRidden;
     }
 
-    private int ridesDrivenCount(ParseUser user) {
-        return 0;
+    private int ridesDrivenCount(List<RideOffer> rideOffers){
+        int ridesDriven = 0;
+        for(RideOffer rideOffer : rideOffers){
+            if(rideOffer.getUser().getObjectId().equals(mUser.getObjectId())){
+                ridesDriven++;
+            }
+        }
+        return ridesDriven;
+    }
+
+    private int passengersDrivenCount(List<RideOffer> rideOffers){
+        int passengersDriven = 0;
+        for(RideOffer rideOffer : rideOffers){
+            if(rideOffer.getUser().getObjectId().equals(mUser.getObjectId())){
+                passengersDriven += rideOffer.getPassengers().length();
+            }
+        }
+        return passengersDriven;
     }
 
     public void setProfilePicture(Uri profilePicture){
