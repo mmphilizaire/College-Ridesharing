@@ -50,8 +50,8 @@ public class FilterRideOfferDialogFragment extends DialogFragment implements Dat
     private EditText mStartMileRadiusEditText;
     private EditText mEndLocationEditText;
     private EditText mEndMileRadiusEditText;
-    private TextView mEarliestDateTextView;
-    private TextView mLatestDateTextView;
+    private EditText mEarliestDateEditText;
+    private EditText mLatestDateEditText;
     private CheckBox mHideFullRidesCheckBox;
     private Button mApplyFilterButton;
 
@@ -95,16 +95,20 @@ public class FilterRideOfferDialogFragment extends DialogFragment implements Dat
         if(mRideOfferFilter.hasStartLocation()){
             mStartLocationEditText.setText(mRideOfferFilter.getStartLocation().getCity() + ", " + mRideOfferFilter.getStartLocation().getState());
             mStartMileRadiusEditText.setText(String.valueOf(mRideOfferFilter.getStartMileRadius()));
+            mDeleteStartLocationImageView.setVisibility(View.VISIBLE);
         }
         if(mRideOfferFilter.hasEndLocation()){
             mEndLocationEditText.setText(mRideOfferFilter.getEndLocation().getCity() + ", " + mRideOfferFilter.getEndLocation().getState());
             mEndMileRadiusEditText.setText(String.valueOf(mRideOfferFilter.getEndMileRadius()));
+            mDeleteEndLocationImageView.setVisibility(View.VISIBLE);
         }
         if(mRideOfferFilter.hasEarliestDeparture()){
-            mEarliestDateTextView.setText((String) DateFormat.format("MM/d/yyyy", mRideOfferFilter.getEarliestDeparture()));
+            mEarliestDateEditText.setText((String) DateFormat.format("MM/d/yyyy", mRideOfferFilter.getEarliestDeparture()));
+            mDeleteEarliestDateImageView.setVisibility(View.VISIBLE);
         }
         if(mRideOfferFilter.hasLatestDeparture()){
-            mLatestDateTextView.setText((String) DateFormat.format("MM/d/yyyy", mRideOfferFilter.getLatestDeparture()));
+            mLatestDateEditText.setText((String) DateFormat.format("MM/d/yyyy", mRideOfferFilter.getLatestDeparture()));
+            mDeleteLatestDateImageView.setVisibility(View.VISIBLE);
         }
         mHideFullRidesCheckBox.setChecked(mRideOfferFilter.getHideFullRides());
     }
@@ -126,7 +130,7 @@ public class FilterRideOfferDialogFragment extends DialogFragment implements Dat
             }
         });
 
-        mEarliestDateTextView.setOnClickListener(new View.OnClickListener() {
+        mEarliestDateEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mEarliestDate = true;
@@ -134,7 +138,7 @@ public class FilterRideOfferDialogFragment extends DialogFragment implements Dat
             }
         });
 
-        mLatestDateTextView.setOnClickListener(new View.OnClickListener() {
+        mLatestDateEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mEarliestDate = false;
@@ -165,6 +169,7 @@ public class FilterRideOfferDialogFragment extends DialogFragment implements Dat
                 mRideOfferFilter.setStartLocation(mStartLocation);
                 mStartLocationEditText.setText("");
                 mStartMileRadiusEditText.setText("");
+                mDeleteStartLocationImageView.setVisibility(View.GONE);
             }
         });
 
@@ -175,6 +180,7 @@ public class FilterRideOfferDialogFragment extends DialogFragment implements Dat
                 mRideOfferFilter.setEndLocation(mEndLocation);
                 mEndLocationEditText.setText("");
                 mEndMileRadiusEditText.setText("");
+                mDeleteEndLocationImageView.setVisibility(View.GONE);
             }
         });
 
@@ -183,7 +189,8 @@ public class FilterRideOfferDialogFragment extends DialogFragment implements Dat
             public void onClick(View view) {
                 mEarliestDateCalendar = null;
                 mRideOfferFilter.setEarliestDeparture(null);
-                mEarliestDateTextView.setText("Earliest Date");
+                mEarliestDateEditText.setText("");
+                mDeleteEarliestDateImageView.setVisibility(View.GONE);
             }
         });
 
@@ -192,7 +199,8 @@ public class FilterRideOfferDialogFragment extends DialogFragment implements Dat
             public void onClick(View view) {
                 mLatestDateCalendar = null;
                 mRideOfferFilter.setLatestDeparture(null);
-                mLatestDateTextView.setText("Latest Date");
+                mLatestDateEditText.setText("");
+                mDeleteLatestDateImageView.setVisibility(View.GONE);
             }
         });
 
@@ -203,8 +211,8 @@ public class FilterRideOfferDialogFragment extends DialogFragment implements Dat
         mStartMileRadiusEditText = mBinding.etStartMileRadius;
         mEndLocationEditText = mBinding.etEndLocation;
         mEndMileRadiusEditText = mBinding.etEndMileRadius;
-        mEarliestDateTextView = mBinding.tvEarliestDate;
-        mLatestDateTextView = mBinding.tvLatestDate;
+        mEarliestDateEditText = mBinding.etEarliestDate;
+        mLatestDateEditText = mBinding.etLatestDate;
         mHideFullRidesCheckBox = mBinding.cbHideFullRides;
         mApplyFilterButton = mBinding.btnApply;
         mDeleteStartLocationImageView = mBinding.ivDeleteStart;
@@ -231,6 +239,7 @@ public class FilterRideOfferDialogFragment extends DialogFragment implements Dat
             if(mStartMileRadiusEditText.getText().toString().equals("")){
                 mStartMileRadiusEditText.setText("10");
             }
+            mDeleteStartLocationImageView.setVisibility(View.VISIBLE);
         }
         else if(resultCode == RESULT_OK && requestCode == END_REQUEST_CODE){
             if(mEndLocation == null){
@@ -248,6 +257,7 @@ public class FilterRideOfferDialogFragment extends DialogFragment implements Dat
             if(mEndMileRadiusEditText.getText().toString().equals("")){
                 mEndMileRadiusEditText.setText("10");
             }
+            mDeleteEndLocationImageView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -268,7 +278,8 @@ public class FilterRideOfferDialogFragment extends DialogFragment implements Dat
             }
             mEarliestDateCalendar.set(year, month, dayOfMonth);
             mRideOfferFilter.setEarliestDeparture(mEarliestDateCalendar.getTime());
-            mEarliestDateTextView.setText(date);
+            mEarliestDateEditText.setText(date);
+            mDeleteEarliestDateImageView.setVisibility(View.VISIBLE);
         }
         else {
             if(mLatestDateCalendar == null){
@@ -276,7 +287,8 @@ public class FilterRideOfferDialogFragment extends DialogFragment implements Dat
             }
             mLatestDateCalendar.set(year, month, dayOfMonth);
             mRideOfferFilter.setLatestDeparture(mLatestDateCalendar.getTime());
-            mLatestDateTextView.setText(date);
+            mLatestDateEditText.setText(date);
+            mDeleteLatestDateImageView.setVisibility(View.VISIBLE);
         }
     }
 

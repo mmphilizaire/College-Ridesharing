@@ -41,6 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:visibility="gone"
             app:srcCompat="@drawable/ic_close" />
 
     </LinearLayout>
@@ -90,6 +91,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:visibility="gone"
             app:srcCompat="@drawable/ic_close" />
 
     </LinearLayout>
@@ -126,38 +128,43 @@
             android:layout_height="wrap_content"
             android:text="Date Range" />
 
-        <TextView
-            android:id="@+id/tvEarliestDate"
+        <EditText
+            android:id="@+id/etEarliestDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="Earliest Date" />
+            android:ems="4"
+            android:focusable="false" />
 
         <ImageView
             android:id="@+id/ivDeleteEarliestDate"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:visibility="gone"
             app:srcCompat="@drawable/ic_close" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="-" />
+            android:text="-"
+            android:textSize="24sp" />
 
-        <TextView
-            android:id="@+id/tvLatestDate"
+        <EditText
+            android:id="@+id/etLatestDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="Latest Date" />
+            android:ems="4"
+            android:focusable="false" />
 
         <ImageView
             android:id="@+id/ivDeleteLatestDate"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:visibility="gone"
             app:srcCompat="@drawable/ic_close" />
 
 

@@ -46,7 +46,7 @@ public class FilterRideRequestDialogFragment extends DialogFragment implements D
     private EditText mStartMileRadiusEditText;
     private EditText mEndLocationEditText;
     private EditText mEndMileRadiusEditText;
-    private TextView mDateTextView;
+    private EditText mDateEditText;
     private Button mApplyFilterButton;
 
     private ImageView mDeleteStartLocationImageView;
@@ -88,13 +88,16 @@ public class FilterRideRequestDialogFragment extends DialogFragment implements D
         if(mRideRequestFilter.hasStartLocation()){
             mStartLocationEditText.setText(mRideRequestFilter.getStartLocation().getCity() + ", " + mRideRequestFilter.getStartLocation().getState());
             mStartMileRadiusEditText.setText(String.valueOf(mRideRequestFilter.getStartMileRadius()));
+            mDeleteStartLocationImageView.setVisibility(View.VISIBLE);
         }
         if(mRideRequestFilter.hasEndLocation()){
             mEndLocationEditText.setText(mRideRequestFilter.getEndLocation().getCity() + ", " + mRideRequestFilter.getEndLocation().getState());
             mEndMileRadiusEditText.setText(String.valueOf(mRideRequestFilter.getEndMileRadius()));
+            mDeleteEndLocationImageView.setVisibility(View.VISIBLE);
         }
         if(mRideRequestFilter.hasDeparture()){
-            mDateTextView.setText((String) DateFormat.format("MM/d/yyyy", mRideRequestFilter.getDeparture()));
+            mDateEditText.setText((String) DateFormat.format("MM/d/yyyy", mRideRequestFilter.getDeparture()));
+            mDeleteDateImageView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -115,7 +118,7 @@ public class FilterRideRequestDialogFragment extends DialogFragment implements D
             }
         });
 
-        mDateTextView.setOnClickListener(new View.OnClickListener() {
+        mDateEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showDatePickerDialog();
@@ -144,6 +147,7 @@ public class FilterRideRequestDialogFragment extends DialogFragment implements D
                 mRideRequestFilter.setStartLocation(mStartLocation);
                 mStartLocationEditText.setText("");
                 mStartMileRadiusEditText.setText("");
+                mDeleteStartLocationImageView.setVisibility(View.GONE);
             }
         });
 
@@ -154,6 +158,7 @@ public class FilterRideRequestDialogFragment extends DialogFragment implements D
                 mRideRequestFilter.setEndLocation(mEndLocation);
                 mEndLocationEditText.setText("");
                 mEndMileRadiusEditText.setText("");
+                mDeleteEndLocationImageView.setVisibility(View.GONE);
             }
         });
 
@@ -162,7 +167,8 @@ public class FilterRideRequestDialogFragment extends DialogFragment implements D
             public void onClick(View view) {
                 mDateCalendar = null;
                 mRideRequestFilter.setDeparture(null);
-                mDateTextView.setText("Select Date");
+                mDateEditText.setText("");
+                mDeleteDateImageView.setVisibility(View.GONE);
             }
         });
     }
@@ -172,7 +178,7 @@ public class FilterRideRequestDialogFragment extends DialogFragment implements D
         mStartMileRadiusEditText = mBinding.etStartMileRadius;
         mEndLocationEditText = mBinding.etEndLocation;
         mEndMileRadiusEditText = mBinding.etEndMileRadius;
-        mDateTextView = mBinding.tvDate;
+        mDateEditText = mBinding.etDate;
         mApplyFilterButton = mBinding.btnApply;
         mDeleteStartLocationImageView = mBinding.ivDeleteStart;
         mDeleteEndLocationImageView = mBinding.ivDeleteEnd;
@@ -197,6 +203,7 @@ public class FilterRideRequestDialogFragment extends DialogFragment implements D
             if(mStartMileRadiusEditText.getText().toString().equals("")){
                 mStartMileRadiusEditText.setText("10");
             }
+            mDeleteStartLocationImageView.setVisibility(View.VISIBLE);
         }
         else if(resultCode == RESULT_OK && requestCode == END_REQUEST_CODE){
             if(mEndLocation == null){
@@ -214,6 +221,7 @@ public class FilterRideRequestDialogFragment extends DialogFragment implements D
             if(mEndMileRadiusEditText.getText().toString().equals("")){
                 mEndMileRadiusEditText.setText("10");
             }
+            mDeleteEndLocationImageView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -233,7 +241,8 @@ public class FilterRideRequestDialogFragment extends DialogFragment implements D
         }
         mDateCalendar.set(year, month, dayOfMonth);
         mRideRequestFilter.setDeparture(mDateCalendar.getTime());
-        mDateTextView.setText(date);
+        mDateEditText.setText(date);
+        mDeleteDateImageView.setVisibility(View.VISIBLE);
     }
 
 
