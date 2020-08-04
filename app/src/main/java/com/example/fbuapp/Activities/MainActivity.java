@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -82,6 +83,12 @@ public class MainActivity extends AppCompatActivity {
         mFragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
     }
 
+    public void replaceFragmentAnimation(Fragment fragment){
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+        fragmentTransaction.replace(R.id.flContainer, fragment).commit();
+    }
+
     public void goToRideOfferStream(RideOffer rideOffer){
         mCurrentFragment = RideStreamFragment.newInstance(rideOffer);
         replaceFragment(mCurrentFragment);
@@ -97,30 +104,30 @@ public class MainActivity extends AppCompatActivity {
     public void goToNextRideRequestFragment(RideRequest rideRequest){
         if(mCurrentFragment instanceof RideRequestFragment1){
             mCurrentFragment = RideRequestFragment2.newInstance(rideRequest);
-            replaceFragment(mCurrentFragment);
+            replaceFragmentAnimation(mCurrentFragment);
         }
         else if(mCurrentFragment instanceof RideRequestFragment2){
             mCurrentFragment = RideRequestFragment3.newInstance(rideRequest);
-            replaceFragment(mCurrentFragment);
+            replaceFragmentAnimation(mCurrentFragment);
         }
         else{
             mCurrentFragment = RideRequestFragment4.newInstance(rideRequest);
-            replaceFragment(mCurrentFragment);
+            replaceFragmentAnimation(mCurrentFragment);
         }
     }
 
     public void goToNextRideOfferFragment(RideOffer rideOffer){
         if(mCurrentFragment instanceof RideOfferFragment1){
             mCurrentFragment = RideOfferFragment2.newInstance(rideOffer);
-            replaceFragment(mCurrentFragment);
+            replaceFragmentAnimation(mCurrentFragment);
         }
         else if(mCurrentFragment instanceof RideOfferFragment2){
             mCurrentFragment = RideOfferFragment3.newInstance(rideOffer);
-            replaceFragment(mCurrentFragment);
+            replaceFragmentAnimation(mCurrentFragment);
         }
         else{
             mCurrentFragment = RideOfferFragment4.newInstance(rideOffer);
-            replaceFragment(mCurrentFragment);
+            replaceFragmentAnimation(mCurrentFragment);
         }
     }
 

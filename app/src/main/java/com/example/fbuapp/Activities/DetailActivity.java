@@ -1,4 +1,4 @@
-package com.example.fbuapp;
+package com.example.fbuapp.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -19,6 +19,7 @@ import com.example.fbuapp.Fragments.RideOfferDetailFragment;
 import com.example.fbuapp.Fragments.RideRequestDetailFragment;
 import com.example.fbuapp.Models.RideOffer;
 import com.example.fbuapp.Models.RideRequest;
+import com.example.fbuapp.R;
 import com.example.fbuapp.databinding.ActivityDetailBinding;
 
 public class DetailActivity extends AppCompatActivity {
@@ -81,30 +82,27 @@ public class DetailActivity extends AppCompatActivity {
 
     public void getProfile(final RideOffer rideOffer){
         final ProfileFragment profileFragment = ProfileFragment.newInstance(rideOffer.getUser());
-        mFragmentManager.beginTransaction().replace(R.id.flContainer, ProfileFragment.newInstance(rideOffer.getUser())).commit();
+        replaceFragmentAnimation(profileFragment);
         mBackImageView.setVisibility(View.VISIBLE);
         mBackImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mFragmentManager.beginTransaction().replace(R.id.flContainer, RideOfferDetailFragment.newInstance(rideOffer)).commit();
+                RideOfferDetailFragment fragment = RideOfferDetailFragment.newInstance(rideOffer);
+                replaceFragmentAnimationBack(fragment);
                 mBackImageView.setVisibility(View.GONE);
             }
         });
     }
 
     public void getProfile(final RideRequest rideRequest){
-        final FragmentTransaction transaction = mFragmentManager.beginTransaction();
-
         final ProfileFragment profileFragment = ProfileFragment.newInstance(rideRequest.getUser());
-        transaction.hide(currentFragment).commit();
-        transaction.add(R.id.flContainer, profileFragment).commit();
-
+        replaceFragmentAnimation(profileFragment);
         mBackImageView.setVisibility(View.VISIBLE);
         mBackImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                transaction.show(currentFragment).commit();
-                transaction.remove(profileFragment).commit();
+                RideRequestDetailFragment fragment = RideRequestDetailFragment.newInstance(rideRequest);
+                replaceFragmentAnimationBack(fragment);
                 mBackImageView.setVisibility(View.GONE);
             }
         });
@@ -115,6 +113,18 @@ public class DetailActivity extends AppCompatActivity {
         data.putExtra("rideRequest", rideRequest);
         setResult(RESULT_OK, data);
         finish();
+    }
+
+    public void replaceFragmentAnimation(Fragment fragment){
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+        fragmentTransaction.replace(R.id.flContainer, fragment).commit();
+    }
+
+    public void replaceFragmentAnimationBack(Fragment fragment){
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
+        fragmentTransaction.replace(R.id.flContainer, fragment).commit();
     }
 
 }

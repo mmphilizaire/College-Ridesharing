@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
-import com.example.fbuapp.DetailActivity;
+import com.example.fbuapp.Activities.DetailActivity;
 import com.example.fbuapp.Models.RideRequest;
 import com.example.fbuapp.databinding.ItemRideRequestBinding;
 import com.parse.ParseFile;
