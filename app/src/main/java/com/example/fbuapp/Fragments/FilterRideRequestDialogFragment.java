@@ -48,6 +48,7 @@ public class FilterRideRequestDialogFragment extends DialogFragment implements D
     private EditText mEndMileRadiusEditText;
     private EditText mDateEditText;
     private Button mApplyFilterButton;
+    private Button mCancelFilterButton;
 
     private ImageView mDeleteStartLocationImageView;
     private ImageView mDeleteEndLocationImageView;
@@ -78,10 +79,27 @@ public class FilterRideRequestDialogFragment extends DialogFragment implements D
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mRideRequestFilter = (RideRequestFilter) Parcels.unwrap(getArguments().getParcelable("filter"));
+        RideRequestFilter filter = (RideRequestFilter) Parcels.unwrap(getArguments().getParcelable("filter"));
+        mRideRequestFilter = copy(filter);
         bind();
         bindData();
         setOnClickListeners();
+    }
+
+    private RideRequestFilter copy(RideRequestFilter filter) {
+        RideRequestFilter copy = new RideRequestFilter();
+        if(filter.hasStartLocation()){
+            copy.setStartLocation(filter.getStartLocation());
+            copy.setStartMileRadius(filter.getStartMileRadius());
+        }
+        if(filter.hasEndLocation()){
+            copy.setEndLocation(filter.getEndLocation());
+            copy.setEndMileRadius(filter.getEndMileRadius());
+        }
+        if(filter.hasDeparture()){
+            copy.setDeparture(filter.getDeparture());
+        }
+        return copy;
     }
 
     private void bindData() {
@@ -140,6 +158,13 @@ public class FilterRideRequestDialogFragment extends DialogFragment implements D
             }
         });
 
+        mCancelFilterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+            }
+        });
+
         mDeleteStartLocationImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -180,6 +205,7 @@ public class FilterRideRequestDialogFragment extends DialogFragment implements D
         mEndMileRadiusEditText = mBinding.etEndMileRadius;
         mDateEditText = mBinding.etDate;
         mApplyFilterButton = mBinding.btnApply;
+        mCancelFilterButton = mBinding.btnCancel;
         mDeleteStartLocationImageView = mBinding.ivDeleteStart;
         mDeleteEndLocationImageView = mBinding.ivDeleteEnd;
         mDeleteDateImageView = mBinding.ivDeleteDate;

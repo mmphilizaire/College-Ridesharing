@@ -54,6 +54,7 @@ public class FilterRideOfferDialogFragment extends DialogFragment implements Dat
     private EditText mLatestDateEditText;
     private CheckBox mHideFullRidesCheckBox;
     private Button mApplyFilterButton;
+    private Button mCancelFilterButton;
 
     private ImageView mDeleteStartLocationImageView;
     private ImageView mDeleteEndLocationImageView;
@@ -85,10 +86,31 @@ public class FilterRideOfferDialogFragment extends DialogFragment implements Dat
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mRideOfferFilter = (RideOfferFilter) Parcels.unwrap(getArguments().getParcelable("filter"));
+        RideOfferFilter filter = (RideOfferFilter) Parcels.unwrap(getArguments().getParcelable("filter"));
+        mRideOfferFilter = copy(filter);
         bind();
         bindData();
         setOnClickListeners();
+    }
+
+    private RideOfferFilter copy(RideOfferFilter filter) {
+        RideOfferFilter copy = new RideOfferFilter();
+        if(filter.hasStartLocation()){
+            copy.setStartLocation(filter.getStartLocation());
+            copy.setStartMileRadius(filter.getStartMileRadius());
+        }
+        if(filter.hasEndLocation()){
+            copy.setEndLocation(filter.getEndLocation());
+            copy.setEndMileRadius(filter.getEndMileRadius());
+        }
+        if(filter.hasEarliestDeparture()){
+            copy.setEarliestDeparture(filter.getEarliestDeparture());
+        }
+        if(filter.hasLatestDeparture()){
+            copy.setLatestDeparture(filter.getLatestDeparture());
+        }
+        copy.setHideFullRides(filter.getHideFullRides());
+        return copy;
     }
 
     private void bindData() {
@@ -162,6 +184,13 @@ public class FilterRideOfferDialogFragment extends DialogFragment implements Dat
             }
         });
 
+        mCancelFilterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+            }
+        });
+
         mDeleteStartLocationImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -215,6 +244,7 @@ public class FilterRideOfferDialogFragment extends DialogFragment implements Dat
         mLatestDateEditText = mBinding.etLatestDate;
         mHideFullRidesCheckBox = mBinding.cbHideFullRides;
         mApplyFilterButton = mBinding.btnApply;
+        mCancelFilterButton = mBinding.btnCancel;
         mDeleteStartLocationImageView = mBinding.ivDeleteStart;
         mDeleteEndLocationImageView = mBinding.ivDeleteEnd;
         mDeleteEarliestDateImageView = mBinding.ivDeleteEarliestDate;

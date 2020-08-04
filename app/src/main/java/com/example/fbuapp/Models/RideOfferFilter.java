@@ -122,5 +122,4 @@ public class RideOfferFilter {
     public boolean hasLatestDeparture() {
         return hasLatestDeparture;
     }
-
 }
