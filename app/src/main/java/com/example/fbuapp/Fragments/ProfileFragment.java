@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.fbuapp.Activities.LoginActivity;
 import com.example.fbuapp.Models.RideOffer;
+import com.example.fbuapp.Models.RideRequest;
 import com.example.fbuapp.R;
 import com.example.fbuapp.databinding.FragmentProfileBinding;
 import com.parse.ParseException;
@@ -113,6 +114,78 @@ public class ProfileFragment extends Fragment {
         mMemberSinceTextView.setText("Member since "+DateFormat.format("MMMM yyyy", mUser.getCreatedAt()));
         mRidesDrivenTextView.setText("Driven " + ridesDrivenCount(pastRideOffers) + " Rides with " + passengersDrivenCount(pastRideOffers) + " Passengers");
         mRidesRiddenTextView.setText("Ridden " + ridesRiddenCount(pastRideOffers) + " Rides");
+    }
+
+    private List<RideOffer> getFutureRideOffers() {
+        ArrayList<RideOffer> rideOffers = new ArrayList<>();
+        boolean finished = false;
+        while(!finished) {
+            ParseQuery<RideOffer> query = ParseQuery.getQuery("RideOffer");
+            query.include("user");
+            query.whereGreaterThan("departureTime", Calendar.getInstance().getTime());
+            List<RideOffer> results = null;
+            try {
+                results = query.find();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            rideOffers.addAll(results);
+            if (results.size() < 100) {
+                finished = true;
+            }
+        }
+        return rideOffers;
+    }
+
+    private List<RideRequest> getFutureRideRequests() {
+        ArrayList<RideRequest> rideRequests = new ArrayList<>();
+        boolean finished = false;
+        while(!finished) {
+            ParseQuery<RideRequest> query = ParseQuery.getQuery("RideRequest");
+            query.include("user");
+            query.whereGreaterThan("earliestDeparture", Calendar.getInstance().getTime());
+            List<RideRequest> results = null;
+            try {
+                results = query.find();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            rideRequests.addAll(results);
+            if (results.size() < 100) {
+                finished = true;
+            }
+        }
+        return rideRequests;
+    }
+
+    private List<RideOffer> getUsersRideOffers(List<RideOffer> rideOffers){
+        List<RideOffer> usersRideOffers = new ArrayList<>();
+        for(RideOffer rideOffer : rideOffers){
+            if(rideOffer.getUser().getObjectId().equals(mUser.getObjectId())){
+                usersRideOffers.add(rideOffer);
+            }
+        }
+        return usersRideOffers;
+    }
+
+    private List<RideOffer> getUsersBookedRides(List<RideOffer> rideOffers){
+        List<RideOffer> bookedRideOffers = new ArrayList<>();
+        for(RideOffer rideOffer : rideOffers){
+            if(rideOffer.hasPassenger(mUser)){
+                bookedRideOffers.add(rideOffer);
+            }
+        }
+        return bookedRideOffers;
+    }
+
+    private List<RideRequest> getUsersRideRequests(List<RideRequest> rideRequests){
+        List<RideRequest> usersRideRequests = new ArrayList<>();
+        for(RideRequest rideRequest : rideRequests){
+            if(rideRequest.getUser().getObjectId().equals(mUser.getObjectId())){
+                usersRideRequests.add(rideRequest);
+            }
+        }
+        return usersRideRequests;
     }
 
     private List<RideOffer> getPastRideOffers() {

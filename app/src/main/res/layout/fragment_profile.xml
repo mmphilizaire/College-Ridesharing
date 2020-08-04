@@ -55,7 +55,30 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="8dp"
         android:text="About"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textSize="26sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvRideOffers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvRidesRidden"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="8dp"
+        android:text="Upcoming Ride Offers"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvRideRequests"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rvRideOffers"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="8dp"
+        android:text="Upcoming Ride Requests"
+        android:textSize="22sp"
         android:textStyle="bold" />
 
     <TextView
@@ -66,7 +89,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textSize="16sp"
         tools:text="Member since July 2020" />
 
     <TextView
@@ -77,7 +100,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textSize="16sp"
         tools:text="Driven 10 Rides With 27 Passengers" />
 
     <TextView
@@ -88,7 +111,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textSize="16sp"
         tools:text="Ridden 5 Rides" />
 
     <Button
@@ -101,5 +124,20 @@
         android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
         android:layout_marginBottom="0dp"
-        android:text="Log Out" />
+        android:background="@drawable/rounded_corners"
+        android:text="Log Out"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvRideOffers"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_below="@+id/tvRideOffers" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvRideRequests"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_below="@+id/tvRideRequests" />
 </RelativeLayout>

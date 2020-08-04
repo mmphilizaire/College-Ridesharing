@@ -28,7 +28,7 @@
 
         <TextView
             android:id="@+id/tvDate"
-            android:layout_width="50dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="right"
             android:text="Date"
@@ -54,7 +54,7 @@
 
         <TextView
             android:id="@+id/tvTime"
-            android:layout_width="50dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="right"
             android:text="Time"
