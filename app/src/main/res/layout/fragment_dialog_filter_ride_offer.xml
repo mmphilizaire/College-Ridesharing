@@ -194,17 +194,25 @@
 
         <Button
             android:id="@+id/btnCancel"
-            android:layout_weight=".5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Cancel" />
+            android:layout_marginRight="5dp"
+            android:layout_weight=".5"
+            android:background="@drawable/rounded_corners"
+            android:text="Cancel"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/btnApply"
-            android:layout_weight=".5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Apply" />
+            android:layout_marginLeft="5dp"
+            android:layout_weight=".5"
+            android:background="@drawable/rounded_corners"
+            android:text="Apply"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
 
     </LinearLayout>
 

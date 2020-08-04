@@ -97,9 +97,9 @@ public class RideRequestsAdapter extends RecyclerView.Adapter<RideRequestsAdapte
             ParseFile profilePicture = rideRequest.getUser().getParseFile("profilePicture");
             Glide.with(mContext).load(profilePicture.getUrl()).transform(new CircleCrop()).into(mProfilePictureImageView);
             mNameTextView.setText(rideRequest.getUser().getString("firstName"));
-            mEarliestDateTextView.setText(rideRequest.getDay(rideRequest.getEarliestDeparture()) + ", " + rideRequest.getDateNoYear(rideRequest.getEarliestDeparture()));
+            mEarliestDateTextView.setText(rideRequest.getDateNoYear(rideRequest.getEarliestDeparture()));
             mEarliestTimeTextView.setText(rideRequest.getTime(rideRequest.getEarliestDeparture()));
-            mLatestDateTextView.setText(rideRequest.getDay(rideRequest.getLatestDeparture()) + ", " + rideRequest.getDateNoYear(rideRequest.getLatestDeparture()));
+            mLatestDateTextView.setText(rideRequest.getDateNoYear(rideRequest.getLatestDeparture()));
             mLatestTimeTextView.setText(rideRequest.getTime(rideRequest.getLatestDeparture()));
             mStartLocationTextView.setText(rideRequest.getStartLocation().getCity()+", "+rideRequest.getStartLocation().getState());
             mEndLocationTextView.setText(rideRequest.getEndLocation().getCity()+", "+rideRequest.getEndLocation().getState());
