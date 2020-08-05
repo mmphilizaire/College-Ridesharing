@@ -2,6 +2,7 @@ package com.example.fbuapp.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding mBinding;
 
     private Fragment mCurrentFragment;
+    private Toolbar mToolbar;
     private BottomNavigationView mBottomNavigationView;
     final FragmentManager mFragmentManager = getSupportFragmentManager();
 
@@ -43,11 +45,18 @@ public class MainActivity extends AppCompatActivity {
         mBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(mBinding.getRoot());
 
+        mToolbar = mBinding.toolbar;
+        setSupportActionBar(mToolbar);
+
         mBottomNavigationView = mBinding.bottomNavigation;
-
         setBottomNavigationListener();
-
     }
+
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu_main, menu);
+//        return true;
+//    }
 
     private void setBottomNavigationListener() {
         mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -56,20 +65,24 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.action_ride_stream:
                         mCurrentFragment = new RideStreamFragment();
+                        getSupportActionBar().setTitle("Ride Stream");
                         break;
                     case R.id.action_ride_offer:
                         RideOffer rideOffer = new RideOffer();
                         rideOffer.setUser(ParseUser.getCurrentUser());
                         mCurrentFragment = RideOfferFragment1.newInstance(rideOffer);
+                        getSupportActionBar().setTitle("Create Ride Offer");
                         break;
                     case R.id.action_ride_request:
                         RideRequest rideRequest = new RideRequest();
                         rideRequest.setUser(ParseUser.getCurrentUser());
                         mCurrentFragment = RideRequestFragment1.newInstance(rideRequest);
+                        getSupportActionBar().setTitle("Create Ride Request");
                         break;
                     case R.id.action_profile:
                     default:
                         mCurrentFragment = ProfileFragment.newInstance(ParseUser.getCurrentUser());
+                        getSupportActionBar().setTitle("Profile");
                         break;
                 }
                 replaceFragment(mCurrentFragment);

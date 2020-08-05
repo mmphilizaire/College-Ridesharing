@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/ivProfilePicture"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
@@ -65,7 +65,7 @@
         android:layout_below="@+id/tvRidesRidden"
         android:layout_alignParentStart="true"
         android:layout_marginTop="8dp"
-        android:text="Upcoming Ride Offers"
+        android:text="Upcoming Rides"
         android:textSize="22sp"
         android:textStyle="bold" />
 
@@ -77,7 +77,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="0dp"
         android:layout_marginTop="8dp"
-        android:text="Upcoming Ride Requests"
+        android:text="Upcoming Requests"
         android:textSize="22sp"
         android:textStyle="bold" />
 
@@ -132,12 +132,14 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvRideOffers"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_below="@+id/tvRideOffers" />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvRideOffers"
+        android:orientation="horizontal" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvRideRequests"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_below="@+id/tvRideRequests" />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvRideRequests"
+        android:orientation="horizontal" />
 </RelativeLayout>

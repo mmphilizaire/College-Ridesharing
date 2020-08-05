@@ -1,6 +1,4 @@
 <resources>
-    <string name="app_name">FBU App</string>
+    <string name="app_name">MileShare</string>
     <string name="google_apps_API_key">AIzaSyA1Nqzc5tYCGq0xkzIHuLASKohFXDvZgNQ</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

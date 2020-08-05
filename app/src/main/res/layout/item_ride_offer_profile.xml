@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="2dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    card_view:cardCornerRadius="8dp"
+    card_view:cardElevation="4dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="4dp">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_corners"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="\tDriver\t " />
+
+        <TextView
+            android:id="@+id/tvStartLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvDeparture"
+            android:textSize="16sp"
+            tools:text="Alexandria, Virginia" />
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvStartLocation"
+            android:layout_alignParentStart="true"
+            card_view:srcCompat="@drawable/ic_to" />
+
+        <TextView
+            android:id="@+id/tvEndLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvStartLocation"
+            android:layout_toEndOf="@+id/imageView5"
+            android:textSize="16sp"
+            tools:text="Chapel Hill, North Carolina" />
+
+        <TextView
+            android:id="@+id/tvDeparture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvTitle"
+            android:layout_alignParentStart="true"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:text="August 9 at 8:30PM" />
+
+        <TextView
+            android:id="@+id/tvSeats"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageView5"
+            android:layout_alignParentStart="true"
+            android:textSize="16sp"
+            tools:text="3 seats left for $10 each" />
+
+        <ImageView
+            android:id="@+id/ivDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="0dp"
+            android:layout_toEndOf="@+id/tvTitle"
+            android:visibility="gone"
+            card_view:srcCompat="@drawable/ic_delete" />
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

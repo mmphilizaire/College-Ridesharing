@@ -17,10 +17,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.fbuapp.Activities.LoginActivity;
+import com.example.fbuapp.Adapters.RideOffersProfileAdapter;
+import com.example.fbuapp.Adapters.RideRequestsAdapter;
+import com.example.fbuapp.Adapters.RideRequestsProfileAdapter;
 import com.example.fbuapp.Models.RideOffer;
 import com.example.fbuapp.Models.RideRequest;
 import com.example.fbuapp.R;
@@ -40,6 +45,10 @@ public class ProfileFragment extends Fragment {
     private ParseUser mUser;
 
     public ProfilePictureDialogFragment profilePictureDialogFragment;
+    public List<RideOffer> mRideOffers;
+    public List<RideRequest> mRideRequests;
+    public RideOffersProfileAdapter mRideOffersAdapter;
+    public RideRequestsProfileAdapter mRideRequestsAdapter;
 
     private ImageView mProfilePictureImageView;
     private TextView mNameTextView;
@@ -47,6 +56,8 @@ public class ProfileFragment extends Fragment {
     private TextView mMemberSinceTextView;
     private TextView mRidesDrivenTextView;
     private TextView mRidesRiddenTextView;
+    private RecyclerView mRideOffersRecyclerView;
+    private RecyclerView mRideRequestsRecyclerView;
     private Button mLogoutButton;
 
     public static ProfileFragment newInstance(ParseUser user){
@@ -75,6 +86,10 @@ public class ProfileFragment extends Fragment {
         bindViews();
         bindData();
 
+        if(isCurrentUser()){
+            configureRecyclerViews();
+        }
+
         mProfilePictureImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,6 +101,25 @@ public class ProfileFragment extends Fragment {
 
         setupLogout();
 
+    }
+
+    private void configureRecyclerViews() {
+        mRideOffers = new ArrayList<>();
+        List<RideOffer> futureRideOffers = getFutureRideOffers();
+        mRideOffers.addAll(getUsersRideOffers(futureRideOffers));
+        mRideOffers.addAll(getUsersBookedRides(futureRideOffers));
+
+        mRideRequests = new ArrayList<>();
+        List<RideRequest> futureRideRequests = getFutureRideRequests();
+        mRideRequests.addAll(getUsersRideRequests(futureRideRequests));
+
+        mRideOffersAdapter = new RideOffersProfileAdapter(mRideOffers, this);
+        mRideRequestsAdapter = new RideRequestsProfileAdapter(mRideRequests, this);
+
+        mRideOffersRecyclerView.setAdapter(mRideOffersAdapter);
+        mRideRequestsRecyclerView.setAdapter(mRideRequestsAdapter);
+        mRideOffersRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
+        mRideRequestsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
     }
 
     private void setupLogout() {
@@ -122,6 +156,8 @@ public class ProfileFragment extends Fragment {
         while(!finished) {
             ParseQuery<RideOffer> query = ParseQuery.getQuery("RideOffer");
             query.include("user");
+            query.include("startLocation");
+            query.include("endLocation");
             query.whereGreaterThan("departureTime", Calendar.getInstance().getTime());
             List<RideOffer> results = null;
             try {
@@ -143,6 +179,8 @@ public class ProfileFragment extends Fragment {
         while(!finished) {
             ParseQuery<RideRequest> query = ParseQuery.getQuery("RideRequest");
             query.include("user");
+            query.include("startLocation");
+            query.include("endLocation");
             query.whereGreaterThan("earliestDeparture", Calendar.getInstance().getTime());
             List<RideRequest> results = null;
             try {
@@ -216,6 +254,8 @@ public class ProfileFragment extends Fragment {
         mMemberSinceTextView = mBinding.tvMemberSince;
         mRidesDrivenTextView = mBinding.tvRidesDriven;
         mRidesRiddenTextView = mBinding.tvRidesRidden;
+        mRideOffersRecyclerView = mBinding.rvRideOffers;
+        mRideRequestsRecyclerView = mBinding.rvRideRequests;
         mLogoutButton = mBinding.btnLogout;
     }
 
