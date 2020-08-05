@@ -119,12 +119,6 @@ public class RideOffersProfileAdapter extends RecyclerView.Adapter<RideOffersPro
                     }
                 }
             });
-//            mDeleteImageView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-
-//                }
-//            });
         }
 
         private void showDeleteDialog(String title) {

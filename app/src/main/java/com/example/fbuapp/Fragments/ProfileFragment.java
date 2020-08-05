@@ -58,6 +58,8 @@ public class ProfileFragment extends Fragment implements DeleteDialogFragment.De
     private TextView mMemberSinceTextView;
     private TextView mRidesDrivenTextView;
     private TextView mRidesRiddenTextView;
+    private TextView mUpcomingRideOffers;
+    private TextView mUpcomingRideRequests;
     private RecyclerView mRideOffersRecyclerView;
     private RecyclerView mRideRequestsRecyclerView;
     private Button mLogoutButton;
@@ -91,6 +93,10 @@ public class ProfileFragment extends Fragment implements DeleteDialogFragment.De
         if(isCurrentUser()){
             configureRecyclerViews();
         }
+        else{
+            mUpcomingRideRequests.setVisibility(View.GONE);
+            mUpcomingRideOffers.setVisibility(View.GONE);
+        }
 
         mProfilePictureImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,6 +120,13 @@ public class ProfileFragment extends Fragment implements DeleteDialogFragment.De
         mRideRequests = new ArrayList<>();
         List<RideRequest> futureRideRequests = getFutureRideRequests();
         mRideRequests.addAll(getUsersRideRequests(futureRideRequests));
+
+        if(mRideOffers.isEmpty()){
+            mUpcomingRideOffers.setText("No Upcoming Rides");
+        }
+        if(mRideRequests.isEmpty()){
+            mUpcomingRideRequests.setText("No Upcoming Requests");
+        }
 
         mRideOffersAdapter = new RideOffersProfileAdapter(mRideOffers, this);
         mRideRequestsAdapter = new RideRequestsProfileAdapter(mRideRequests, this);
@@ -256,6 +269,8 @@ public class ProfileFragment extends Fragment implements DeleteDialogFragment.De
         mMemberSinceTextView = mBinding.tvMemberSince;
         mRidesDrivenTextView = mBinding.tvRidesDriven;
         mRidesRiddenTextView = mBinding.tvRidesRidden;
+        mUpcomingRideOffers = mBinding.tvRideOffers;
+        mUpcomingRideRequests = mBinding.tvRideRequests;
         mRideOffersRecyclerView = mBinding.rvRideOffers;
         mRideRequestsRecyclerView = mBinding.rvRideRequests;
         mLogoutButton = mBinding.btnLogout;
