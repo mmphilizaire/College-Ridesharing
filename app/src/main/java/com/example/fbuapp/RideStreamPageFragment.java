@@ -336,6 +336,7 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
             rideOffersList(0, true);
         }
         else if(requestCode == CREATE_REQUEST_CODE && data != null){
+            //TODO: use new fragments
             RideRequest rideRequest = data.getParcelableExtra("rideRequest");
             MainActivity activity = (MainActivity) getActivity();
             activity.replaceFragment(RideOfferFragment.newInstance(rideRequest));

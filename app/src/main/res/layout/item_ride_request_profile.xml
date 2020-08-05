@@ -66,16 +66,6 @@
             android:textStyle="bold"
             tools:text="August 9 at 8:30PM" />
 
-        <ImageView
-            android:id="@+id/ivDelete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="0dp"
-            android:layout_toEndOf="@+id/tvEarliestDeparture"
-            android:visibility="gone"
-            card_view:srcCompat="@drawable/ic_delete" />
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

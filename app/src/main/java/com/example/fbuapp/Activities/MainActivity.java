@@ -10,6 +10,9 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.fbuapp.CreateRideOffer.RideOfferFragment1;
 import com.example.fbuapp.CreateRideOffer.RideOfferFragment2;
@@ -36,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Fragment mCurrentFragment;
     private Toolbar mToolbar;
+    private ImageView mBackImageView;
+    private TextView mToolbarTitleTextView;
     private BottomNavigationView mBottomNavigationView;
     final FragmentManager mFragmentManager = getSupportFragmentManager();
 
@@ -45,18 +50,19 @@ public class MainActivity extends AppCompatActivity {
         mBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(mBinding.getRoot());
 
-        mToolbar = mBinding.toolbar;
-        setSupportActionBar(mToolbar);
+        bind();
 
-        mBottomNavigationView = mBinding.bottomNavigation;
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         setBottomNavigationListener();
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu_main, menu);
-//        return true;
-//    }
+    private void bind() {
+        mToolbar = mBinding.toolbar;
+        mBackImageView = mBinding.ivBack;
+        mBottomNavigationView = mBinding.bottomNavigation;
+        mToolbarTitleTextView = mBinding.toolbarTitle;
+    }
 
     private void setBottomNavigationListener() {
         mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -65,24 +71,24 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.action_ride_stream:
                         mCurrentFragment = new RideStreamFragment();
-                        getSupportActionBar().setTitle("Ride Stream");
+                        mBackImageView.setVisibility(View.GONE);
                         break;
                     case R.id.action_ride_offer:
                         RideOffer rideOffer = new RideOffer();
                         rideOffer.setUser(ParseUser.getCurrentUser());
                         mCurrentFragment = RideOfferFragment1.newInstance(rideOffer);
-                        getSupportActionBar().setTitle("Create Ride Offer");
+                        mBackImageView.setVisibility(View.GONE);
                         break;
                     case R.id.action_ride_request:
                         RideRequest rideRequest = new RideRequest();
                         rideRequest.setUser(ParseUser.getCurrentUser());
                         mCurrentFragment = RideRequestFragment1.newInstance(rideRequest);
-                        getSupportActionBar().setTitle("Create Ride Request");
+                        mBackImageView.setVisibility(View.GONE);
                         break;
                     case R.id.action_profile:
                     default:
                         mCurrentFragment = ProfileFragment.newInstance(ParseUser.getCurrentUser());
-                        getSupportActionBar().setTitle("Profile");
+                        mBackImageView.setVisibility(View.GONE);
                         break;
                 }
                 replaceFragment(mCurrentFragment);
@@ -118,14 +124,17 @@ public class MainActivity extends AppCompatActivity {
         if(mCurrentFragment instanceof RideRequestFragment1){
             mCurrentFragment = RideRequestFragment2.newInstance(rideRequest);
             replaceFragmentAnimation(mCurrentFragment);
+            mBackImageView.setVisibility(View.VISIBLE);
         }
         else if(mCurrentFragment instanceof RideRequestFragment2){
             mCurrentFragment = RideRequestFragment3.newInstance(rideRequest);
             replaceFragmentAnimation(mCurrentFragment);
+            mBackImageView.setVisibility(View.VISIBLE);
         }
         else{
             mCurrentFragment = RideRequestFragment4.newInstance(rideRequest);
             replaceFragmentAnimation(mCurrentFragment);
+            mBackImageView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -133,13 +142,50 @@ public class MainActivity extends AppCompatActivity {
         if(mCurrentFragment instanceof RideOfferFragment1){
             mCurrentFragment = RideOfferFragment2.newInstance(rideOffer);
             replaceFragmentAnimation(mCurrentFragment);
+            mBackImageView.setVisibility(View.VISIBLE);
         }
         else if(mCurrentFragment instanceof RideOfferFragment2){
             mCurrentFragment = RideOfferFragment3.newInstance(rideOffer);
             replaceFragmentAnimation(mCurrentFragment);
+            mBackImageView.setVisibility(View.VISIBLE);
         }
         else{
             mCurrentFragment = RideOfferFragment4.newInstance(rideOffer);
+            replaceFragmentAnimation(mCurrentFragment);
+            mBackImageView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void goToBackRideRequestFragment(RideRequest rideRequest){
+        if(mCurrentFragment instanceof RideRequestFragment2){
+            mCurrentFragment = RideRequestFragment1.newInstance(rideRequest);
+            replaceFragmentAnimation(mCurrentFragment);
+            mBackImageView.setVisibility(View.GONE);
+        }
+        else if(mCurrentFragment instanceof RideRequestFragment3){
+            mCurrentFragment = RideRequestFragment2.newInstance(rideRequest);
+            replaceFragmentAnimation(mCurrentFragment);
+            mBackImageView.setVisibility(View.VISIBLE);
+        }
+        else{
+            mCurrentFragment = RideRequestFragment3.newInstance(rideRequest);
+            replaceFragmentAnimation(mCurrentFragment);
+            mBackImageView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void goToBackRideOfferFragment(RideOffer rideOffer){
+        if(mCurrentFragment instanceof RideOfferFragment2){
+            mCurrentFragment = RideOfferFragment1.newInstance(rideOffer);
+            replaceFragmentAnimation(mCurrentFragment);
+            mBackImageView.setVisibility(View.GONE);
+        }
+        else if(mCurrentFragment instanceof RideOfferFragment3){
+            mCurrentFragment = RideOfferFragment2.newInstance(rideOffer);
+            replaceFragmentAnimation(mCurrentFragment);
+        }
+        else{
+            mCurrentFragment = RideOfferFragment3.newInstance(rideOffer);
             replaceFragmentAnimation(mCurrentFragment);
         }
     }
