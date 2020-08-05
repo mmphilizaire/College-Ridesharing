@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.action_ride_stream:
                         mCurrentFragment = new RideStreamFragment();
                         mBackImageView.setVisibility(View.GONE);
+                        mToolbarTitleTextView.setText("MileShare");
                         break;
                     case R.id.action_ride_offer:
                         RideOffer rideOffer = new RideOffer();
@@ -80,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
                         mCurrentFragment = RideOfferFragment1.newInstance(rideOffer);
                         mBackImageView.setVisibility(View.GONE);
                         setRideOfferBackListener(rideOffer);
+                        mToolbarTitleTextView.setText("Create Ride Offer");
                         break;
                     case R.id.action_ride_request:
                         RideRequest rideRequest = new RideRequest();
@@ -87,11 +89,13 @@ public class MainActivity extends AppCompatActivity {
                         mCurrentFragment = RideRequestFragment1.newInstance(rideRequest);
                         mBackImageView.setVisibility(View.GONE);
                         setRideRequestBackListener(rideRequest);
+                        mToolbarTitleTextView.setText("Create Ride Request");
                         break;
                     case R.id.action_profile:
                     default:
                         mCurrentFragment = ProfileFragment.newInstance(ParseUser.getCurrentUser());
                         mBackImageView.setVisibility(View.GONE);
+                        mToolbarTitleTextView.setText("Profile");
                         break;
                 }
                 replaceFragment(mCurrentFragment);

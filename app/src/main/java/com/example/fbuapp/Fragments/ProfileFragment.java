@@ -122,10 +122,10 @@ public class ProfileFragment extends Fragment implements DeleteDialogFragment.De
         mRideRequests.addAll(getUsersRideRequests(futureRideRequests));
 
         if(mRideOffers.isEmpty()){
-            mUpcomingRideOffers.setText("No Upcoming Rides");
+            mUpcomingRideOffers.setVisibility(View.GONE);
         }
         if(mRideRequests.isEmpty()){
-            mUpcomingRideRequests.setText("No Upcoming Requests");
+            mUpcomingRideRequests.setVisibility(View.GONE);
         }
 
         mRideOffersAdapter = new RideOffersProfileAdapter(mRideOffers, this);
