@@ -34,11 +34,13 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment implements DeleteDialogFragment.DeleteDialogListener {
 
     private FragmentProfileBinding mBinding;
 
@@ -319,4 +321,37 @@ public class ProfileFragment extends Fragment {
         return mUser;
     }
 
+    @Override
+    public void onFinishDeleteDialog(RideOffer rideOffer, RideRequest rideRequest) {
+        if(rideOffer != null){
+            if(rideOffer.hasPassenger(ParseUser.getCurrentUser())){
+                try {
+                    rideOffer.removePassenger(ParseUser.getCurrentUser());
+                    rideOffer.saveInBackground();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            else{
+                rideOffer.deleteInBackground();
+            }
+            for(int i = 0; i < mRideOffers.size(); i++){
+                if(mRideOffers.get(i).getObjectId().equals(rideOffer.getObjectId())){
+                    mRideOffers.remove(i);
+                    break;
+                }
+            }
+            mRideOffersAdapter.notifyDataSetChanged();
+        }
+        else{
+            rideRequest.deleteInBackground();
+            for(int i = 0; i < mRideRequests.size(); i++){
+                if(mRideRequests.get(i).getObjectId().equals(rideRequest.getObjectId())){
+                    mRideRequests.remove(i);
+                    break;
+                }
+            }
+            mRideRequestsAdapter.notifyDataSetChanged();
+        }
+    }
 }

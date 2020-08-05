@@ -13,11 +13,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.fbuapp.Activities.DetailActivity;
+import com.example.fbuapp.Fragments.DeleteDialogFragment;
 import com.example.fbuapp.Models.RideOffer;
 import com.example.fbuapp.OnDoubleTapListener;
 import com.example.fbuapp.databinding.ItemRideOfferBinding;
@@ -79,7 +81,6 @@ public class RideOffersProfileAdapter extends RecyclerView.Adapter<RideOffersPro
         public TextView mStartLocationTextView;
         public TextView mEndLocationTextView;
         public TextView mSeatTextView;
-        public ImageView mDeleteImageView;
 
         public ViewHolder(@NonNull ItemRideOfferProfileBinding binding){
             super(binding.getRoot());
@@ -93,10 +94,9 @@ public class RideOffersProfileAdapter extends RecyclerView.Adapter<RideOffersPro
             mStartLocationTextView = mBinding.tvStartLocation;
             mEndLocationTextView = mBinding.tvEndLocation;
             mSeatTextView = mBinding.tvSeats;
-            mDeleteImageView = mBinding.ivDelete;
         }
 
-        public void bindData(RideOffer rideOffer) {
+        public void bindData(final RideOffer rideOffer) {
             if(rideOffer.hasPassenger(ParseUser.getCurrentUser())){
                 mTitleTextView.setText(" \tPassenger\t ");
             }
@@ -108,32 +108,30 @@ public class RideOffersProfileAdapter extends RecyclerView.Adapter<RideOffersPro
             mEndLocationTextView.setText(rideOffer.getEndLocation().getCity()+", "+rideOffer.getEndLocation().getState());
             mSeatTextView.setText(rideOffer.getSeatsAvailable() + " seats left for $" + rideOffer.getSeatPrice().toString() + " each");
 
-            mDeleteImageView.setVisibility(View.GONE);
             mBinding.getRoot().setOnTouchListener(new OnDoubleTapListener(mContext){
                 @Override
                 public void onDoubleTap(MotionEvent e) {
-                    mDeleteImageView.setVisibility(View.VISIBLE);
-                }
-            });
-            mDeleteImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    RideOffer rideOffer = mRideOffers.get(getAdapterPosition());
                     if(rideOffer.hasPassenger(ParseUser.getCurrentUser())){
-                        try {
-                            rideOffer.removePassenger(ParseUser.getCurrentUser());
-                            rideOffer.saveInBackground();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        showDeleteDialog("Cancel Your Seat in Ride");
                     }
                     else{
-                        rideOffer.deleteInBackground();
+                        showDeleteDialog("Delete Your Ride Request");
                     }
-                    mRideOffers.remove(getAdapterPosition());
-                    notifyDataSetChanged();
                 }
             });
+//            mDeleteImageView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+
+//                }
+//            });
+        }
+
+        private void showDeleteDialog(String title) {
+            FragmentManager fm = mFragment.getActivity().getSupportFragmentManager();
+            DeleteDialogFragment deleteDialog = DeleteDialogFragment.newInstance(title, mRideOffers.get(getAdapterPosition()), null);
+            deleteDialog.setTargetFragment(mFragment, 300);
+            deleteDialog.show(fm, "fragment_alert");
         }
 
     }
