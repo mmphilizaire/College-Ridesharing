@@ -25,6 +25,7 @@ import com.example.fbuapp.R;
 import com.example.fbuapp.databinding.FragmentRideRequest1Binding;
 import com.example.fbuapp.databinding.FragmentRideRequest2Binding;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class RideRequestFragment2 extends Fragment implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
@@ -67,6 +68,16 @@ public class RideRequestFragment2 extends Fragment implements DatePickerDialog.O
         mDepartureCalendar = Calendar.getInstance();
 
         bind();
+
+        mDepartureCalendar = Calendar.getInstance();
+        if(mRideRequest.getEarliestDeparture() != null){
+            mDepartureCalendar.setTime(mRideRequest.getEarliestDeparture());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("M/d/yyyy");
+            mDateEditText.setText(dateFormat.format(mRideRequest.getEarliestDeparture()));
+            SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
+            mTimeEditText.setText(timeFormat.format(mRideRequest.getEarliestDeparture()));
+        }
+
         setOnClickListeners();
     }
 

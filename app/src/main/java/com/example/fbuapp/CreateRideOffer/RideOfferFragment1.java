@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,10 +68,19 @@ public class RideOfferFragment1 extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mStartLocation = new Location();
-        mEndLocation = new Location();
-
         bind();
+
+        if(mRideOffer.getStartLocation() != null){
+            mStartLocation = mRideOffer.getStartLocation();
+            mEndLocation = mRideOffer.getEndLocation();
+            mStartLocationEditText.setText(mStartLocation.getCity() + ", " + mStartLocation.getState());
+            mEndLocationEditText.setText(mEndLocation.getCity() + ", " + mEndLocation.getState());
+        }
+        else{
+            mStartLocation = new Location();
+            mEndLocation = new Location();
+        }
+
         setOnClickListeners();
     }
 

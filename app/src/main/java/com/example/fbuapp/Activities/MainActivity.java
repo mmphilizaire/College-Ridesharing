@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -78,12 +79,14 @@ public class MainActivity extends AppCompatActivity {
                         rideOffer.setUser(ParseUser.getCurrentUser());
                         mCurrentFragment = RideOfferFragment1.newInstance(rideOffer);
                         mBackImageView.setVisibility(View.GONE);
+                        setRideOfferBackListener(rideOffer);
                         break;
                     case R.id.action_ride_request:
                         RideRequest rideRequest = new RideRequest();
                         rideRequest.setUser(ParseUser.getCurrentUser());
                         mCurrentFragment = RideRequestFragment1.newInstance(rideRequest);
                         mBackImageView.setVisibility(View.GONE);
+                        setRideRequestBackListener(rideRequest);
                         break;
                     case R.id.action_profile:
                     default:
@@ -98,6 +101,24 @@ public class MainActivity extends AppCompatActivity {
         mBottomNavigationView.setSelectedItemId(R.id.action_ride_stream);
     }
 
+    private void setRideRequestBackListener(final RideRequest rideRequest) {
+        mBackImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToLastRideRequestFragment(rideRequest);
+            }
+        });
+    }
+
+    private void setRideOfferBackListener(final RideOffer rideOffer) {
+        mBackImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToLastRideOfferFragment(rideOffer);
+            }
+        });
+    }
+
     public void replaceFragment(Fragment fragment){
         mFragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
     }
@@ -105,6 +126,12 @@ public class MainActivity extends AppCompatActivity {
     public void replaceFragmentAnimation(Fragment fragment){
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+        fragmentTransaction.replace(R.id.flContainer, fragment).commit();
+    }
+
+    public void replaceFragmentAnimationBack(Fragment fragment){
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
         fragmentTransaction.replace(R.id.flContainer, fragment).commit();
     }
 
@@ -129,12 +156,10 @@ public class MainActivity extends AppCompatActivity {
         else if(mCurrentFragment instanceof RideRequestFragment2){
             mCurrentFragment = RideRequestFragment3.newInstance(rideRequest);
             replaceFragmentAnimation(mCurrentFragment);
-            mBackImageView.setVisibility(View.VISIBLE);
         }
         else{
             mCurrentFragment = RideRequestFragment4.newInstance(rideRequest);
             replaceFragmentAnimation(mCurrentFragment);
-            mBackImageView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -147,46 +172,42 @@ public class MainActivity extends AppCompatActivity {
         else if(mCurrentFragment instanceof RideOfferFragment2){
             mCurrentFragment = RideOfferFragment3.newInstance(rideOffer);
             replaceFragmentAnimation(mCurrentFragment);
-            mBackImageView.setVisibility(View.VISIBLE);
         }
         else{
             mCurrentFragment = RideOfferFragment4.newInstance(rideOffer);
             replaceFragmentAnimation(mCurrentFragment);
-            mBackImageView.setVisibility(View.VISIBLE);
         }
     }
 
-    public void goToBackRideRequestFragment(RideRequest rideRequest){
+    public void goToLastRideRequestFragment(RideRequest rideRequest){
         if(mCurrentFragment instanceof RideRequestFragment2){
             mCurrentFragment = RideRequestFragment1.newInstance(rideRequest);
-            replaceFragmentAnimation(mCurrentFragment);
+            replaceFragmentAnimationBack(mCurrentFragment);
             mBackImageView.setVisibility(View.GONE);
         }
         else if(mCurrentFragment instanceof RideRequestFragment3){
             mCurrentFragment = RideRequestFragment2.newInstance(rideRequest);
-            replaceFragmentAnimation(mCurrentFragment);
-            mBackImageView.setVisibility(View.VISIBLE);
+            replaceFragmentAnimationBack(mCurrentFragment);
         }
         else{
             mCurrentFragment = RideRequestFragment3.newInstance(rideRequest);
-            replaceFragmentAnimation(mCurrentFragment);
-            mBackImageView.setVisibility(View.VISIBLE);
+            replaceFragmentAnimationBack(mCurrentFragment);
         }
     }
 
-    public void goToBackRideOfferFragment(RideOffer rideOffer){
+    public void goToLastRideOfferFragment(RideOffer rideOffer){
         if(mCurrentFragment instanceof RideOfferFragment2){
             mCurrentFragment = RideOfferFragment1.newInstance(rideOffer);
-            replaceFragmentAnimation(mCurrentFragment);
+            replaceFragmentAnimationBack(mCurrentFragment);
             mBackImageView.setVisibility(View.GONE);
         }
         else if(mCurrentFragment instanceof RideOfferFragment3){
             mCurrentFragment = RideOfferFragment2.newInstance(rideOffer);
-            replaceFragmentAnimation(mCurrentFragment);
+            replaceFragmentAnimationBack(mCurrentFragment);
         }
         else{
             mCurrentFragment = RideOfferFragment3.newInstance(rideOffer);
-            replaceFragmentAnimation(mCurrentFragment);
+            replaceFragmentAnimationBack(mCurrentFragment);
         }
     }
 

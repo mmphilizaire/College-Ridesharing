@@ -20,6 +20,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.fbuapp.Activities.MainActivity;
+import com.example.fbuapp.Models.Location;
 import com.example.fbuapp.Models.RideOffer;
 import com.example.fbuapp.Models.RideRequest;
 import com.example.fbuapp.R;
@@ -27,6 +28,7 @@ import com.example.fbuapp.databinding.FragmentRideOffer2Binding;
 import com.example.fbuapp.databinding.FragmentRideRequest1Binding;
 import com.example.fbuapp.databinding.FragmentRideRequest2Binding;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class RideOfferFragment2 extends Fragment implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
@@ -66,9 +68,17 @@ public class RideOfferFragment2 extends Fragment implements DatePickerDialog.OnD
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mDepartureCalendar = Calendar.getInstance();
-
         bind();
+
+        mDepartureCalendar = Calendar.getInstance();
+        if(mRideOffer.getDepartureTime() != null){
+            mDepartureCalendar.setTime(mRideOffer.getDepartureTime());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("M/d/yyyy");
+            mDateEditText.setText(dateFormat.format(mRideOffer.getDepartureTime()));
+            SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
+            mTimeEditText.setText(timeFormat.format(mRideOffer.getDepartureTime()));
+        }
+
         setOnClickListeners();
     }
 

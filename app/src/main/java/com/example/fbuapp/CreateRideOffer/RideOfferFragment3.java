@@ -66,6 +66,12 @@ public class RideOfferFragment3 extends Fragment {
 
         bind();
         configureNumberPicker();
+
+        if(mRideOffer.getSeatCount() != null){
+            mSeatCountNumberPicker.setValue(mRideOffer.getSeatCount().intValue());
+            mSeatPriceEditText.setText(mRideOffer.getSeatPrice().toString());
+        }
+
         setOnClickListeners();
     }
 

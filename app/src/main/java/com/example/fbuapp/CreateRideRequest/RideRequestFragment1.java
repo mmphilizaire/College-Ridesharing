@@ -65,10 +65,19 @@ public class RideRequestFragment1 extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mStartLocation = new Location();
-        mEndLocation = new Location();
-
         bind();
+
+        if(mRideRequest.getStartLocation() != null){
+            mStartLocation = mRideRequest.getStartLocation();
+            mEndLocation = mRideRequest.getEndLocation();
+            mStartLocationEditText.setText(mStartLocation.getCity() + ", " + mStartLocation.getState());
+            mEndLocationEditText.setText(mEndLocation.getCity() + ", " + mEndLocation.getState());
+        }
+        else{
+            mStartLocation = new Location();
+            mEndLocation = new Location();
+        }
+
         setOnClickListeners();
     }
 
