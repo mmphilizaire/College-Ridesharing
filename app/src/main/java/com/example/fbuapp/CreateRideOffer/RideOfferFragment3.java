@@ -85,21 +85,32 @@ public class RideOfferFragment3 extends Fragment {
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!missingInfo()){
+                if(missingInfo()){
+                    Toast.makeText(getActivity(), "Missing information!", Toast.LENGTH_LONG).show();
+                }
+                else if(!belowPriceCeiling()){
+                    Toast.makeText(getActivity(), "Seat price must be below $100", Toast.LENGTH_LONG).show();
+                }
+                else{
                     mRideOffer.setSeatPrice((Number) Integer.parseInt(mSeatPriceEditText.getText().toString()));
                     mRideOffer.setSeatCount((Number) mSeatCountNumberPicker.getValue());
                     MainActivity activity = (MainActivity) getActivity();
                     activity.goToNextRideOfferFragment(mRideOffer);
                 }
-                else{
-                    Toast.makeText(getActivity(), "Missing information!", Toast.LENGTH_LONG).show();
-                }
+
             }
         });
     }
 
     private boolean missingInfo() {
         if(mSeatPriceEditText.getText().toString().equals("")){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean belowPriceCeiling(){
+        if(Integer.parseInt(mSeatPriceEditText.getText().toString()) < 100){
             return true;
         }
         return false;

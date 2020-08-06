@@ -104,17 +104,27 @@ public class RideOfferFragment1 extends Fragment {
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!missingInfo()){
+                if(missingInfo()){
+                    Toast.makeText(getActivity(), "Missing information!", Toast.LENGTH_LONG).show();
+                }
+                else if (shortRoute()){
+                    Toast.makeText(getActivity(), "Ride must be longer than 5 miles", Toast.LENGTH_LONG).show();
+                }
+                else{
                     mRideOffer.setStartLocation(mStartLocation);
                     mRideOffer.setEndLocation(mEndLocation);
                     MainActivity activity = (MainActivity) getActivity();
                     activity.goToNextRideOfferFragment(mRideOffer);
                 }
-                else{
-                    Toast.makeText(getActivity(), "Missing information!", Toast.LENGTH_LONG).show();
-                }
             }
         });
+    }
+
+    private boolean shortRoute() {
+        if(mStartLocation.getGeoPoint().distanceInMilesTo(mEndLocation.getGeoPoint()) < 5){
+            return true;
+        }
+        return false;
     }
 
     private boolean missingInfo() {

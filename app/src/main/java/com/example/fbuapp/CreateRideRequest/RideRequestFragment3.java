@@ -95,16 +95,26 @@ public class RideRequestFragment3 extends Fragment implements DatePickerDialog.O
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!missingInfo()){
+                if(missingInfo()){
+                    Toast.makeText(getActivity(), "Missing information!", Toast.LENGTH_LONG).show();
+                }
+                else if(!afterEarliestDeparture()){
+                    Toast.makeText(getActivity(), "Latest Departure must be after earliest departure!", Toast.LENGTH_LONG).show();
+                }
+                else{
                     mRideRequest.setLatestDeparture(mDepartureCalendar.getTime());
                     MainActivity activity = (MainActivity) getActivity();
                     activity.goToNextRideRequestFragment(mRideRequest);
                 }
-                else{
-                    Toast.makeText(getActivity(), "Missing information!", Toast.LENGTH_LONG).show();
-                }
             }
         });
+    }
+
+    private boolean afterEarliestDeparture() {
+        if(mDepartureCalendar.getTime().after(mRideRequest.getEarliestDeparture())){
+            return true;
+        }
+        return false;
     }
 
     private boolean missingInfo() {
