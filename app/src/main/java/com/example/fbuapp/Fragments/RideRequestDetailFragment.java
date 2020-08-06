@@ -191,7 +191,7 @@ public class RideRequestDetailFragment extends Fragment implements OnMapReadyCal
         int height = dpToPx(300);
         int padding = (int) (width * 0.35);
 
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, 100);
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, padding);
         mMap.animateCamera(cu);
 
     }

@@ -66,8 +66,6 @@ public class RegisterFragment2 extends Fragment {
                     return;
                 }
                 updateUser(email, password);
-                RegisterActivity activity = (RegisterActivity) getActivity();
-                activity.goToNextFragment(mUser);
             }
         });
     }
@@ -93,6 +91,8 @@ public class RegisterFragment2 extends Fragment {
                     }
                     return;
                 }
+                RegisterActivity activity = (RegisterActivity) getActivity();
+                activity.goToNextFragment(mUser);
             }
         });
     }

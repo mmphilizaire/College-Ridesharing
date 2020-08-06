@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -83,30 +84,34 @@ public class RegisterActivity extends AppCompatActivity {
 //        }
 //    }
 
+    public void replaceFragmentAnimation(Fragment fragment){
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+        fragmentTransaction.replace(R.id.flContainer, fragment).commit();
+    }
+
+    public void replaceFragmentAnimationBack(Fragment fragment){
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
+        fragmentTransaction.replace(R.id.flContainer, fragment).commit();
+    }
+
     public void goToNextFragment(ParseUser user){
         if(mCurrentFragment instanceof RegisterFragment1){
             mCurrentFragment = RegisterFragment2.newInstance(user);
             mBackImageView.setVisibility(View.VISIBLE);
-            mFragmentManager.beginTransaction().replace(R.id.flContainer, mCurrentFragment).commit();
         }
         else{
             mCurrentFragment = RegisterFragment3.newInstance(user);
-            mFragmentManager.beginTransaction().replace(R.id.flContainer, mCurrentFragment).commit();
+            mBackImageView.setVisibility(View.GONE);
         }
+        replaceFragmentAnimation(mCurrentFragment);
     }
 
     public void goToLastFragment(){
-        if(mCurrentFragment instanceof RegisterFragment2){
-            mCurrentFragment = RegisterFragment1.newInstance(mUser);
-            mBackImageView.setVisibility(View.GONE);
-            mFragmentManager.beginTransaction().replace(R.id.flContainer, mCurrentFragment).commit();
-        }
-        else{
-            mCurrentFragment = RegisterFragment2.newInstance(mUser);
-            mBackImageView.setVisibility(View.GONE);
-            mFragmentManager.beginTransaction().replace(R.id.flContainer, mCurrentFragment).commit();
-        }
-
+        mCurrentFragment = RegisterFragment1.newInstance(mUser);
+        mBackImageView.setVisibility(View.GONE);
+        replaceFragmentAnimationBack(mCurrentFragment);
     }
 
     private void createToast(String text){
