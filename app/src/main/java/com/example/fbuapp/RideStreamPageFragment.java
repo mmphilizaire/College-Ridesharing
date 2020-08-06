@@ -22,6 +22,8 @@ import android.widget.Spinner;
 import com.example.fbuapp.Activities.MainActivity;
 import com.example.fbuapp.Adapters.RideOffersAdapter;
 import com.example.fbuapp.Adapters.RideRequestsAdapter;
+import com.example.fbuapp.CreateRideOffer.RideOfferFragment1;
+import com.example.fbuapp.CreateRideOffer.RideOfferFragment2;
 import com.example.fbuapp.Fragments.FilterRideOfferDialogFragment;
 import com.example.fbuapp.Fragments.FilterRideRequestDialogFragment;
 import com.example.fbuapp.CreateRideOffer.RideOfferFragment;
@@ -339,7 +341,7 @@ public class RideStreamPageFragment extends Fragment implements FilterRideOfferD
             //TODO: use new fragments
             RideRequest rideRequest = data.getParcelableExtra("rideRequest");
             MainActivity activity = (MainActivity) getActivity();
-            activity.replaceFragment(RideOfferFragment.newInstance(rideRequest));
+            activity.createOfferFromRequest(rideRequest);
         }
     }
 }

@@ -215,6 +215,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void createOfferFromRequest(RideRequest rideRequest){
+        RideOffer rideOffer = new RideOffer();
+        rideOffer.setUser(ParseUser.getCurrentUser());
+        rideOffer.setStartLocation(rideRequest.getStartLocation());
+        rideOffer.setEndLocation(rideRequest.getEndLocation());
+        mCurrentFragment = RideOfferFragment1.newInstance(rideOffer);
+        replaceFragment(mCurrentFragment);
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults)
     {
