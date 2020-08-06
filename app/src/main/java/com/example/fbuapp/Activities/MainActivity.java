@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private Fragment mCurrentFragment;
     private Toolbar mToolbar;
     private ImageView mBackImageView;
+    private MenuItem mCloseMenuItem;
     private TextView mToolbarTitleTextView;
     private BottomNavigationView mBottomNavigationView;
     final FragmentManager mFragmentManager = getSupportFragmentManager();
@@ -53,9 +55,33 @@ public class MainActivity extends AppCompatActivity {
 
         bind();
 
+        configureToolbar();
+    }
+
+    private void configureToolbar() {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch(item.getItemId()){
+                    case R.id.miClose:
+                        mBottomNavigationView.setSelectedItemId(R.id.action_ride_stream);
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        mCloseMenuItem = menu.findItem(R.id.miClose);
         setBottomNavigationListener();
+        return true;
     }
 
     private void bind() {
@@ -73,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.action_ride_stream:
                         mCurrentFragment = new RideStreamFragment();
                         mBackImageView.setVisibility(View.GONE);
+                        mCloseMenuItem.setVisible(false);
                         mToolbarTitleTextView.setText("MileShare");
                         break;
                     case R.id.action_ride_offer:
@@ -80,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
                         rideOffer.setUser(ParseUser.getCurrentUser());
                         mCurrentFragment = RideOfferFragment1.newInstance(rideOffer);
                         mBackImageView.setVisibility(View.GONE);
+                        mCloseMenuItem.setVisible(true);
                         setRideOfferBackListener(rideOffer);
                         mToolbarTitleTextView.setText("Create Ride Offer");
                         break;
@@ -88,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
                         rideRequest.setUser(ParseUser.getCurrentUser());
                         mCurrentFragment = RideRequestFragment1.newInstance(rideRequest);
                         mBackImageView.setVisibility(View.GONE);
+                        mCloseMenuItem.setVisible(true);
                         setRideRequestBackListener(rideRequest);
                         mToolbarTitleTextView.setText("Create Ride Request");
                         break;
@@ -95,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
                     default:
                         mCurrentFragment = ProfileFragment.newInstance(ParseUser.getCurrentUser());
                         mBackImageView.setVisibility(View.GONE);
+                        mCloseMenuItem.setVisible(false);
                         mToolbarTitleTextView.setText("Profile");
                         break;
                 }
