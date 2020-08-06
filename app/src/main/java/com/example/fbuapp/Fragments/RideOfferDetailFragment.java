@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -104,12 +105,13 @@ public class RideOfferDetailFragment extends Fragment implements OnMapReadyCallb
         loadSeats();
         bindData();
 
-        mDriverInfoRelativeLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ((DetailActivity)getActivity()).getProfile(mRideOffer);
-            }
-        });
+        try {
+            setOnClickListeners();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         if(myRideOffer() || fullRide()){
             mBookSeatButton.setVisibility(View.INVISIBLE);
@@ -140,6 +142,26 @@ public class RideOfferDetailFragment extends Fragment implements OnMapReadyCallb
             initializeMap();
         }
 
+    }
+
+    private void setOnClickListeners() throws JSONException, ParseException {
+        mDriverInfoRelativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((DetailActivity)getActivity()).getProfile(mRideOffer, mRideOffer.getUser());
+            }
+        });
+        for(int i = 0; i < mRideOffer.getPassengers().length(); i++){
+            ParseQuery<ParseUser> query = ParseUser.getQuery();
+            query.whereEqualTo("objectId", mRideOffer.getPassengers().get(i));
+            final ParseUser passenger = query.find().get(0);
+            mPassengers[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ((DetailActivity)getActivity()).getProfile(mRideOffer, passenger);
+                }
+            });
+        }
     }
 
     private boolean fullRide() {

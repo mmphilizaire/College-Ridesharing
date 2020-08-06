@@ -21,6 +21,7 @@ import com.example.fbuapp.Models.RideOffer;
 import com.example.fbuapp.Models.RideRequest;
 import com.example.fbuapp.R;
 import com.example.fbuapp.databinding.ActivityDetailBinding;
+import com.parse.ParseUser;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -80,8 +81,8 @@ public class DetailActivity extends AppCompatActivity {
         return true;
     }
 
-    public void getProfile(final RideOffer rideOffer){
-        final ProfileFragment profileFragment = ProfileFragment.newInstance(rideOffer.getUser());
+    public void getProfile(final RideOffer rideOffer, ParseUser user){
+        final ProfileFragment profileFragment = ProfileFragment.newInstance(user);
         replaceFragmentAnimation(profileFragment);
         mBackImageView.setVisibility(View.VISIBLE);
         mBackImageView.setOnClickListener(new View.OnClickListener() {
