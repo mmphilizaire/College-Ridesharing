@@ -1,6 +1,9 @@
 package com.example.fbuapp;
 
 import android.app.Application;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 
 import com.example.fbuapp.Models.Location;
 import com.example.fbuapp.Models.RideOffer;
@@ -19,6 +22,16 @@ public class ParseApplication extends Application {
         ParseObject.registerSubclass(RideOffer.class);
         ParseObject.registerSubclass(RideRequest.class);
         ParseObject.registerSubclass(Location.class);
+
+        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+        NotificationChannel channel = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            channel = new NotificationChannel("myChannelId", "My Channel", importance);
+            channel.setDescription("Reminders");
+            NotificationManager mNotificationManager =
+                    (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager.createNotificationChannel(channel);
+        }
 
         // Use for troubleshooting -- remove this line for production
         Parse.setLogLevel(Parse.LOG_LEVEL_DEBUG);

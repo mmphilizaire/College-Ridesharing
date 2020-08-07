@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,7 +72,7 @@ public class RideOfferDetailFragment extends Fragment implements OnMapReadyCallb
     private TextView mDriverUniversityTextView;
 
     private Button mBookSeatButton;
-    private boolean bookSeat;
+    private boolean mBookSeat;
 
     private ImageView[] mPassengers;
 
@@ -113,19 +112,27 @@ public class RideOfferDetailFragment extends Fragment implements OnMapReadyCallb
             e.printStackTrace();
         }
 
-        if(myRideOffer() || fullRide()){
+        mBookSeat = !checkHasBookedSeat();
+
+        if(myRideOffer()){
+            mBookSeatButton.setVisibility(View.INVISIBLE);
+        }
+        else if(fullRide() && mBookSeat){
             mBookSeatButton.setVisibility(View.INVISIBLE);
         }
         else{
-            bookSeat = !hasBookedSeat();
-            if(!bookSeat){
+            if(!mBookSeat){
                 mBookSeatButton.setText("Cancel Seat");
             }
             mBookSeatButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(bookSeat){
-                        bookSeat();
+                    if(mBookSeat){
+                        try {
+                            bookSeat();
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                     }
                     else{
                         try {
@@ -212,7 +219,7 @@ public class RideOfferDetailFragment extends Fragment implements OnMapReadyCallb
 
     }
 
-    private boolean hasBookedSeat() {
+    private boolean checkHasBookedSeat() {
         String objectId = ParseUser.getCurrentUser().getObjectId();
         JSONArray passengers = mRideOffer.getPassengers();
         for(int i = 0; i < passengers.length(); i++){
@@ -247,12 +254,12 @@ public class RideOfferDetailFragment extends Fragment implements OnMapReadyCallb
         mSeatsAvailableTextView.setText(mRideOffer.getSeatsAvailable() + " seats\navailable");
     }
 
-    private void bookSeat() {
+    private void bookSeat() throws ParseException {
         ParseUser user = ParseUser.getCurrentUser();
         mRideOffer.addPassenger(user);
-        mRideOffer.saveInBackground();
+        mRideOffer.save();
         mBookSeatButton.setText("Cancel Seat");
-        bookSeat = false;
+        mBookSeat = false;
         loadSeats();
     }
 
@@ -261,7 +268,7 @@ public class RideOfferDetailFragment extends Fragment implements OnMapReadyCallb
         mRideOffer.removePassenger(user);
         mRideOffer.saveInBackground();
         mBookSeatButton.setText("Book Seat");
-        bookSeat = true;
+        mBookSeat = true;
         loadSeats();
     }
 
@@ -384,5 +391,9 @@ public class RideOfferDetailFragment extends Fragment implements OnMapReadyCallb
             mPolyline.remove();
         }
         mPolyline = mMap.addPolyline((PolylineOptions) values[0]);
+    }
+
+    public boolean hasBookedSeat(){
+        return !mBookSeat;
     }
 }

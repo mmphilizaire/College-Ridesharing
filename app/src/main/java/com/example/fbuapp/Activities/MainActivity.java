@@ -29,9 +29,17 @@ import com.example.fbuapp.Fragments.RideStreamFragment;
 import com.example.fbuapp.Models.RideOffer;
 import com.example.fbuapp.Models.RideRequest;
 import com.example.fbuapp.R;
+import com.example.fbuapp.RateRideDialogFragment;
 import com.example.fbuapp.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 import static com.example.fbuapp.Fragments.ProfilePictureDialogFragment.GALLERY_IMAGE_REQUEST_CODE;
 
@@ -56,6 +64,16 @@ public class MainActivity extends AppCompatActivity {
         bind();
 
         configureToolbar();
+
+        List<RideOffer> recentRides = getRecentRides(lastLogin());
+        for(RideOffer rideOffer : recentRides){
+            if(rideOffer.hasPassenger(ParseUser.getCurrentUser())){
+                FragmentManager fm = getSupportFragmentManager();
+                RateRideDialogFragment rateRideDialogFragment = RateRideDialogFragment.newInstance(rideOffer);
+                rateRideDialogFragment.show(fm, "rateRide");
+            }
+        }
+
     }
 
     private void configureToolbar() {
@@ -267,4 +285,35 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
+
+    public Date lastLogin(){
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("_Session");
+        query.orderByDescending("createdAt");
+        try {
+            List<ParseObject> list = query.find();
+            if(list.size() > 1){
+                return list.get(1).getCreatedAt();
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return Calendar.getInstance().getTime();
+    }
+
+    public List<RideOffer> getRecentRides(Date lastLogin){
+        ParseQuery<RideOffer> query = ParseQuery.getQuery("RideOffer");
+        query.include("startLocation");
+        query.include("endLocation");
+        query.include("user");
+        query.whereGreaterThan("departureTime", lastLogin);
+        query.whereLessThan("departureTime", Calendar.getInstance().getTime());
+        try {
+            List<RideOffer> rideOffers = query.find();
+            return rideOffers;
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }

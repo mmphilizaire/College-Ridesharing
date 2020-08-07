@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,8 @@ import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.app.Activity.RESULT_OK;
 
 public class RideRequestFragment4 extends Fragment {
 
@@ -76,15 +79,20 @@ public class RideRequestFragment4 extends Fragment {
         configureResults();
         bindData();
 
-        if(isBooked()){
-            mCreateButton.setVisibility(View.GONE);
-            mCancelButton.setVisibility(View.VISIBLE);
-        }
+        loadButton();
+
         if(mRideOffers.size() == 0){
             mResultsTextView.setText("No Matching Ride Offers");
         }
 
         setOnClickListeners();
+    }
+
+    private void loadButton() {
+        if(isBooked()){
+            mCreateButton.setVisibility(View.GONE);
+            mCancelButton.setVisibility(View.VISIBLE);
+        }
     }
 
     private void setOnClickListeners() {
@@ -184,9 +192,6 @@ public class RideRequestFragment4 extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(isBooked()){
-            mCreateButton.setVisibility(View.GONE);
-            mCancelButton.setVisibility(View.VISIBLE);
-        }
+        loadButton();
     }
 }
