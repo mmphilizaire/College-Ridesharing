@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,8 @@ import android.widget.TextView;
 
 import com.example.fbuapp.Models.RideOffer;
 import com.example.fbuapp.databinding.FragmentRateRideBinding;
+import com.parse.ParseException;
+import com.parse.SaveCallback;
 
 import org.json.JSONArray;
 import org.w3c.dom.Text;
@@ -61,10 +64,24 @@ public class RateRideDialogFragment extends DialogFragment {
         mSubmitTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int rating = mReviewRatingBar.getNumStars();
+                int rating = Math.round(mReviewRatingBar.getRating());
                 JSONArray ratings = mRide.getUser().getJSONArray("ratings");
+                Log.e("Mishka", rating + " " + ratings.length());
                 ratings.put(rating);
+                Log.e("Mishka", rating + " " + ratings.length());
                 mRide.getUser().put("ratings", ratings);
+                mRide.getUser().saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if(e != null){
+                            e.printStackTrace();
+                        }
+                        else{
+                            Log.e("Mishka", "works");
+                        }
+                    }
+                });
+                dismiss();
             }
         });
 
