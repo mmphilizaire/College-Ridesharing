@@ -95,10 +95,11 @@ public class RideRequestsProfileAdapter extends RecyclerView.Adapter<RideRequest
             mLatestDepartureTextView.setText(rideRequest.getDateNoYear(rideRequest.getLatestDeparture()) + " at " + rideRequest.getTime(rideRequest.getLatestDeparture()));
             mStartLocationTextView.setText(rideRequest.getStartLocation().getCity()+", "+rideRequest.getStartLocation().getState());
             mEndLocationTextView.setText(rideRequest.getEndLocation().getCity()+", "+rideRequest.getEndLocation().getState());
-            mBinding.getRoot().setOnTouchListener(new OnDoubleTapListener(mContext){
+            mBinding.getRoot().setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
-                public void onDoubleTap(MotionEvent e) {
+                public boolean onLongClick(View view) {
                     showDeleteDialog("Delete Your Ride Request");
+                    return true;
                 }
             });
         }

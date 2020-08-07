@@ -72,7 +72,7 @@ public class RideOffersProfileAdapter extends RecyclerView.Adapter<RideOffersPro
         notifyDataSetChanged();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder{
 
         private ItemRideOfferProfileBinding mBinding;
 
@@ -108,15 +108,16 @@ public class RideOffersProfileAdapter extends RecyclerView.Adapter<RideOffersPro
             mEndLocationTextView.setText(rideOffer.getEndLocation().getCity()+", "+rideOffer.getEndLocation().getState());
             mSeatTextView.setText(rideOffer.getSeatsAvailable() + " seats left for $" + rideOffer.getSeatPrice().toString() + " each");
 
-            mBinding.getRoot().setOnTouchListener(new OnDoubleTapListener(mContext){
+            mBinding.getRoot().setOnLongClickListener(new View.OnLongClickListener(){
                 @Override
-                public void onDoubleTap(MotionEvent e) {
+                public boolean onLongClick(View view) {
                     if(rideOffer.hasPassenger(ParseUser.getCurrentUser())){
                         showDeleteDialog("Cancel Your Seat in Ride");
                     }
                     else{
                         showDeleteDialog("Delete Your Ride Request");
                     }
+                    return true;
                 }
             });
         }
